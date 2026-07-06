@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+*.yaml
+*.yml
+Dockerfile
+docker-compose.yml
+pnpm-lock.yaml

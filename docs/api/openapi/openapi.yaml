@@ -1,0 +1,4820 @@
+openapi: "3.1.0"
+info:
+  title: TableFlow API
+  version: "1.0.0"
+  description: >
+    Enterprise restaurant reservation management API for the TableFlow SaaS platform.
+    Manage multi-restaurant organizations, branches, tables, reservations, customers,
+    staff, and reporting â€” all through a single RESTful API.
+  termsOfService: https://tableflow.com/terms
+  contact:
+    name: TableFlow Support
+    email: support@tableflow.com
+    url: https://tableflow.com/support
+  license:
+    name: Proprietary
+    url: https://tableflow.com/license
+
+servers:
+  - url: https://api.tableflow.com/api/v1
+    description: Production server
+  - url: https://staging-api.tableflow.com/api/v1
+    description: Staging server
+  - url: http://localhost:4000/api/v1
+    description: Development server
+
+paths:
+  # ============================================================================
+  # HEALTH
+  # ============================================================================
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      tags: [Health]
+      security: []
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy]
+                  timestamp:
+                    type: string
+                    format: date-time
+              example:
+                status: healthy
+                timestamp: "2026-07-04T10:00:00.000Z"
+
+  # ============================================================================
+  # AUTHENTICATION
+  # ============================================================================
+  /auth/register:
+    post:
+      summary: Register a new organization and admin user
+      operationId: authRegister
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+            example:
+              email: admin@restaurant.com
+              password: SecurePass123!
+              firstName: John
+              lastName: Doe
+              organizationName: La Trattoria Group
+              phone: "+14155551234"
+      responses:
+        "201":
+          description: Organization and admin user created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+              description: URL of the created user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                success: true
+                data:
+                  id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                  email: admin@restaurant.com
+                  firstName: John
+                  lastName: Doe
+                  organizationId: "b2c3d4e5-f6a7-8901-bcde-f12345678901"
+                  createdAt: "2026-07-04T10:00:00.000Z"
+                message: Organization created successfully
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+
+  /auth/login:
+    post:
+      summary: Authenticate and receive JWT tokens
+      operationId: authLogin
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            example:
+              email: admin@restaurant.com
+              password: SecurePass123!
+      responses:
+        "200":
+          description: Authentication successful
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+              description: HTTP-only refresh token cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+              example:
+                success: true
+                data:
+                  accessToken: eyJhbGciOiJIUzI1NiIs...
+                  refreshToken: dGhpcyBpcyBhIHJlZnJl...
+                  expiresIn: 900
+                  user:
+                    id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                    email: admin@restaurant.com
+                    firstName: John
+                    lastName: Doe
+                    role: restaurant_admin
+                message: Authentication successful
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token using refresh token
+      operationId: authRefresh
+      tags: [Authentication]
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+            example:
+              refreshToken: dGhpcyBpcyBhIHJlZnJl...
+      responses:
+        "200":
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+              example:
+                success: true
+                data:
+                  accessToken: eyJhbGciOiJIUzI1NiIs...
+                  refreshToken: bmV3IHJlZnJlcyB0b2tl...
+                  expiresIn: 900
+                  user:
+                    id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+                    email: admin@restaurant.com
+                    role: restaurant_admin
+                message: Token refreshed successfully
+        "401":
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      summary: Revoke the current refresh token
+      operationId: authLogout
+      tags: [Authentication]
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "204":
+          description: Logout successful (no content)
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/forgot-password:
+    post:
+      summary: Send password reset email
+      operationId: authForgotPassword
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+            example:
+              email: admin@restaurant.com
+      responses:
+        "200":
+          description: Reset email sent (always returns 200 to prevent enumeration)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                success: true
+                data: null
+                message: If the email exists, a reset link has been sent
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+
+  /auth/reset-password:
+    post:
+      summary: Reset password using reset token
+      operationId: authResetPassword
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token:
+                  type: string
+                  format: uuid
+                  description: Reset token received via email
+                password:
+                  type: string
+                  minLength: 12
+                  description: New password (min 12 chars, uppercase, lowercase, digit, special)
+            example:
+              token: "reset-token-uuid"
+              password: NewSecurePass123!
+      responses:
+        "200":
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                success: true
+                data:
+                  message: Password successfully reset
+                message: Password reset completed
+        "400":
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+
+  /auth/verify-email:
+    post:
+      summary: Verify email address using verification token
+      operationId: authVerifyEmail
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token:
+                  type: string
+                  format: uuid
+            example:
+              token: "verification-token-uuid"
+      responses:
+        "200":
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/change-password:
+    post:
+      summary: Change password for authenticated user
+      operationId: authChangePassword
+      tags: [Authentication]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+                  minLength: 12
+            example:
+              currentPassword: OldPass123!
+              newPassword: NewPass456!
+      responses:
+        "200":
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          description: Current password is incorrect
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ============================================================================
+  # USERS
+  # ============================================================================
+  /users:
+    get:
+      summary: List users in the organization
+      operationId: listUsers
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/sortBy"
+        - $ref: "#/components/parameters/sortDirection"
+        - $ref: "#/components/parameters/searchQuery"
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active status
+        - name: roleId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by role
+        - name: branchId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by branch assignment
+      responses:
+        "200":
+          description: Paginated list of users
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/User"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a new staff user
+      operationId: createUser
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+            example:
+              email: newstaff@restaurant.com
+              password: TempPass123!
+              firstName: Mark
+              lastName: Johnson
+              phone: "+14155559876"
+              roleIds:
+                - roleId: "role-uuid"
+                  branchId: "branch-uuid"
+      responses:
+        "201":
+          description: User created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+              example:
+                success: true
+                data:
+                  id: "user-uuid"
+                  email: newstaff@restaurant.com
+                  firstName: Mark
+                  lastName: Johnson
+                  isActive: true
+                  isVerified: false
+                  createdAt: "2026-07-04T10:00:00.000Z"
+                message: User created successfully
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /users/{id}:
+    get:
+      summary: Get a single user by ID
+      operationId: getUser
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: User details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/User"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Update a user's profile
+      operationId: updateUser
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+            example:
+              firstName: Marky
+              lastName: Johnson-Smith
+              phone: "+14155559877"
+              isActive: false
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Soft-delete a user account
+      operationId: deleteUser
+      tags: [Users]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+        - name: permanent
+          in: query
+          schema:
+            type: boolean
+          description: Hard delete (admin only)
+      responses:
+        "204":
+          description: User deleted (no content)
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  # ============================================================================
+  # ROLES
+  # ============================================================================
+  /roles:
+    get:
+      summary: List all roles
+      operationId: listRoles
+      tags: [Roles]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: List of roles with permissions
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Role"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a custom role
+      operationId: createRole
+      tags: [Roles]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoleRequest"
+            example:
+              name: floor_manager
+              description: Manages floor operations
+              permissionIds:
+                - "perm-uuid-1"
+                - "perm-uuid-2"
+      responses:
+        "201":
+          description: Role created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /roles/{id}:
+    get:
+      summary: Get a single role's details
+      operationId: getRole
+      tags: [Roles]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Role details with permissions
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Role"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Replace a role's permissions
+      operationId: updateRole
+      tags: [Roles]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoleRequest"
+      responses:
+        "200":
+          description: Role updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Delete a custom role
+      operationId: deleteRole
+      tags: [Roles]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "204":
+          description: Role deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  # ============================================================================
+  # PERMISSIONS
+  # ============================================================================
+  /permissions:
+    get:
+      summary: List all system permissions (read-only catalog)
+      operationId: listPermissions
+      tags: [Permissions]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Permission catalog
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Permission"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ============================================================================
+  # ORGANIZATIONS (RESTAURANTS)
+  # ============================================================================
+  /organizations:
+    get:
+      summary: List organizations (system admin only)
+      operationId: listOrganizations
+      tags: [Restaurants]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/sortBy"
+        - $ref: "#/components/parameters/sortDirection"
+      responses:
+        "200":
+          description: Paginated list of organizations
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Organization"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /organizations/{id}:
+    get:
+      summary: Get organization details
+      operationId: getOrganization
+      tags: [Restaurants]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Organization details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Organization"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Update organization settings
+      operationId: updateOrganization
+      tags: [Restaurants]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrganizationRequest"
+            example:
+              name: La Trattoria Group Inc.
+              email: contact@latrattoriagroup.com
+              phone: "+14155559876"
+              address: 456 Oak Ave, New York, NY 10002
+              logoUrl: "https://cdn.tableflow.com/logos/new-logo.png"
+              timezone: America/New_York
+      responses:
+        "200":
+          description: Organization updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # BRANCHES
+  # ============================================================================
+  /branches:
+    get:
+      summary: List branches
+      operationId: listBranches
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/sortBy"
+        - $ref: "#/components/parameters/sortDirection"
+        - $ref: "#/components/parameters/searchQuery"
+        - name: cuisineType
+          in: query
+          schema:
+            type: string
+          description: Filter by cuisine type
+        - name: isOnlineReservationEnabled
+          in: query
+          schema:
+            type: boolean
+          description: Filter by online booking toggle
+      responses:
+        "200":
+          description: Paginated list of branches
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Branch"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a new branch
+      operationId: createBranch
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBranchRequest"
+            example:
+              name: La Trattoria Uptown
+              address: 789 Park Ave, New York, NY 10021
+              phone: "+14155559876"
+              email: uptown@latrattoria.com
+              timezone: America/New_York
+              cuisineType: Italian
+              averageDiningDuration: 90
+              maxAdvanceBookingDays: 60
+              slotInterval: 30
+              maxPartySize: 20
+              isOnlineReservationEnabled: true
+      responses:
+        "201":
+          description: Branch created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /branches/{id}:
+    get:
+      summary: Get branch details with hours and stats
+      operationId: getBranch
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Branch details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Branch"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Replace all branch fields
+      operationId: replaceBranch
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBranchRequest"
+      responses:
+        "200":
+          description: Branch replaced
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Partially update a branch
+      operationId: updateBranch
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateBranchRequest"
+            example:
+              name: La Trattoria Uptown Renovated
+              cuisineType: Italian-Contemporary
+      responses:
+        "200":
+          description: Branch updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Soft-delete a branch
+      operationId: deleteBranch
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "204":
+          description: Branch deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /branches/{id}/business-hours:
+    get:
+      summary: Get operating hours for a branch
+      operationId: getBusinessHours
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Array of 7 daily business hour records
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BusinessHours"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Set all 7 days of business hours
+      operationId: setBusinessHours
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 7
+              maxItems: 7
+              items:
+                $ref: "#/components/schemas/BusinessHours"
+      responses:
+        "200":
+          description: Business hours updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /branches/{id}/holiday-hours:
+    get:
+      summary: List holiday hour overrides
+      operationId: listHolidayHours
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+      responses:
+        "200":
+          description: Paginated list of holiday hour overrides
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/HolidayHours"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Add a holiday hour override
+      operationId: createHolidayHours
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HolidayHours"
+            example:
+              date: "2026-12-25"
+              openTime: null
+              closeTime: null
+              isClosed: true
+              description: Christmas Day
+      responses:
+        "201":
+          description: Holiday hours created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /branches/{id}/holiday-hours/{holidayId}:
+    delete:
+      summary: Remove a holiday hour override
+      operationId: deleteHolidayHours
+      tags: [Branches]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+        - name: holidayId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Holiday hours deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # TABLES
+  # ============================================================================
+  /branches/{branchId}/tables:
+    get:
+      summary: List tables for a branch
+      operationId: listTables
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+          description: Filter by active status
+        - name: zoneId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by zone
+        - name: minCapacity
+          in: query
+          schema:
+            type: integer
+          description: Minimum seat filter
+        - name: maxCapacity
+          in: query
+          schema:
+            type: integer
+          description: Maximum seat filter
+        - $ref: "#/components/parameters/searchQuery"
+      responses:
+        "200":
+          description: List of tables
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RestaurantTable"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Add a table to a branch
+      operationId: createTable
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTableRequest"
+            example:
+              tableNumber: T-02
+              minCapacity: 4
+              maxCapacity: 8
+              zoneId: "zone-uuid"
+              positionX: 150
+              positionY: 250
+              shape: round
+              width: 80
+              height: 80
+      responses:
+        "201":
+          description: Table created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /branches/{branchId}/tables/{id}:
+    patch:
+      summary: Update table properties
+      operationId: updateTable
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTableRequest"
+            example:
+              minCapacity: 6
+              maxCapacity: 10
+              isActive: false
+      responses:
+        "200":
+          description: Table updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Soft-delete a table
+      operationId: deleteTable
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "204":
+          description: Table deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /branches/{branchId}/tables/zones:
+    get:
+      summary: List table zones
+      operationId: listTableZones
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of zones
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TableZone"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Create a table zone
+      operationId: createTableZone
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                  maxLength: 100
+                description:
+                  type: string
+                sortOrder:
+                  type: integer
+                  default: 0
+            example:
+              name: VIP Room
+              description: Private dining room
+              sortOrder: 3
+      responses:
+        "201":
+          description: Zone created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /branches/{branchId}/tables/floor-plan:
+    put:
+      summary: Update the entire floor plan
+      operationId: updateFloorPlan
+      tags: [Tables]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tables]
+              properties:
+                tables:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, positionX, positionY]
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      positionX:
+                        type: integer
+                      positionY:
+                        type: integer
+            example:
+              tables:
+                - id: "table-uuid-1"
+                  positionX: 100
+                  positionY: 200
+                - id: "table-uuid-2"
+                  positionX: 300
+                  positionY: 200
+      responses:
+        "200":
+          description: Floor plan updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # RESERVATIONS
+  # ============================================================================
+  /reservations:
+    get:
+      summary: List reservations
+      operationId: listReservations
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/sortBy"
+        - $ref: "#/components/parameters/sortDirection"
+        - $ref: "#/components/parameters/searchQuery"
+        - name: branchId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by branch
+        - name: customerId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by customer
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Exact date filter
+        - name: gte_date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Start date range
+        - name: lte_date
+          in: query
+          schema:
+            type: string
+            format: date
+          description: End date range
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [PENDING, CONFIRMED, SEATED, COMPLETED, NO_SHOW, CANCELLED]
+          description: Filter by status
+        - name: in_status
+          in: query
+          schema:
+            type: string
+          description: Comma-separated status list
+        - name: assignedTo
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by assigned waiter
+        - name: isWalkIn
+          in: query
+          schema:
+            type: boolean
+          description: Filter walk-ins
+      responses:
+        "200":
+          description: Paginated list of reservations
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Reservation"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a new reservation
+      operationId: createReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReservationRequest"
+            example:
+              branchId: "branch-uuid"
+              customerId: "customer-uuid"
+              date: "2026-07-15"
+              time: "19:00:00"
+              partySize: 4
+              source: PHONE
+              specialRequests: Anniversary dinner
+              internalNotes: Regular customer
+              tableIds:
+                - "table-uuid-1"
+                - "table-uuid-2"
+      responses:
+        "201":
+          description: Reservation created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Reservation"
+              example:
+                success: true
+                data:
+                  id: "reservation-uuid"
+                  confirmationCode: TF-ABC123
+                  branchId: "branch-uuid"
+                  customerId: "customer-uuid"
+                  date: "2026-07-15"
+                  time: "19:00:00"
+                  partySize: 4
+                  status: CONFIRMED
+                  source: PHONE
+                  createdAt: "2026-07-04T10:00:00.000Z"
+                message: Reservation created successfully
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          description: Table overlap conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Business rule violation (past date, outside hours)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /reservations/availability:
+    get:
+      summary: Find available time slots for a branch on a date
+      operationId: getAvailability
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: partySize
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+        - name: time
+          in: query
+          schema:
+            type: string
+          description: Specific time to check
+      responses:
+        "200":
+          description: Available time slots with table options
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          branchId:
+                            type: string
+                            format: uuid
+                          date:
+                            type: string
+                            format: date
+                          partySize:
+                            type: integer
+                          slots:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                time:
+                                  type: string
+                                available:
+                                  type: boolean
+                                availableTables:
+                                  type: array
+                                  items:
+                                    $ref: "#/components/schemas/RestaurantTable"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "429":
+          $ref: "#/components/responses/RateLimitExceeded"
+
+  /reservations/{id}:
+    get:
+      summary: Get reservation details
+      operationId: getReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Reservation details with customer, tables, and status history
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Reservation"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Update reservation details
+      operationId: updateReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReservationRequest"
+            example:
+              time: "20:00:00"
+              partySize: 5
+              specialRequests: Updated - birthday dinner
+      responses:
+        "200":
+          description: Reservation updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Table overlap conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Terminal status cannot be modified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Soft-delete a reservation (admin only)
+      operationId: deleteReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+        - name: reason
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Reservation deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reservations/{id}/confirm:
+    post:
+      summary: Confirm a pending reservation
+      operationId: confirmReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Reservation confirmed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          description: Not in PENDING status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /reservations/{id}/cancel:
+    post:
+      summary: Cancel a reservation
+      operationId: cancelReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason:
+                  type: string
+                  maxLength: 500
+                sendNotification:
+                  type: boolean
+                  default: true
+            example:
+              reason: Customer called to cancel
+              sendNotification: true
+      responses:
+        "200":
+          description: Reservation cancelled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          description: Terminal status cannot be cancelled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /reservations/{id}/check-in:
+    post:
+      summary: Mark reservation as seated
+      operationId: checkInReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableIds:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+            example:
+              tableIds:
+                - "table-uuid-1"
+      responses:
+        "200":
+          description: Guest checked in (seated)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reservations/{id}/check-out:
+    post:
+      summary: Complete a reservation
+      operationId: checkOutReservation
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Guest checked out (completed)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reservations/{id}/mark-noshow:
+    post:
+      summary: Mark a reservation as no-show
+      operationId: markNoShow
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Reservation marked as no-show
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reservations/{id}/assign-tables:
+    post:
+      summary: Change table assignment for a reservation
+      operationId: assignTables
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tableIds]
+              properties:
+                tableIds:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    format: uuid
+            example:
+              tableIds:
+                - "table-uuid-1"
+                - "table-uuid-2"
+      responses:
+        "200":
+          description: Tables assigned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Table overlap conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /reservations/{id}/status-history:
+    get:
+      summary: Get status change timeline for a reservation
+      operationId: getReservationStatusHistory
+      tags: [Reservations]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Status history timeline
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/StatusHistory"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # CUSTOMERS
+  # ============================================================================
+  /customers:
+    get:
+      summary: List customers
+      operationId: listCustomers
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/sortBy"
+        - $ref: "#/components/parameters/sortDirection"
+        - $ref: "#/components/parameters/searchQuery"
+        - name: isFlagged
+          in: query
+          schema:
+            type: boolean
+          description: Filter flagged customers
+        - name: gt_totalNoshows
+          in: query
+          schema:
+            type: integer
+          description: Customers with more than N no-shows
+      responses:
+        "200":
+          description: Paginated list of customers
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Customer"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a customer profile
+      operationId: createCustomer
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomerRequest"
+            example:
+              email: jane@example.com
+              phone: "+14155559876"
+              firstName: Jane
+              lastName: Smith
+              notes: VIP customer
+              preferences:
+                favoriteTable: T-10
+                allergies:
+                  - shellfish
+                seatingPreference: indoor
+      responses:
+        "201":
+          description: Customer created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          description: Duplicate email or phone
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /customers/{id}:
+    get:
+      summary: Get customer details
+      operationId: getCustomer
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Customer"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      summary: Update customer profile
+      operationId: updateCustomer
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCustomerRequest"
+            example:
+              firstName: Jane
+              lastName: Smith-Jones
+              notes: VIP customer - prefers patio
+      responses:
+        "200":
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Soft-delete a customer profile
+      operationId: deleteCustomer
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "204":
+          description: Customer deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /customers/{id}/flag:
+    post:
+      summary: Flag or unflag a customer
+      operationId: flagCustomer
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [isFlagged]
+              properties:
+                isFlagged:
+                  type: boolean
+                reason:
+                  type: string
+                  maxLength: 500
+            example:
+              isFlagged: true
+              reason: Repeated no-shows
+      responses:
+        "200":
+          description: Customer flag status updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /customers/{id}/reservations:
+    get:
+      summary: Get a customer's reservation history
+      operationId: getCustomerReservations
+      tags: [Customers]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+        - $ref: "#/components/parameters/sortBy"
+        - $ref: "#/components/parameters/sortDirection"
+      responses:
+        "200":
+          description: Paginated reservation history
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Reservation"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # EMPLOYEES
+  # ============================================================================
+  /branches/{branchId}/employees:
+    get:
+      summary: List employees at a branch
+      operationId: listEmployees
+      tags: [Employees]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of employees
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Employee"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Assign a user as an employee at a branch
+      operationId: createEmployee
+      tags: [Employees]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [userId, position, hiredAt]
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                employeeCode:
+                  type: string
+                  maxLength: 50
+                position:
+                  type: string
+                  maxLength: 100
+                hiredAt:
+                  type: string
+                  format: date
+            example:
+              userId: "user-uuid"
+              employeeCode: EMP-002
+              position: Server
+              hiredAt: "2026-07-01"
+      responses:
+        "201":
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /branches/{branchId}/employees/{id}:
+    patch:
+      summary: Update employee details
+      operationId: updateEmployee
+      tags: [Employees]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeCode:
+                  type: string
+                  maxLength: 50
+                position:
+                  type: string
+                  maxLength: 100
+      responses:
+        "200":
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Remove employee from branch
+      operationId: deleteEmployee
+      tags: [Employees]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "204":
+          description: Employee removed
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # NOTIFICATIONS
+  # ============================================================================
+  /notifications:
+    get:
+      summary: List notifications
+      operationId: listNotifications
+      tags: [Notifications]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Cursor for pagination
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+          description: Max items per page
+        - name: branchId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by branch
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [CONFIRMATION, REMINDER, CANCELLATION, MODIFICATION]
+          description: Filter by notification type
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [PENDING, SENT, FAILED]
+          description: Filter by delivery status
+        - name: gte_createdAt
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Start date range
+      responses:
+        "200":
+          description: Paginated list of notifications
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Notification"
+                      meta:
+                        type: object
+                        properties:
+                          limit:
+                            type: integer
+                          hasMore:
+                            type: boolean
+                          nextCursor:
+                            type: string
+                            format: uuid
+                          requestId:
+                            type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /notifications/{id}/retry:
+    post:
+      summary: Retry a failed notification
+      operationId: retryNotification
+      tags: [Notifications]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Notification retry initiated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # REPORTS
+  # ============================================================================
+  /reports/daily-summary:
+    post:
+      summary: Generate daily reservation summary
+      operationId: dailySummary
+      tags: [Reports]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [branchId, date]
+              properties:
+                branchId:
+                  type: string
+                  format: uuid
+                date:
+                  type: string
+                  format: date
+            example:
+              branchId: "branch-uuid"
+              date: "2026-07-15"
+      responses:
+        "200":
+          description: Daily summary report
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DailySummary"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /reports/period-summary:
+    post:
+      summary: Generate summary for a date range
+      operationId: periodSummary
+      tags: [Reports]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [branchId, startDate, endDate]
+              properties:
+                branchId:
+                  type: string
+                  format: uuid
+                startDate:
+                  type: string
+                  format: date
+                endDate:
+                  type: string
+                  format: date
+            example:
+              branchId: "branch-uuid"
+              startDate: "2026-07-01"
+              endDate: "2026-07-31"
+      responses:
+        "202":
+          description: Report generation accepted (async)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      meta:
+                        type: object
+                        properties:
+                          statusUrl:
+                            type: string
+                            format: uri
+                            description: URL to poll for completion
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /reports/status/{reportId}:
+    get:
+      summary: Check async report generation status
+      operationId: reportStatus
+      tags: [Reports]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Report generation status
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          status:
+                            type: string
+                            enum: [PENDING, PROCESSING, COMPLETED, FAILED]
+                          progress:
+                            type: integer
+                          resultUrl:
+                            type: string
+                            format: uri
+                          expiresAt:
+                            type: string
+                            format: date-time
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /reports/export:
+    get:
+      summary: Export reservation data as CSV
+      operationId: exportReport
+      tags: [Reports]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [csv, xlsx]
+            default: csv
+      responses:
+        "200":
+          description: CSV or XLSX file download
+          content:
+            text/csv:
+              schema:
+                type: string
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ============================================================================
+  # DASHBOARD
+  # ============================================================================
+  /dashboard/today:
+    get:
+      summary: Get today's dashboard summary for a branch
+      operationId: dashboardToday
+      tags: [Dashboard]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Today's dashboard data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DashboardToday"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /dashboard/weekly:
+    get:
+      summary: Get weekly reservation trends
+      operationId: dashboardWeekly
+      tags: [Dashboard]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Start date (defaults to Monday of current week)
+      responses:
+        "200":
+          description: Weekly dashboard data
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/DailySummary"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ============================================================================
+  # SETTINGS
+  # ============================================================================
+  /settings:
+    get:
+      summary: List configuration settings
+      operationId: listSettings
+      tags: [Settings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: branchId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by branch (null = org-level)
+        - name: key
+          in: query
+          schema:
+            type: string
+          description: Filter by specific setting key
+      responses:
+        "200":
+          description: List of settings
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Setting"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /settings/{id}:
+    put:
+      summary: Update a setting value
+      operationId: updateSetting
+      tags: [Settings]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [value]
+              properties:
+                value:
+                  type: object
+            example:
+              value:
+                hoursBefore: 3
+      responses:
+        "200":
+          description: Setting updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /settings/bulk:
+    put:
+      summary: Update multiple settings at once
+      operationId: bulkUpdateSettings
+      tags: [Settings]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [settings]
+              properties:
+                settings:
+                  type: array
+                  items:
+                    type: object
+                    required: [id, value]
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      value:
+                        type: object
+            example:
+              settings:
+                - id: "setting-uuid-1"
+                  value:
+                    hoursBefore: 3
+                - id: "setting-uuid-2"
+                  value:
+                    enabled: false
+      responses:
+        "200":
+          description: Settings updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ============================================================================
+  # AUDIT LOGS
+  # ============================================================================
+  /audit-logs:
+    get:
+      summary: Query system audit logs
+      operationId: listAuditLogs
+      tags: [Audit Logs]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Cursor for pagination
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: userId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by actor
+        - name: action
+          in: query
+          schema:
+            type: string
+          description: Filter by action (e.g. reservation.cancel)
+        - name: resourceType
+          in: query
+          schema:
+            type: string
+          description: Filter by resource type
+        - name: resourceId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by specific resource
+        - name: gte_createdAt
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Start date range
+        - name: lte_createdAt
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: End date range
+      responses:
+        "200":
+          description: Paginated audit log entries
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AuditLog"
+                      meta:
+                        type: object
+                        properties:
+                          limit:
+                            type: integer
+                          hasMore:
+                            type: boolean
+                          nextCursor:
+                            type: string
+                            format: uuid
+                          requestId:
+                            type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ============================================================================
+  # WEBHOOKS
+  # ============================================================================
+  /webhooks:
+    get:
+      summary: List webhook subscriptions
+      operationId: listWebhooks
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: List of webhook subscriptions
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Webhook"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a webhook subscription
+      operationId: createWebhook
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, events]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                events:
+                  type: array
+                  items:
+                    type: string
+                isActive:
+                  type: boolean
+                  default: true
+            example:
+              url: "https://pos.example.com/webhooks/tableflow"
+              events:
+                - reservation.created
+                - reservation.cancelled
+              isActive: true
+      responses:
+        "201":
+          description: Webhook created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /webhooks/{id}:
+    get:
+      summary: Get webhook subscription details
+      operationId: getWebhook
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Webhook subscription details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/Webhook"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update a webhook subscription
+      operationId: updateWebhook
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                events:
+                  type: array
+                  items:
+                    type: string
+                isActive:
+                  type: boolean
+      responses:
+        "200":
+          description: Webhook updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Delete a webhook subscription
+      operationId: deleteWebhook
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "204":
+          description: Webhook deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /webhooks/{id}/deliveries:
+    get:
+      summary: List recent delivery attempts for a webhook
+      operationId: listWebhookDeliveries
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            maximum: 50
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Delivery attempts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            webhookId:
+                              type: string
+                              format: uuid
+                            status:
+                              type: string
+                              enum: [SUCCESS, FAILED, DEGRADED]
+                            statusCode:
+                              type: integer
+                            responseBody:
+                              type: string
+                              nullable: true
+                            attemptedAt:
+                              type: string
+                              format: date-time
+                            nextRetryAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                      meta:
+                        type: object
+                        properties:
+                          limit:
+                            type: integer
+                          hasMore:
+                            type: boolean
+                          nextCursor:
+                            type: string
+                            format: uuid
+                            nullable: true
+                          requestId:
+                            type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /webhooks/{id}/test:
+    post:
+      summary: Send a test webhook event
+      operationId: testWebhook
+      tags: [Webhooks]
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Test event sent
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          deliveryId:
+                            type: string
+                            format: uuid
+                          status:
+                            type: string
+                            enum: [SUCCESS, FAILED]
+                          statusCode:
+                            type: integer
+                          durationMs:
+                            type: integer
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # SEARCH
+  # ============================================================================
+  /search:
+    get:
+      summary: Global search across resource types
+      operationId: globalSearch
+      tags: [Search]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+          description: Search query
+        - name: scope
+          in: query
+          schema:
+            type: string
+          description: Comma-separated resource types
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 5
+            maximum: 20
+          description: Results per scope
+      responses:
+        "200":
+          description: Search results grouped by resource type
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        additionalProperties:
+                          type: array
+                          items:
+                            type: object
+                      meta:
+                        type: object
+                        properties:
+                          query:
+                            type: string
+                          totalResults:
+                            type: integer
+                          scope:
+                            type: array
+                            items:
+                              type: string
+                          requestId:
+                            type: string
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+webhooks:
+  reservationCreated:
+    post:
+      summary: Webhook for reservation created events
+      description: Triggered when a new reservation is created
+      operationId: webhookReservationCreated
+      tags: [Webhooks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                  enum: [reservation.created]
+                id:
+                  type: string
+                  format: uuid
+                createdAt:
+                  type: string
+                  format: date-time
+                data:
+                  $ref: "#/components/schemas/Reservation"
+  reservationUpdated:
+    post:
+      summary: Webhook for reservation updated events
+      description: Triggered when reservation details are modified
+      operationId: webhookReservationUpdated
+      tags: [Webhooks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                  enum: [reservation.updated]
+                id:
+                  type: string
+                  format: uuid
+                createdAt:
+                  type: string
+                  format: date-time
+                data:
+                  $ref: "#/components/schemas/Reservation"
+  reservationCancelled:
+    post:
+      summary: Webhook for reservation cancelled events
+      description: Triggered when a reservation is cancelled
+      operationId: webhookReservationCancelled
+      tags: [Webhooks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                  enum: [reservation.cancelled]
+                id:
+                  type: string
+                  format: uuid
+                createdAt:
+                  type: string
+                  format: date-time
+                data:
+                  $ref: "#/components/schemas/Reservation"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token (15-minute expiry). Obtain via POST /auth/login or POST /auth/refresh.
+
+  parameters:
+    resourceId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: Resource UUID
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      description: Page number (1-indexed)
+    pageSize:
+      name: pageSize
+      in: query
+      schema:
+        type: integer
+        default: 20
+        maximum: 100
+        minimum: 1
+      description: Items per page
+    sortBy:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+      description: Field to sort by
+    sortDirection:
+      name: sortDirection
+      in: query
+      schema:
+        type: string
+        enum: [ASC, DESC]
+        default: DESC
+      description: Sort direction
+    searchQuery:
+      name: q
+      in: query
+      schema:
+        type: string
+      description: Search query
+
+  responses:
+    Unauthorized:
+      description: Authentication required or token expired
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: auth.token.missing
+              message: Authentication required
+              details: []
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: auth.forbidden
+              message: Insufficient permissions to perform this action
+              details: []
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: resource.not_found
+              message: Resource not found
+              details: []
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: validation.failed
+              message: Request validation failed
+              details:
+                - field: email
+                  code: validation.email.invalid
+                  message: Must be a valid email address
+    Conflict:
+      description: Resource conflict
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: resource.duplicate
+              message: Resource already exists
+              details: []
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: internal.error
+              message: An unexpected error occurred. Please try again later.
+              details: []
+    RateLimitExceeded:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: rate_limit.exceeded
+              message: Too many requests. Please try again later.
+              details:
+                retryAfter: 45
+                limit: 200
+                resetAt: 1704068100
+
+  schemas:
+    # ==============================
+    # ENVELOPES
+    # ==============================
+    SuccessResponse:
+      type: object
+      required: [success, data]
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          nullable: true
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required: [success, error]
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: object
+          required: [code, message, details]
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  value:
+                    type: string
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalCount:
+          type: integer
+        totalPages:
+          type: integer
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+        requestId:
+          type: string
+
+    # ==============================
+    # AUTH
+    # ==============================
+    RegisterRequest:
+      type: object
+      required: [email, password, firstName, lastName, organizationName]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 12
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        organizationName:
+          type: string
+          maxLength: 255
+        phone:
+          type: string
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+            refreshToken:
+              type: string
+            expiresIn:
+              type: integer
+            user:
+              type: object
+              properties:
+                id:
+                  type: string
+                  format: uuid
+                email:
+                  type: string
+                  format: email
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                role:
+                  type: string
+
+    # ==============================
+    # USER
+    # ==============================
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        isActive:
+          type: boolean
+        isVerified:
+          type: boolean
+        lastLoginAt:
+          type: string
+          format: date-time
+          nullable: true
+        roles:
+          type: array
+          items:
+            type: object
+            properties:
+              roleId:
+                type: string
+                format: uuid
+              roleName:
+                type: string
+              branchId:
+                type: string
+                format: uuid
+                nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateUserRequest:
+      type: object
+      required: [email, password, firstName, lastName]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 12
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+        roleIds:
+          type: array
+          items:
+            type: object
+            properties:
+              roleId:
+                type: string
+                format: uuid
+              branchId:
+                type: string
+                format: uuid
+                nullable: true
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+        isActive:
+          type: boolean
+
+    # ==============================
+    # ROLE
+    # ==============================
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        isSystem:
+          type: boolean
+        permissions:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateRoleRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        permissionIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    # ==============================
+    # PERMISSION
+    # ==============================
+    Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        module:
+          type: string
+        riskLevel:
+          type: string
+          enum: [low, medium, high, critical]
+
+    # ==============================
+    # ORGANIZATION
+    # ==============================
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        logoUrl:
+          type: string
+          format: uri
+          nullable: true
+        timezone:
+          type: string
+        branchCount:
+          type: integer
+        totalStaff:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UpdateOrganizationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          type: string
+        logoUrl:
+          type: string
+          format: uri
+        timezone:
+          type: string
+
+    # ==============================
+    # BRANCH
+    # ==============================
+    Branch:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        organizationId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        timezone:
+          type: string
+        cuisineType:
+          type: string
+          nullable: true
+        averageDiningDuration:
+          type: integer
+        maxAdvanceBookingDays:
+          type: integer
+        slotInterval:
+          type: integer
+        maxPartySize:
+          type: integer
+        isOnlineReservationEnabled:
+          type: boolean
+        tableCount:
+          type: integer
+        updatedBy:
+          type: string
+          format: uuid
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateBranchRequest:
+      type: object
+      required: [name, address, timezone]
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        address:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        timezone:
+          type: string
+        cuisineType:
+          type: string
+          maxLength: 100
+        averageDiningDuration:
+          type: integer
+          minimum: 30
+          maximum: 240
+          default: 90
+        maxAdvanceBookingDays:
+          type: integer
+          minimum: 1
+          maximum: 365
+          default: 60
+        slotInterval:
+          type: integer
+          enum: [15, 30, 60]
+          default: 30
+        maxPartySize:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 20
+        isOnlineReservationEnabled:
+          type: boolean
+          default: false
+
+    UpdateBranchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        address:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        timezone:
+          type: string
+        cuisineType:
+          type: string
+        averageDiningDuration:
+          type: integer
+          minimum: 30
+          maximum: 240
+        maxAdvanceBookingDays:
+          type: integer
+          minimum: 1
+          maximum: 365
+        slotInterval:
+          type: integer
+          enum: [15, 30, 60]
+        maxPartySize:
+          type: integer
+          minimum: 1
+          maximum: 50
+        isOnlineReservationEnabled:
+          type: boolean
+
+    # ==============================
+    # BUSINESS / HOLIDAY HOURS
+    # ==============================
+    BusinessHours:
+      type: object
+      required: [dayOfWeek, isClosed]
+      properties:
+        dayOfWeek:
+          type: integer
+          minimum: 1
+          maximum: 7
+          description: 1=Monday, 7=Sunday
+        openTime:
+          type: string
+          nullable: true
+        closeTime:
+          type: string
+          nullable: true
+        isClosed:
+          type: boolean
+
+    HolidayHours:
+      type: object
+      required: [date, isClosed]
+      properties:
+        date:
+          type: string
+          format: date
+        openTime:
+          type: string
+          nullable: true
+        closeTime:
+          type: string
+          nullable: true
+        isClosed:
+          type: boolean
+        description:
+          type: string
+          maxLength: 255
+
+    # ==============================
+    # TABLE
+    # ==============================
+    RestaurantTable:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+        zoneId:
+          type: string
+          format: uuid
+          nullable: true
+        tableNumber:
+          type: string
+        minCapacity:
+          type: integer
+        maxCapacity:
+          type: integer
+        isActive:
+          type: boolean
+        positionX:
+          type: integer
+        positionY:
+          type: integer
+        shape:
+          type: string
+          enum: [rectangle, round, square, booth]
+        width:
+          type: integer
+        height:
+          type: integer
+        zoneName:
+          type: string
+          nullable: true
+        updatedBy:
+          type: string
+          format: uuid
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateTableRequest:
+      type: object
+      required: [tableNumber, minCapacity, maxCapacity]
+      properties:
+        tableNumber:
+          type: string
+          maxLength: 20
+        minCapacity:
+          type: integer
+          minimum: 1
+          maximum: 50
+        maxCapacity:
+          type: integer
+          minimum: 1
+          maximum: 50
+        zoneId:
+          type: string
+          format: uuid
+          nullable: true
+        positionX:
+          type: integer
+          minimum: 0
+          default: 0
+        positionY:
+          type: integer
+          minimum: 0
+          default: 0
+        shape:
+          type: string
+          enum: [rectangle, round, square, booth]
+          default: rectangle
+        width:
+          type: integer
+          minimum: 20
+          maximum: 500
+          default: 60
+        height:
+          type: integer
+          minimum: 20
+          maximum: 500
+          default: 60
+
+    UpdateTableRequest:
+      type: object
+      properties:
+        tableNumber:
+          type: string
+          maxLength: 20
+        minCapacity:
+          type: integer
+          minimum: 1
+          maximum: 50
+        maxCapacity:
+          type: integer
+          minimum: 1
+          maximum: 50
+        zoneId:
+          type: string
+          format: uuid
+          nullable: true
+        positionX:
+          type: integer
+        positionY:
+          type: integer
+        shape:
+          type: string
+          enum: [rectangle, round, square, booth]
+        width:
+          type: integer
+          minimum: 20
+          maximum: 500
+        height:
+          type: integer
+          minimum: 20
+          maximum: 500
+        isActive:
+          type: boolean
+
+    TableZone:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+        tableCount:
+          type: integer
+
+    # ==============================
+    # RESERVATION
+    # ==============================
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+          format: uuid
+        updatedBy:
+          type: string
+          format: uuid
+          nullable: true
+        noShowMarkedAt:
+          type: string
+          format: date-time
+          nullable: true
+        assignedTo:
+          type: string
+          format: uuid
+          nullable: true
+        confirmationCode:
+          type: string
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+        partySize:
+          type: integer
+        status:
+          type: string
+          enum: [PENDING, CONFIRMED, SEATED, COMPLETED, NO_SHOW, CANCELLED]
+        source:
+          type: string
+          enum: [PHONE, WALK_IN, ONLINE, STAFF]
+        isWalkIn:
+          type: boolean
+        specialRequests:
+          type: string
+          nullable: true
+        internalNotes:
+          type: string
+          nullable: true
+        cancellationReason:
+          type: string
+          nullable: true
+        checkedInAt:
+          type: string
+          format: date-time
+          nullable: true
+        checkedOutAt:
+          type: string
+          format: date-time
+          nullable: true
+        cancelledAt:
+          type: string
+          format: date-time
+          nullable: true
+        customer:
+          $ref: "#/components/schemas/Customer"
+        tables:
+          type: array
+          items:
+            type: object
+            properties:
+              tableId:
+                type: string
+                format: uuid
+              tableNumber:
+                type: string
+              assignedAt:
+                type: string
+                format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateReservationRequest:
+      type: object
+      required: [branchId, customerId, date, time, partySize]
+      properties:
+        branchId:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        time:
+          type: string
+        partySize:
+          type: integer
+          minimum: 1
+          maximum: 20
+        source:
+          type: string
+          enum: [PHONE, WALK_IN, ONLINE, STAFF]
+          default: PHONE
+        specialRequests:
+          type: string
+          maxLength: 2000
+        internalNotes:
+          type: string
+          maxLength: 2000
+        tableIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    UpdateReservationRequest:
+      type: object
+      properties:
+        time:
+          type: string
+        partySize:
+          type: integer
+          minimum: 1
+          maximum: 20
+        specialRequests:
+          type: string
+          maxLength: 2000
+        internalNotes:
+          type: string
+          maxLength: 2000
+        tableIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    StatusHistory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fromStatus:
+          type: string
+          nullable: true
+        toStatus:
+          type: string
+        changedBy:
+          type: string
+          format: uuid
+        changedByName:
+          type: string
+        reason:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # CUSTOMER
+    # ==============================
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        totalVisits:
+          type: integer
+        totalCancellations:
+          type: integer
+        totalNoshows:
+          type: integer
+        isFlagged:
+          type: boolean
+        updatedBy:
+          type: string
+          format: uuid
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        preferences:
+          type: object
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateCustomerRequest:
+      type: object
+      required: [email, phone, firstName, lastName]
+      properties:
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        notes:
+          type: string
+          maxLength: 5000
+        preferences:
+          type: object
+
+    UpdateCustomerRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        firstName:
+          type: string
+          maxLength: 100
+        lastName:
+          type: string
+          maxLength: 100
+        notes:
+          type: string
+          maxLength: 5000
+        preferences:
+          type: object
+
+    # ==============================
+    # EMPLOYEE
+    # ==============================
+    Employee:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+        employeeCode:
+          type: string
+          nullable: true
+        position:
+          type: string
+        hiredAt:
+          type: string
+          format: date
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # NOTIFICATION
+    # ==============================
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+        reservationId:
+          type: string
+          format: uuid
+          nullable: true
+        type:
+          type: string
+          enum: [CONFIRMATION, REMINDER, CANCELLATION, MODIFICATION]
+        recipientEmail:
+          type: string
+          format: email
+          nullable: true
+        recipientPhone:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [PENDING, SENT, FAILED]
+        sentAt:
+          type: string
+          format: date-time
+          nullable: true
+        errorMessage:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # SETTING
+    # ==============================
+    Setting:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+          nullable: true
+        key:
+          type: string
+        value:
+          type: object
+        updatedAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # AUDIT LOG
+    # ==============================
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+          nullable: true
+        userName:
+          type: string
+        action:
+          type: string
+        resourceType:
+          type: string
+        resourceId:
+          type: string
+        details:
+          type: object
+          nullable: true
+        ipAddress:
+          type: string
+          nullable: true
+        userAgent:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # WEBHOOK
+    # ==============================
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+        isActive:
+          type: boolean
+        lastDeliveryAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastDeliveryStatus:
+          type: string
+          enum: [SUCCESS, FAILED, DEGRADED]
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # DASHBOARD & REPORTS
+    # ==============================
+    DashboardToday:
+      type: object
+      properties:
+        branchId:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        totalReservations:
+          type: integer
+        totalCovers:
+          type: integer
+        confirmedCount:
+          type: integer
+        seatedCount:
+          type: integer
+        completedCount:
+          type: integer
+        noShowCount:
+          type: integer
+        cancelledCount:
+          type: integer
+        walkInCount:
+          type: integer
+        availableTables:
+          type: integer
+        occupiedTables:
+          type: integer
+        outOfServiceTables:
+          type: integer
+        occupancyRate:
+          type: number
+          format: float
+        upcomingReservations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              time:
+                type: string
+              partySize:
+                type: integer
+              customerName:
+                type: string
+              status:
+                type: string
+              tableNumbers:
+                type: array
+                items:
+                  type: string
+
+    DailySummary:
+      type: object
+      properties:
+        branchId:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        totalReservations:
+          type: integer
+        totalCovers:
+          type: integer
+        totalConfirmed:
+          type: integer
+        totalSeated:
+          type: integer
+        totalCompleted:
+          type: integer
+        totalNoShows:
+          type: integer
+        totalCancellations:
+          type: integer
+        occupancyRate:
+          type: number
+          format: float
+        averagePartySize:
+          type: number
+          format: float
+        peakHour:
+          type: string
+        peakHourCovers:
+          type: integer
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Authentication
+    description: Auth and token management
+  - name: Users
+    description: Staff user management
+  - name: Roles
+    description: Role definitions and permission assignments
+  - name: Permissions
+    description: Permission catalog
+  - name: Restaurants
+    description: Organization/tenant management
+  - name: Branches
+    description: Branch management
+  - name: Tables
+    description: Table and floor plan management
+  - name: Reservations
+    description: Reservation operations
+  - name: Customers
+    description: Customer profile management
+  - name: Employees
+    description: Staff employment records
+  - name: Notifications
+    description: Notification history and delivery
+  - name: Reports
+    description: Aggregated data and analytics
+  - name: Dashboard
+    description: Role-specific dashboard data
+  - name: Settings
+    description: Branch and organization configuration
+  - name: Audit Logs
+    description: Immutable system event log
+  - name: Webhooks
+    description: Outbound webhook subscriptions
+  - name: Search
+    description: Global search across resources

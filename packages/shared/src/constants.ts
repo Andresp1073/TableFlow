@@ -1,0 +1,30 @@
+export const API_VERSION = 'v1';
+
+export const PAGINATION = {
+  DEFAULT_LIMIT: 10,
+  MAX_LIMIT: 100,
+  DEFAULT_PAGE: 1,
+} as const;
+
+export const RESERVATION = {
+  MIN_PARTY_SIZE: 1,
+  MAX_PARTY_SIZE: 20,
+  DEFAULT_DINE_DURATION_MINUTES: 90,
+  MIN_NOTICE_MINUTES: 60,
+  MAX_ADVANCE_DAYS: 30,
+  CONFIRMATION_CODE_LENGTH: 10,
+} as const;
+
+export const AUTH = {
+  BCRYPT_SALT_ROUNDS: 12,
+  ACCESS_TOKEN_EXPIRY: '15m',
+  REFRESH_TOKEN_EXPIRY: '7d',
+  MIN_PASSWORD_LENGTH: 8,
+  MAX_LOGIN_ATTEMPTS: 5,
+  LOCKOUT_DURATION_MINUTES: 15,
+} as const;
+
+export const TABLE = {
+  MIN_CAPACITY: 1,
+  DEFAULT_STATUS: 'available',
+} as const;
