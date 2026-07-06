@@ -4,9 +4,9 @@
 </picture>
 
 <p align="center">
-  <strong>Enterprise Multi-Restaurant Reservation & Table Management SaaS</strong>
+  <strong>SaaS empresarial de reservas y gestión de mesas para restaurantes multi-sucursal</strong>
   <br>
-  Built with Clean Architecture, RBAC, and Multi-Tenant Isolation
+  Construido con Clean Architecture, RBAC y aislamiento multi-tenant
 </p>
 
 <p align="center">
@@ -21,15 +21,15 @@
 
 ---
 
-## Overview
+## Descripción general
 
-**TableFlow** is a comprehensive, enterprise-grade reservation management platform designed for multi-location restaurant groups. It provides end-to-end table management, reservation lifecycle handling, customer profiles, and operational analytics — all secured with a fine-grained Role-Based Access Control (RBAC) system.
+**TableFlow** es una plataforma SaaS de gestión de reservas de nivel empresarial, diseñada para grupos de restaurantes con múltiples ubicaciones. Proporciona gestión completa de mesas, ciclo de vida de reservas, perfiles de clientes y análisis operativos — todo asegurado con un sistema de control de acceso basado en roles (RBAC) de grano fino.
 
-The platform follows **Clean Architecture** and **Domain-Driven Design** principles, ensuring maintainability, testability, and clear separation of concerns across the entire stack.
+La plataforma sigue los principios de **Clean Architecture** y **Domain-Driven Design**, garantizando mantenibilidad, testabilidad y una separación clara de responsabilidades en toda la pila.
 
 ---
 
-## Architecture
+## Arquitectura
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -43,133 +43,133 @@ The platform follows **Clean Architecture** and **Domain-Driven Design** princip
 │  Node.js · TypeScript · Prisma ORM · Zod · JWT              │
 │                                                             │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│  │  Auth    │  │   RBAC   │  │Reserv.   │  │  Tables  │   │
-│  │  Module  │  │  Module  │  │  Module  │  │  Module  │   │
+│  │   Auth   │  │   RBAC   │  │ Reserv.  │  │  Mesas   │   │
+│  │  Módulo  │  │  Módulo  │  │  Módulo  │  │  Módulo  │   │
 │  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│  │Customers │  │  Audit   │  │  Shared  │  │   ...    │   │
-│  │  Module  │  │  Module  │  │  Layer   │  │          │   │
+│  │Clientes  │  │ Auditoría│  │ Compart. │  │   ...    │   │
+│  │  Módulo  │  │  Módulo  │  │  Capa    │  │          │   │
 │  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
 └──────────────────────┬──────────────────────────────────────┘
                        │
 ┌──────────────────────▼──────────────────────────────────────┐
-│                 Database (MySQL 8)                           │
-│  Prisma ORM · InnoDB · utf8mb4 · UUID v4 PKs                │
+│                 Base de datos (MySQL 8)                      │
+│  Prisma ORM · InnoDB · utf8mb4 · UUID v4 como PK            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Design Principles
+### Principios de diseño
 
-| Principle | Application |
-|-----------|-------------|
-| **Clean Architecture** | Domain, Application, Infrastructure layers with strict dependency rules |
-| **Domain-Driven Design** | Models, repositories, services per bounded context |
-| **RBAC** | Fine-grained permissions with role-permission-user assignments |
-| **Multi-Tenancy** | Organization-scoped data with cross-tenant isolation |
-| **API-First** | Comprehensive OpenAPI contracts define all endpoints |
-| **Security-First** | JWT rotation, bcrypt hashing, rate limiting, account lockout |
+| Principio | Aplicación |
+|-----------|------------|
+| **Clean Architecture** | Capas de dominio, aplicación e infraestructura con reglas de dependencia estrictas |
+| **Domain-Driven Design** | Modelos, repositorios y servicios por contexto delimitado |
+| **RBAC** | Permisos de grano fino con asignaciones rol-permiso-usuario |
+| **Multi-Tenancy** | Datos aislados por organización con separación entre inquilinos |
+| **API-First** | Contratos OpenAPI exhaustivos que definen todos los endpoints |
+| **Security-First** | Rotación de JWT, hashing con bcrypt, limitación de tasa, bloqueo de cuenta |
 
 ---
 
-## Tech Stack
+## Stack tecnológico
 
 ### Frontend
 
-| Technology | Purpose |
-|------------|---------|
-| **React 19** | UI library |
-| **TypeScript** (strict mode) | Type safety |
-| **Vite 6** | Build tool & dev server |
-| **TailwindCSS 3** | Utility-first styling |
-| **TanStack Query 5** | Server state management |
-| **React Router v7** | Client-side routing |
-| **Axios** | HTTP client |
+| Tecnología | Propósito |
+|------------|-----------|
+| **React 19** | Librería UI |
+| **TypeScript** (modo estricto) | Seguridad de tipos |
+| **Vite 6** | Herramienta de build y servidor de desarrollo |
+| **TailwindCSS 3** | Estilos utilitarios |
+| **TanStack Query 5** | Gestión de estado del servidor |
+| **React Router v7** | Enrutamiento del lado del cliente |
+| **Axios** | Cliente HTTP |
 
 ### Backend
 
-| Technology | Purpose |
-|------------|---------|
-| **Node.js 20** | Runtime |
-| **Express** | HTTP framework |
-| **TypeScript** (strict mode) | Type safety |
-| **Prisma 6** | ORM & migrations |
-| **MySQL 8** | Database (InnoDB, utf8mb4) |
-| **Zod** | Request validation |
-| **JWT** | Access & refresh token auth |
-| **bcryptjs** | Password hashing |
-| **Pino** | Structured logging |
-| **Vitest** | Unit & integration testing |
+| Tecnología | Propósito |
+|------------|-----------|
+| **Node.js 20** | Entorno de ejecución |
+| **Express** | Framework HTTP |
+| **TypeScript** (modo estricto) | Seguridad de tipos |
+| **Prisma 6** | ORM y migraciones |
+| **MySQL 8** | Base de datos (InnoDB, utf8mb4) |
+| **Zod** | Validación de peticiones |
+| **JWT** | Autenticación con tokens de acceso y refresco |
+| **bcryptjs** | Hashing de contraseñas |
+| **Pino** | Logging estructurado |
+| **Vitest** | Tests unitarios y de integración |
 
-### Infrastructure
+### Infraestructura
 
-| Technology | Purpose |
-|------------|---------|
-| **Docker** | Containerization |
-| **Docker Compose** | Local development orchestration |
-| **Nginx** | Reverse proxy |
-| **pnpm workspaces** | Monorepo management |
+| Tecnología | Propósito |
+|------------|-----------|
+| **Docker** | Contenerización |
+| **Docker Compose** | Orquestación de desarrollo local |
+| **Nginx** | Proxy inverso |
+| **pnpm workspaces** | Gestión del monorepositorio |
 
 ---
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 tableflow/
 ├── apps/
-│   ├── frontend/                  # React SPA (port 3000)
+│   ├── frontend/                  # React SPA (puerto 3000)
 │   │   ├── src/
-│   │   │   ├── components/        # Shared UI components
-│   │   │   ├── features/          # Feature modules
-│   │   │   ├── hooks/             # Custom React hooks
-│   │   │   ├── layouts/           # Layout components
-│   │   │   ├── pages/             # Route pages
-│   │   │   ├── services/          # API client (Axios)
-│   │   │   ├── types/             # Frontend-specific types
-│   │   │   └── utils/             # Utilities
+│   │   │   ├── components/        # Componentes UI compartidos
+│   │   │   ├── features/          # Módulos funcionales
+│   │   │   ├── hooks/             # Hooks personalizados
+│   │   │   ├── layouts/           # Componentes de layout
+│   │   │   ├── pages/             # Páginas de ruta
+│   │   │   ├── services/          # Cliente API (Axios)
+│   │   │   ├── types/             # Tipos específicos del frontend
+│   │   │   └── utils/             # Utilidades
 │   │   ├── index.html
 │   │   ├── vite.config.ts
 │   │   └── tailwind.config.ts
 │   │
-│   └── backend/                   # Express API (port 4000)
+│   └── backend/                   # Express API (puerto 4000)
 │       ├── prisma/
-│       │   └── schema.prisma      # Complete domain schema (675 lines)
+│       │   └── schema.prisma      # Esquema completo del dominio (675 líneas)
 │       ├── src/
-│       │   ├── config/            # Env, logger, database, constants
-│       │   ├── errors/            # Error hierarchy (AppError base)
-│       │   ├── events/            # Event bus
-│       │   ├── middlewares/        # Auth, validation, rate limiter, error handler
-│       │   ├── modules/           # Feature modules (auth, authorization, shared)
-│       │   │   ├── auth/          # Auth service, repository, controller
-│       │   │   ├── authorization/ # RBAC: roles, permissions, assignments, middleware
+│       │   ├── config/            # Env, logger, base de datos, constantes
+│       │   ├── errors/            # Jerarquía de errores (AppError base)
+│       │   ├── events/            # Bus de eventos
+│       │   ├── middlewares/        # Auth, validación, limitador de tasa, error handler
+│       │   ├── modules/           # Módulos funcionales (auth, autorización, compartido)
+│       │   │   ├── auth/          # Servicio de autenticación, repositorio, controlador
+│       │   │   ├── authorization/ # RBAC: roles, permisos, asignaciones, middleware
 │       │   │   └── shared/        # BaseRepository, BaseService
-│       │   ├── routes/            # Route aggregators
-│       │   ├── types/             # Backend-specific types
-│       │   └── utils/             # Async handler, date helpers
+│       │   ├── routes/            # Agregadores de rutas
+│       │   ├── types/             # Tipos específicos del backend
+│       │   └── utils/             # Async handler, helpers de fecha
 │       ├── vitest.config.ts
 │       └── package.json
 │
 ├── packages/
-│   ├── shared/                    # Cross-app constants, enums, helpers
-│   ├── types/                     # Shared DTOs and interfaces
-│   ├── ui/                        # Shared UI primitives
-│   └── config/                    # Shared configuration
+│   ├── shared/                    # Constantes, enums y helpers entre apps
+│   ├── types/                     # DTOs e interfaces compartidas
+│   ├── ui/                        # Primitivas UI compartidas
+│   └── config/                    # Configuración compartida
 │
 ├── docker/
-│   ├── docker-compose.yml         # MySQL + services orchestration
+│   ├── docker-compose.yml         # Orquestación MySQL + servicios
 │   ├── Dockerfile.backend
 │   ├── Dockerfile.frontend
 │   └── nginx.conf
 │
 ├── scripts/
-│   ├── setup.ps1                  # One-command project setup
-│   └── dev.ps1                    # Development environment start
+│   ├── setup.ps1                  # Configuración con un solo comando
+│   └── dev.ps1                    # Inicio del entorno de desarrollo
 │
-├── docs/                          # Comprehensive documentation
-│   ├── api/                       # API contracts, standards, OpenAPI spec
-│   ├── architecture/              # Architecture decisions, patterns, modules
-│   ├── authorization/             # RBAC docs: roles, permissions, assignment
-│   ├── database/                  # Schema, conventions, indexes, migrations
-│   └── ...                        # Requirements, glossary, roadmap, use cases
+├── docs/                          # Documentación exhaustiva
+│   ├── api/                       # Contratos API, estándares, especificación OpenAPI
+│   ├── architecture/              # Decisiones arquitectónicas, patrones, módulos
+│   ├── authorization/             # Documentación RBAC: roles, permisos, asignación
+│   ├── database/                  # Esquema, convenciones, índices, migraciones
+│   └── ...                        # Requisitos, glosario, roadmap, casos de uso
 │
 ├── pnpm-workspace.yaml
 ├── tsconfig.base.json
@@ -178,76 +178,76 @@ tableflow/
 
 ---
 
-## Features
+## Funcionalidades
 
-### Authentication & Security
-- JWT access + refresh token rotation with family tracking
-- bcrypt password hashing
-- Account lockout after configurable failed attempts
-- Password reset with one-time tokens
-- Email verification flow
-- Rate limiting on auth endpoints
-- Session management (list, revoke, revoke all)
+### Autenticación y Seguridad
+- Rotación de tokens JWT access + refresh con seguimiento familiar
+- Hashing de contraseñas con bcrypt
+- Bloqueo de cuenta tras intentos fallidos configurables
+- Restablecimiento de contraseña con tokens de un solo uso
+- Flujo de verificación de email
+- Limitación de tasa en endpoints de autenticación
+- Gestión de sesiones (listar, revocar, revocar todas)
 
-### Authorization (RBAC)
-- **Permission Catalog** — granular dot-notation permissions (`reservations.create`, `users.read`)
-- **Role Management** — system vs restaurant roles with priority, status, color
-- **Role-Permission Assignment** — bulk assign, replace, validate
-- **User-Role Assignment** — multi-tenant: different roles per restaurant
-- **Authorization Middleware** — `requirePermission`, `requireRole`, `requireRestaurantAccess`
-- **Request-level caching** — WeakMap-based permission cache per request
-- **Multi-tenant isolation** — organization-scoped roles and data
+### Autorización (RBAC)
+- **Catálogo de permisos** — permisos granulares con notación de punto (`reservations.create`, `users.read`)
+- **Gestión de roles** — roles de sistema vs restaurante con prioridad, estado, color
+- **Asignación Rol-Permiso** — asignación masiva, reemplazo, validación
+- **Asignación Usuario-Rol** — multi-tenant: diferentes roles por restaurante
+- **Middleware de autorización** — `requirePermission`, `requireRole`, `requireRestaurantAccess`
+- **Caching por petición** — caché de permisos basada en WeakMap
+- **Aislamiento multi-tenant** — roles y datos aislados por organización
 
-### Planned Modules
-- **Reservations** — full lifecycle (pending → confirmed → seated → completed)
-- **Tables** — floor plan with zones, shapes, capacity
-- **Customers** — profile management with visit history
-- **Branches** — multi-location support with operating hours
-- **Notifications** — email/SMS templates and delivery
-- **Reports & Analytics** — aggregated metrics and exports
-- **Audit Logging** — immutable event log
+### Módulos planeados
+- **Reservas** — ciclo de vida completo (pendiente → confirmada → sentado → completada)
+- **Mesas** — plano del piso con zonas, formas, capacidad
+- **Clientes** — gestión de perfiles con historial de visitas
+- **Sucursales** — soporte multi-ubicación con horarios operativos
+- **Notificaciones** — plantillas de email/SMS y envío
+- **Reportes y Analytics** — métricas agregadas y exportaciones
+- **Auditoría** — registro de eventos inmutable
 
 ---
 
-## Quick Start
+## Inicio rápido
 
-### Prerequisites
+### Requisitos previos
 
 - **Node.js** >= 20
 - **pnpm** >= 9 (`npm install -g pnpm`)
-- **Docker Desktop** (for MySQL)
+- **Docker Desktop** (para MySQL)
 
-### Setup
+### Instalación
 
 ```bash
-# 1. Clone the repository
+# 1. Clonar el repositorio
 git clone https://github.com/Andresp1073/TableFlow.git
 cd TableFlow
 
-# 2. Install dependencies
+# 2. Instalar dependencias
 pnpm install
 
-# 3. Start MySQL
+# 3. Iniciar MySQL
 docker compose -f docker/docker-compose.yml up -d mysql
 
-# 4. Configure environment
+# 4. Configurar entorno
 cp apps/backend/.env.example apps/backend/.env
-# Edit apps/backend/.env to match your setup (defaults work for local dev)
+# Editar apps/backend/.env si es necesario (los valores por defecto funcionan para desarrollo local)
 
-# 5. Generate Prisma client & push schema
+# 5. Generar cliente Prisma y subir esquema
 pnpm --filter @tableflow/backend db:generate
 pnpm --filter @tableflow/backend db:push
 
-# 6. (Optional) Seed the database
+# 6. (Opcional) Sembrar la base de datos
 pnpm --filter @tableflow/backend db:seed
 
-# 7. Start development servers
+# 7. Iniciar servidores de desarrollo
 pnpm dev
 ```
 
-The frontend will be available at **http://localhost:3000** and the backend API at **http://localhost:4000**.
+El frontend estará disponible en **http://localhost:3000** y la API backend en **http://localhost:4000**.
 
-### Alternative: Automated Setup (Windows)
+### Alternativa: Instalación automatizada (Windows)
 
 ```powershell
 .\scripts\setup.ps1
@@ -255,141 +255,141 @@ The frontend will be available at **http://localhost:3000** and the backend API 
 
 ---
 
-## Scripts Reference
+## Referencia de comandos
 
-| Command | Description |
+| Comando | Descripción |
 |---------|-------------|
-| `pnpm dev` | Start frontend + backend concurrently |
-| `pnpm dev:frontend` | Start frontend only (port 3000) |
-| `pnpm dev:backend` | Start backend only (port 4000) |
-| `pnpm build` | Build all packages and apps |
-| `pnpm lint` | Run ESLint across all packages |
-| `pnpm lint:fix` | Auto-fix lint issues |
-| `pnpm format` | Format code with Prettier |
-| `pnpm format:check` | Check formatting without changes |
-| `pnpm typecheck` | Run TypeScript type checking |
-| `pnpm test` | Run all tests (Vitest) |
-| `pnpm clean` | Clean all build artifacts (dist, .tsbuildinfo) |
-| `pnpm db:migrate` | Run Prisma migrations |
-| `pnpm db:push` | Push Prisma schema to database |
-| `pnpm db:studio` | Open Prisma Studio GUI |
-| `pnpm db:seed` | Seed database with initial data |
-| `pnpm db:reset` | Reset database (drops all data) |
-| `pnpm docker:up` | Start all Docker services |
-| `pnpm docker:down` | Stop all Docker services |
+| `pnpm dev` | Inicia frontend + backend concurrentemente |
+| `pnpm dev:frontend` | Inicia solo el frontend (puerto 3000) |
+| `pnpm dev:backend` | Inicia solo el backend (puerto 4000) |
+| `pnpm build` | Compila todos los paquetes y apps |
+| `pnpm lint` | Ejecuta ESLint en todos los paquetes |
+| `pnpm lint:fix` | Corrige errores de lint automáticamente |
+| `pnpm format` | Formatea código con Prettier |
+| `pnpm format:check` | Verifica formato sin cambios |
+| `pnpm typecheck` | Ejecuta verificación de tipos TypeScript |
+| `pnpm test` | Ejecuta todos los tests (Vitest) |
+| `pnpm clean` | Limpia artefactos de build (dist, .tsbuildinfo) |
+| `pnpm db:migrate` | Ejecuta migraciones de Prisma |
+| `pnpm db:push` | Sube el esquema Prisma a la base de datos |
+| `pnpm db:studio` | Abre Prisma Studio GUI |
+| `pnpm db:seed` | Siembra la base de datos con datos iniciales |
+| `pnpm db:reset` | Reinicia la base de datos (borra todos los datos) |
+| `pnpm docker:up` | Inicia todos los servicios Docker |
+| `pnpm docker:down` | Detiene todos los servicios Docker |
 
 ---
 
-## Environment Variables
+## Variables de entorno
 
 ### Backend (`apps/backend/.env`)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NODE_ENV` | `development` | Runtime environment |
-| `PORT` | `4000` | Server port |
-| `HOST` | `0.0.0.0` | Server host |
-| `DATABASE_URL` | — | MySQL connection string |
-| `JWT_SECRET` | — | JWT signing secret |
-| `JWT_EXPIRES_IN` | `15m` | Access token lifetime |
-| `JWT_REFRESH_EXPIRES_IN` | `7d` | Refresh token lifetime |
-| `CORS_ORIGIN` | `http://localhost:3000` | Allowed CORS origin |
-| `RATE_LIMIT_WINDOW_MS` | `900000` | Rate limit window (15 min) |
-| `RATE_LIMIT_MAX` | `100` | Max requests per window |
+| Variable | Valor por defecto | Descripción |
+|----------|-------------------|-------------|
+| `NODE_ENV` | `development` | Entorno de ejecución |
+| `PORT` | `4000` | Puerto del servidor |
+| `HOST` | `0.0.0.0` | Host del servidor |
+| `DATABASE_URL` | — | Cadena de conexión MySQL |
+| `JWT_SECRET` | — | Secreto para firmar JWT |
+| `JWT_EXPIRES_IN` | `15m` | Duración del token de acceso |
+| `JWT_REFRESH_EXPIRES_IN` | `7d` | Duración del token de refresco |
+| `CORS_ORIGIN` | `http://localhost:3000` | Origen CORS permitido |
+| `RATE_LIMIT_WINDOW_MS` | `900000` | Ventana de limitación de tasa (15 min) |
+| `RATE_LIMIT_MAX` | `100` | Máximo de peticiones por ventana |
 
 ### Frontend (`apps/frontend/.env`)
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `VITE_API_URL` | `/api/v1` | API base URL |
+| Variable | Valor por defecto | Descripción |
+|----------|-------------------|-------------|
+| `VITE_API_URL` | `/api/v1` | URL base de la API |
 
 ---
 
-## Testing
+## Tests
 
-The project uses **Vitest** with Node environment for both unit and integration tests.
+El proyecto usa **Vitest** con entorno Node para tests unitarios y de integración.
 
 ```bash
-# Run all tests
+# Ejecutar todos los tests
 pnpm test
 
-# Run specific test file
+# Ejecutar un archivo específico
 pnpm --filter @tableflow/backend test -- src/modules/auth/auth.service.spec.ts
 
-# Run tests in watch mode
+# Ejecutar tests en modo watch
 pnpm --filter @tableflow/backend test:watch
 
-# Current coverage: 298 tests across 11 test files
+# Cobertura actual: 298 tests en 11 archivos
 ```
 
-### Test Structure
-- **Unit tests** — co-located with source files (`*.spec.ts`)
-- **Validation tests** — pure function testing for domain logic
-- **Service tests** — mocked repositories for business logic
-- **Middleware tests** — mocked Express req/res/next
-- **Integration tests** — full request-response with real database (`*.test.ts`)
+### Estructura de tests
+- **Tests unitarios** — co-ubicados con archivos fuente (`*.spec.ts`)
+- **Tests de validación** — pruebas de funciones puras para lógica de dominio
+- **Tests de servicios** — repositorios mockeados para lógica de negocio
+- **Tests de middleware** — req/res/next mockeados de Express
+- **Tests de integración** — petición-respuesta completa con base de datos real (`*.test.ts`)
 
 ---
 
-## Documentation
+## Documentación
 
-Comprehensive documentation is available in the [`docs/`](docs/) directory:
+La documentación completa está disponible en el directorio [`docs/`](docs/):
 
-- [API Overview](docs/api/api-overview.md) — API standards, pagination, filtering, sorting
-- [Endpoint Catalog](docs/api/endpoint-catalog.md) — Complete API reference with 1900+ lines
-- [Error Catalog](docs/api/error-catalog.md) — All error codes and responses
-- [Authorization Architecture](docs/authorization/authorization-architecture.md) — RBAC design
-- [Permission Catalog](docs/authorization/permission-catalog.md) — All permissions defined
-- [Roles](docs/authorization/roles.md) — System and restaurant role definitions
-- [User Role Assignment](docs/authorization/user-role-assignment.md) — Assignment lifecycle
-- [Database Schema](docs/database/database-overview.md) — Entity relationships and design
-- [Architecture Decisions](docs/architecture/architecture-decisions.md) — Key technical decisions
+- [Visión general de la API](docs/api/api-overview.md) — Estándares API, paginación, filtrado, ordenamiento
+- [Catálogo de endpoints](docs/api/endpoint-catalog.md) — Referencia completa de la API con 1900+ líneas
+- [Catálogo de errores](docs/api/error-catalog.md) — Todos los códigos de error y respuestas
+- [Arquitectura de autorización](docs/authorization/authorization-architecture.md) — Diseño RBAC
+- [Catálogo de permisos](docs/authorization/permission-catalog.md) — Todos los permisos definidos
+- [Roles](docs/authorization/roles.md) — Definiciones de roles de sistema y restaurante
+- [Asignación usuario-rol](docs/authorization/user-role-assignment.md) — Ciclo de vida de asignación
+- [Esquema de base de datos](docs/database/database-overview.md) — Relaciones de entidades y diseño
+- [Decisiones arquitectónicas](docs/architecture/architecture-decisions.md) — Decisiones técnicas clave
 
 ---
 
-## Docker Deployment
+## Despliegue con Docker
 
-### Production Build
+### Build de producción
 
 ```bash
-# Build and start all services
+# Construir e iniciar todos los servicios
 docker compose -f docker/docker-compose.yml up -d --build
 
-# Services:
-# - MySQL 8 on port 3306
-# - Backend API on port 4000
-# - Frontend SPA on port 3000 (via Nginx)
+# Servicios:
+# - MySQL 8 en puerto 3306
+# - Backend API en puerto 4000
+# - Frontend SPA en puerto 3000 (vía Nginx)
 ```
 
 ---
 
-## Contributing
+## Contribuir
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feat/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feat/amazing-feature`)
-5. Open a Pull Request
+1. Haz fork del repositorio
+2. Crea una rama de funcionalidad (`git checkout -b feat/nueva-funcionalidad`)
+3. Haz commit de tus cambios (`git commit -m 'feat: agrega nueva funcionalidad'`)
+4. Sube la rama (`git push origin feat/nueva-funcionalidad`)
+5. Abre un Pull Request
 
-### Commit Convention
+### Convención de commits
 
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
+Seguimos [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat(authz): implement user role assignment
-fix(auth): prevent token reuse after rotation
-docs(api): update endpoint catalog
-test(auth): add account lockout tests
+feat(authz): implementar asignación de roles a usuarios
+fix(auth): evitar reutilización de tokens después de rotación
+docs(api): actualizar catálogo de endpoints
+test(auth): agregar tests de bloqueo de cuenta
 ```
 
 ---
 
-## License
+## Licencia
 
-This project is licensed under the [MIT License](LICENSE).
+Este proyecto está licenciado bajo [MIT License](LICENSE).
 
 ---
 
 <p align="center">
-  Built with ❤️ for restaurant operators everywhere
+  Construido con ❤️ para operadores de restaurantes en todo el mundo
 </p>
