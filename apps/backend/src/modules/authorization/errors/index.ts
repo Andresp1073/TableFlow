@@ -6,3 +6,4 @@ export { UnauthorizedRestaurantAccessError } from "./UnauthorizedRestaurantAcces
 export { DuplicateAssignmentError } from "./DuplicateAssignmentError.js";
 export { UserNotFoundError } from "./UserNotFoundError.js";
 export { AssignmentNotFoundError } from "./AssignmentNotFoundError.js";
+export { ResourceForbiddenError } from "./ResourceForbiddenError.js";

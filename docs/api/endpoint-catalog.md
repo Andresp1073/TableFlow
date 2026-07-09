@@ -1866,6 +1866,244 @@ Each endpoint includes:
 
 ---
 
+## 17. Reservation Policy
+
+### GET /api/v1/restaurants/{id}/reservation-policy
+
+**Purpose:** Get reservation policy with auto-create defaults.
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth** | ✅ Required |
+| **Permission** | `restaurants.reservation-policy.read` |
+| **Idempotent** | ✅ (GET) |
+
+**Path Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | UUID | ✅ | Restaurant ID |
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "restaurantId": "uuid",
+    "enabled": true,
+    "minPartySize": 1,
+    "maxPartySize": 20,
+    "defaultReservationDuration": 60,
+    "minAdvanceBookingMinutes": 60,
+    "maxAdvanceBookingDays": 30,
+    "cancellationDeadlineMinutes": 1440,
+    "modificationDeadlineMinutes": 1440,
+    "allowWalkIns": true,
+    "autoConfirmReservations": false,
+    "requireCustomerPhone": false,
+    "requireCustomerEmail": true,
+    "maxActiveReservationsPerCustomer": 10,
+    "gracePeriodMinutes": 15,
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "updatedAt": "2026-07-07T12:00:00.000Z"
+  }
+}
+```
+
+**Errors:** `400` (invalid UUID), `401`, `403`
+
+---
+
+### PUT /api/v1/restaurants/{id}/reservation-policy
+
+**Purpose:** Update reservation policy.
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth** | ✅ Required |
+| **Permission** | `restaurants.reservation-policy.update` |
+| **Idempotent** | ✅ |
+
+**Path Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | UUID | ✅ | Restaurant ID |
+
+**Request Body:**
+
+| Field | Type | Required | Default | Validation |
+|-------|------|----------|---------|------------|
+| `enabled` | boolean | ❌ | `true` | — |
+| `minPartySize` | integer | ❌ | `1` | 1–100 |
+| `maxPartySize` | integer | ❌ | `20` | 1–100, must be >= minPartySize |
+| `defaultReservationDuration` | integer | ❌ | `60` | 15–480 (minutes) |
+| `minAdvanceBookingMinutes` | integer | ❌ | `60` | 0–43200 (minutes) |
+| `maxAdvanceBookingDays` | integer | ❌ | `30` | 0–365 (days) |
+| `cancellationDeadlineMinutes` | integer | ❌ | `1440` | 0–43200 (minutes) |
+| `modificationDeadlineMinutes` | integer | ❌ | `1440` | 0–43200 (minutes) |
+| `allowWalkIns` | boolean | ❌ | `true` | — |
+| `autoConfirmReservations` | boolean | ❌ | `false` | — |
+| `requireCustomerPhone` | boolean | ❌ | `false` | — |
+| `requireCustomerEmail` | boolean | ❌ | `true` | — |
+| `maxActiveReservationsPerCustomer` | integer | ❌ | `10` | 1–100 |
+| `gracePeriodMinutes` | integer | ❌ | `15` | 0–120 (minutes) |
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "restaurantId": "uuid",
+    "enabled": true,
+    "minPartySize": 2,
+    "maxPartySize": 50,
+    "defaultReservationDuration": 90,
+    "minAdvanceBookingMinutes": 120,
+    "maxAdvanceBookingDays": 60,
+    "cancellationDeadlineMinutes": 720,
+    "modificationDeadlineMinutes": 1440,
+    "allowWalkIns": false,
+    "autoConfirmReservations": true,
+    "requireCustomerPhone": false,
+    "requireCustomerEmail": true,
+    "maxActiveReservationsPerCustomer": 10,
+    "gracePeriodMinutes": 15,
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "updatedAt": "2026-07-07T12:00:10.000Z"
+  },
+  "message": "Reservation policy updated successfully"
+}
+```
+
+**Errors:** `400` (validation), `401`, `403`
+
+---
+
+## 18. Business Hours
+
+### GET /api/v1/restaurants/{id}/business-hours
+
+**Purpose:** Get business hours with auto-create defaults (Mon-Fri 09:00-17:00, Sat-Sun closed).
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth** | ✅ Required |
+| **Permission** | `restaurants.business-hours.read` |
+| **Idempotent** | ✅ (GET) |
+
+**Path Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | UUID | ✅ | Restaurant ID |
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "restaurantId": "uuid",
+    "schedules": [
+      {
+        "dayOfWeek": 1,
+        "isClosed": false,
+        "periods": [{ "openTime": "09:00", "closeTime": "17:00", "order": 0 }]
+      },
+      { "dayOfWeek": 6, "isClosed": true, "periods": [] },
+      { "dayOfWeek": 7, "isClosed": true, "periods": [] }
+    ],
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "updatedAt": "2026-07-07T12:00:00.000Z"
+  }
+}
+```
+
+**Errors:** `400`, `401`, `403`
+
+---
+
+### PUT /api/v1/restaurants/{id}/business-hours
+
+**Purpose:** Replace all business hours for a restaurant.
+
+| Attribute | Value |
+|-----------|-------|
+| **Auth** | ✅ Required |
+| **Permission** | `restaurants.business-hours.update` |
+| **Idempotent** | ✅ |
+
+**Path Parameters:**
+
+| Param | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | UUID | ✅ | Restaurant ID |
+
+**Request Body:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `schedules` | array | ✅ | Array of 1–7 day schedules |
+
+**Day Schedule Object:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `dayOfWeek` | integer | ✅ | 1=Monday .. 7=Sunday |
+| `isClosed` | boolean | ✅ | If true, `periods` must be empty |
+| `periods` | array | ✅ | Array of opening periods (max 10) |
+
+**Opening Period Object:**
+
+| Field | Type | Required | Validation |
+|-------|------|----------|------------|
+| `openTime` | string | ✅ | `HH:MM` format (00:00–23:59) |
+| `closeTime` | string | ✅ | `HH:MM` format, must be after `openTime` |
+| `order` | integer | ✅ | Non-negative display order |
+
+**Response:** `200 OK`
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "restaurantId": "uuid",
+    "schedules": [
+      {
+        "dayOfWeek": 1,
+        "isClosed": false,
+        "periods": [
+          { "openTime": "08:00", "closeTime": "12:00", "order": 0 },
+          { "openTime": "13:00", "closeTime": "18:00", "order": 1 }
+        ]
+      },
+      { "dayOfWeek": 3, "isClosed": true, "periods": [] }
+    ],
+    "createdAt": "2026-07-07T12:00:00.000Z",
+    "updatedAt": "2026-07-07T12:00:10.000Z"
+  },
+  "message": "Business hours updated successfully"
+}
+```
+
+**Business Rules:**
+- Open time must be before close time
+- Periods within the same day must not overlap
+- Maximum 10 periods per day
+- Closed days cannot have periods
+- Periods are sorted by `order` within each day
+
+**Errors:** `400` (validation), `401`, `403`
+
+---
+
 ## Endpoint Summary
 
 | Module | Method | URL | Permission |
@@ -1942,6 +2180,17 @@ Each endpoint includes:
 | **Reports** | GET | `/reports/export` | `reports.export` |
 | **Dashboard** | GET | `/dashboard/today` | Implicit |
 | **Dashboard** | GET | `/dashboard/weekly` | Implicit |
+| **Restaurants** | POST | `/restaurants` | `restaurants.create` |
+| **Restaurants** | GET | `/restaurants` | `restaurants.read` |
+| **Restaurants** | GET | `/restaurants/{id}` | `restaurants.read` |
+| **Restaurants** | PUT | `/restaurants/{id}` | `restaurants.update` |
+| **Restaurants** | PATCH | `/restaurants/{id}/activate` | `restaurants.activate` |
+| **Restaurants** | PATCH | `/restaurants/{id}/suspend` | `restaurants.suspend` |
+| **Restaurants** | PATCH | `/restaurants/{id}/archive` | `restaurants.archive` |
+| **Reservation Policy** | GET | `/restaurants/{id}/reservation-policy` | `restaurants.reservation-policy.read` |
+| **Reservation Policy** | PUT | `/restaurants/{id}/reservation-policy` | `restaurants.reservation-policy.update` |
+| **Business Hours** | GET | `/restaurants/{id}/business-hours` | `restaurants.business-hours.read` |
+| **Business Hours** | PUT | `/restaurants/{id}/business-hours` | `restaurants.business-hours.update` |
 | **Settings** | GET | `/settings` | `settings.read` |
 | **Settings** | PUT | `/settings/{id}` | `settings.update` |
 | **Settings** | PUT | `/settings/bulk` | `settings.update` |

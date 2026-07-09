@@ -1,0 +1,11 @@
+export type { Restaurant } from "./Restaurant.js";
+export { RestaurantName } from "./RestaurantName.js";
+export { RestaurantSlug } from "./RestaurantSlug.js";
+export { RestaurantStatus, RESTAURANT_STATUSES } from "./RestaurantStatus.js";
+export type { RestaurantStatusValue } from "./RestaurantStatus.js";
+export { RestaurantTimezone } from "./RestaurantTimezone.js";
+export { RestaurantCurrency } from "./RestaurantCurrency.js";
+export { RestaurantLanguage } from "./RestaurantLanguage.js";
+export { RestaurantEmail } from "./RestaurantEmail.js";
+export { RestaurantTaxId } from "./RestaurantTaxId.js";
+export { RestaurantPhone } from "./RestaurantPhone.js";

@@ -3,3 +3,5 @@ export type { Permission } from "./Permission.js";
 export type { UserRole, UserRoleStatus } from "./UserRole.js";
 export type { RolePermission } from "./RolePermission.js";
 export type { AuthorizationContext, AuthorizationScope, UserRoleInfo } from "./AuthorizationContext.js";
+export type { PermissionResolutionContext, PermissionResolutionResult } from "./PermissionResolution.js";
+export type { ResourceContext, ResourceType } from "./ResourceContext.js";

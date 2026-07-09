@@ -3,9 +3,18 @@ import type { Response, NextFunction } from "express";
 import type { AuthenticatedRequest } from "../../../middlewares/auth.js";
 import { requirePermission, requireAnyPermission, requireRole, requireRestaurantAccess } from "./guards.js";
 
-vi.mock("../../../config/logger.js", () => ({
-  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
-}));
+vi.mock("../../../config/logger.js", () => {
+  const childFn = vi.fn(() => ({
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+    child: childFn,
+  }));
+  return {
+    logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), child: childFn },
+  };
+});
 
 function createMockReq(overrides?: Partial<AuthenticatedRequest>): AuthenticatedRequest {
   return {

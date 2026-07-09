@@ -252,25 +252,192 @@ model Organization {
   id        String   @id @default(uuid()) @db.Char(36)
   name      String   @db.VarChar(255)
   slug      String   @unique @db.VarChar(100)
+  legalName String?  @db.VarChar(255)
+  taxId     String?  @db.VarChar(50)
   email     String?  @db.VarChar(255)
   phone     String?  @db.VarChar(20)
+  website   String?  @db.VarChar(500)
   address   String?  @db.Text
   logoUrl   String?  @db.VarChar(500)
   timezone  String   @default("UTC") @db.VarChar(50)
   currency  String   @default("USD") @db.VarChar(3)
+  language  String   @default("en") @db.VarChar(5)
+  status    String   @default("draft") @db.VarChar(20)
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  deletedBy String?  @db.Char(36)
 
   roles        Role[]
   branches     Branch[]
   users        User[]
   customers    Customer[]
   settings     OrganizationSetting[]
+  restaurantSettings RestaurantSettings[]
+  reservationPolicy ReservationPolicy?
+  businessHours     BusinessHours?
+  calendarExceptions CalendarException[]
+  restaurantAssets   RestaurantAsset[]
+  diningAreas        DiningArea[]
   reservations Reservation[]
   auditLogs    AuditLog[]
+  userRoles    UserRole[]
 
+  @@index([status])
   @@map("organizations")
+}
+
+// ── RestaurantSettings ─────────────────────────────────────────────────────
+// Typed operational settings for a restaurant (one-to-one with Organization).
+// Separate aggregate from Restaurant — loaded and managed independently.
+
+model RestaurantSettings {
+  id                          String   @id @default(uuid()) @db.Char(36)
+  restaurantId                String   @unique @db.Char(36)
+  timezone                    String   @default("UTC") @db.VarChar(50)
+  currency                    String   @default("USD") @db.Char(3)
+  language                    String   @default("en") @db.VarChar(10)
+  dateFormat                  String   @default("YYYY-MM-DD") @db.VarChar(20)
+  timeFormat                  String   @default("HH:mm") @db.VarChar(20)
+  weekStartsOn                Int      @default(0)
+  taxPercentage               Decimal  @default(0) @db.Decimal(5, 2)
+  serviceChargePercentage     Decimal  @default(0) @db.Decimal(5, 2)
+  defaultReservationDuration  Int      @default(60)
+  reservationBufferMinutes    Int      @default(15)
+  allowWalkIns                Boolean  @default(true)
+  autoConfirmReservations     Boolean  @default(false)
+  maxReservationsPerCustomer  Int      @default(10)
+  reservationCancellationHours Int     @default(24)
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@map("restaurant_settings")
+}
+
+// ── BusinessHours ──────────────────────────────────────────────────────
+// Operating hours for a restaurant (one-to-one with Organization).
+// Separate aggregate — contains day schedules and opening periods.
+// Designed for future: branches, holiday overrides, seasonal schedules.
+
+model BusinessHours {
+  id           String   @id @default(uuid()) @db.Char(36)
+  restaurantId String   @unique @db.Char(36)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  periods    OpeningPeriod[]
+
+  @@map("business_hours")
+}
+
+// ── CalendarException ──────────────────────────────────────────────────
+// Overrides business hours for specific dates (holidays, closures, events).
+// Multiple exceptions per restaurant; resolved by priority + date/type uniqueness.
+// Designed for future resolver: Business Hours → Calendar Exception → Reservation Policy.
+// Types: holiday, special_opening, temporary_closure, maintenance, private_event, seasonal_hours, emergency_closure
+
+model CalendarException {
+  id           String   @id @default(uuid()) @db.Char(36)
+  restaurantId String   @db.Char(36)
+  title        String   @db.VarChar(255)
+  description  String?  @db.Text
+  type         String   @db.VarChar(30)
+  date         DateTime @db.Date
+  isClosed     Boolean  @default(false)
+  openTime     String?  @db.VarChar(5)
+  closeTime    String?  @db.VarChar(5)
+  allDay       Boolean  @default(false)
+  priority     Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, date, type])
+  @@index([restaurantId, date])
+  @@index([date])
+  @@map("calendar_exceptions")
+}
+
+model OpeningPeriod {
+  id              String   @id @default(uuid()) @db.Char(36)
+  businessHoursId String   @db.Char(36)
+  dayOfWeek       Int      // 1=Monday .. 7=Sunday
+  openTime        Int      // Minutes from midnight (0-1439)
+  closeTime       Int      // Minutes from midnight (0-1439)
+  order           Int      // Display order for periods within the same day
+  createdAt       DateTime @default(now())
+
+  businessHours BusinessHours @relation(fields: [businessHoursId], references: [id], onDelete: Cascade)
+
+  @@index([businessHoursId, dayOfWeek])
+  @@map("opening_periods")
+}
+
+// ── RestaurantAsset ────────────────────────────────────────────────────
+// Digital assets uploaded for a restaurant (logos, covers, gallery images, menus, etc.).
+// Provider-agnostic: storageProvider field identifies the backend (local, s3, cloudinary).
+// Primary flag supports exactly one primary asset per type per restaurant.
+
+model RestaurantAsset {
+  id              String   @id @default(uuid()) @db.Char(36)
+  restaurantId    String   @db.Char(36)
+  type            String   @db.VarChar(30)
+  name            String   @db.VarChar(255)
+  originalFilename String  @db.VarChar(500)
+  mimeType        String   @db.VarChar(100)
+  extension       String   @db.VarChar(20)
+  size            Int
+  width           Int?
+  height          Int?
+  storageProvider String   @db.VarChar(50)
+  storageKey      String   @db.VarChar(500)
+  publicUrl       String?  @db.VarChar(1000)
+  isPrimary       Boolean  @default(false)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@index([restaurantId, type])
+  @@index([restaurantId, isPrimary])
+  @@map("restaurant_assets")
+}
+
+// ── ReservationPolicy ───────────────────────────────────────────────────
+// Reservation policies and constraints per restaurant (one-to-one with Organization).
+// Separate aggregate from Restaurant — loaded and managed independently.
+// Defines business rules for reservations: party size, duration, advance booking,
+// cancellation, walk-ins, auto-confirmation, and customer requirements.
+
+model ReservationPolicy {
+  id                                String   @id @default(uuid()) @db.Char(36)
+  restaurantId                      String   @unique @db.Char(36)
+  enabled                           Boolean  @default(true)
+  minPartySize                      Int      @default(1)
+  maxPartySize                      Int      @default(20)
+  defaultReservationDuration        Int      @default(60)
+  minAdvanceBookingMinutes          Int      @default(60)
+  maxAdvanceBookingDays             Int      @default(30)
+  cancellationDeadlineMinutes       Int      @default(1440)
+  modificationDeadlineMinutes       Int      @default(1440)
+  allowWalkIns                      Boolean  @default(true)
+  autoConfirmReservations           Boolean  @default(false)
+  requireCustomerPhone              Boolean  @default(false)
+  requireCustomerEmail              Boolean  @default(true)
+  maxActiveReservationsPerCustomer  Int      @default(10)
+  gracePeriodMinutes                Int      @default(15)
+  createdAt                         DateTime @default(now())
+  updatedAt                         DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@map("reservation_policies")
 }
 
 // ── OrganizationSetting ────────────────────────────────────────────────────
@@ -443,6 +610,30 @@ model RestaurantTable {
   @@index([branchId, status])
   @@index([zoneId])
   @@map("restaurant_tables")
+}
+
+// ── DiningArea ─────────────────────────────────────────────────────────────
+// Physical zones or sections inside a restaurant (Main Hall, Terrace, VIP Room).
+// Each area can have multiple tables. Soft-deletable via status.
+
+model DiningArea {
+  id              String   @id @default(uuid()) @db.Char(36)
+  restaurantId    String   @db.Char(36)
+  name            String   @db.VarChar(100)
+  code            String   @db.VarChar(30)
+  description     String?  @db.Text
+  displayOrder    Int      @default(0)
+  status          String   @default("active") @db.VarChar(20)
+  isReservable    Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, name])
+  @@unique([restaurantId, code])
+  @@index([restaurantId, status])
+  @@map("dining_areas")
 }
 
 // ============================================================================
@@ -672,4 +863,35 @@ model AuditLog {
   @@index([organizationId, action])
   @@index([userId])
   @@map("audit_logs")
+}
+
+// ── AuditEntry ─────────────────────────────────────────────────────────────
+// Generic immutable audit trail. Tracks every significant action across all
+// modules (restaurant, table, reservation, user, role, etc.).
+// Designed as a generic module — not tied to any specific domain.
+
+model AuditEntry {
+  id              String   @id @default(uuid()) @db.Char(36)
+  organizationId  String   @db.Char(36)
+  module          String   @db.VarChar(50)
+  entityType      String   @db.VarChar(50)
+  entityId        String   @db.Char(36)
+  action          String   @db.VarChar(50)
+  performedBy     String?  @db.Char(36)
+  restaurantId    String?  @db.Char(36)
+  ipAddress       String?  @db.VarChar(45)
+  userAgent       String?  @db.VarChar(500)
+  requestId       String?  @db.VarChar(100)
+  oldValues       Json?
+  newValues       Json?
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, module])
+  @@index([organizationId, entityType, entityId])
+  @@index([organizationId, action])
+  @@index([performedBy])
+  @@index([restaurantId])
+  @@map("audit_entries")
 }

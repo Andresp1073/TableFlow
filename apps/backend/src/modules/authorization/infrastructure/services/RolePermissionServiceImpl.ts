@@ -4,6 +4,7 @@ import type {
   RolePermissionService,
   AssignPermissionsResult,
 } from "../../application/services/RolePermissionService.js";
+import type { CacheInvalidationService } from "../../../shared/cache/domain/CacheInvalidationService.js";
 import { DuplicateAssignmentError } from "../../errors/DuplicateAssignmentError.js";
 import {
   validateRolePermissionAssignment,
@@ -11,9 +12,14 @@ import {
 } from "../../domain/validation/RolePermissionValidation.js";
 
 export class RolePermissionServiceImpl implements RolePermissionService {
+  private readonly invalidation: CacheInvalidationService | null;
+
   constructor(
-    private readonly repo: RolePermissionRepository
-  ) {}
+    private readonly repo: RolePermissionRepository,
+    invalidation?: CacheInvalidationService
+  ) {
+    this.invalidation = invalidation ?? null;
+  }
 
   async assignPermissionToRole(
     roleId: string,
@@ -28,7 +34,9 @@ export class RolePermissionServiceImpl implements RolePermissionService {
       throw new DuplicateAssignmentError(duplicateError.message);
     }
 
-    return this.repo.create(roleId, permissionId);
+    const result = await this.repo.create(roleId, permissionId);
+    await this.invalidation?.invalidateAll();
+    return result;
   }
 
   async assignPermissionsToRole(
@@ -64,6 +72,10 @@ export class RolePermissionServiceImpl implements RolePermissionService {
       }
     }
 
+    if (result.assigned > 0) {
+      await this.invalidation?.invalidateAll();
+    }
+
     return result;
   }
 
@@ -72,6 +84,7 @@ export class RolePermissionServiceImpl implements RolePermissionService {
     permissionId: string
   ): Promise<void> {
     await this.repo.deleteByRoleAndPermission(roleId, permissionId);
+    await this.invalidation?.invalidateAll();
   }
 
   async removePermissionsFromRole(
@@ -91,6 +104,10 @@ export class RolePermissionServiceImpl implements RolePermissionService {
       }
     }
 
+    if (removed > 0) {
+      await this.invalidation?.invalidateAll();
+    }
+
     return removed;
   }
 
@@ -105,6 +122,8 @@ export class RolePermissionServiceImpl implements RolePermissionService {
       const record = await this.repo.create(roleId, permissionId);
       created.push(record);
     }
+
+    await this.invalidation?.invalidateAll();
 
     return created;
   }

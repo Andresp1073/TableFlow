@@ -1,15 +1,18 @@
 import type { Response, NextFunction } from "express";
 import type { AuthenticatedRequest } from "../../../middlewares/auth.js";
 import type { AuthorizationService } from "../application/services/AuthorizationService.js";
+import type { PermissionResolutionService } from "../domain/services/PermissionResolutionService.js";
 import { ForbiddenError } from "../../../errors/ForbiddenError.js";
 import { UnauthorizedError } from "../../../errors/UnauthorizedError.js";
 import { AuthorizationServiceImpl } from "../application/services/AuthorizationServiceImpl.js";
+import { PermissionResolutionServiceImpl } from "../infrastructure/services/PermissionResolutionServiceImpl.js";
 import { PermissionEvaluatorImpl } from "../application/services/PermissionEvaluatorImpl.js";
 import { getCache } from "./PermissionCache.js";
 import { logger } from "../../../config/logger.js";
 
 const defaultAuthz = new AuthorizationServiceImpl();
 const defaultEvaluator = new PermissionEvaluatorImpl();
+const defaultResolver = new PermissionResolutionServiceImpl();
 
 function getRequestLogger(req: AuthenticatedRequest) {
   return {
@@ -20,31 +23,72 @@ function getRequestLogger(req: AuthenticatedRequest) {
   };
 }
 
-function getPermissionSet(req: AuthenticatedRequest): Set<string> {
+async function resolvePermissions(req: AuthenticatedRequest, resolver?: PermissionResolutionService): Promise<Set<string>> {
   if (req.authContext?.permissions) {
     return new Set(req.authContext.permissions);
   }
+
   const cached = getCache(req);
   if (cached) {
     return cached.permissions;
   }
+
+  if (req.userId && req.organizationId) {
+    const r = resolver ?? defaultResolver;
+    try {
+      const resolved = await r.resolve(
+        {
+          userId: req.userId,
+          restaurantId: req.organizationId,
+          organizationId: req.organizationId,
+          requestId: req.requestId,
+        },
+        req
+      );
+      return resolved.permissions as Set<string>;
+    } catch {
+      return new Set<string>();
+    }
+  }
+
   return new Set<string>();
 }
 
-function getRoleCodes(req: AuthenticatedRequest): Set<string> {
+async function resolveRoleCodes(req: AuthenticatedRequest, resolver?: PermissionResolutionService): Promise<Set<string>> {
   if (req.authContext?.roles) {
     return new Set(req.authContext.roles.map((r) => r.roleCode));
   }
+
   const cached = getCache(req);
   if (cached) {
     return cached.roleCodes;
   }
+
+  if (req.userId && req.organizationId) {
+    const r = resolver ?? defaultResolver;
+    try {
+      const resolved = await r.resolve(
+        {
+          userId: req.userId,
+          restaurantId: req.organizationId,
+          organizationId: req.organizationId,
+          requestId: req.requestId,
+        },
+        req
+      );
+      return new Set(resolved.roleCodes);
+    } catch {
+      return new Set<string>();
+    }
+  }
+
   return new Set<string>();
 }
 
 export function requirePermission(
   permissionCode: string,
-  service?: AuthorizationService
+  service?: AuthorizationService,
+  resolver?: PermissionResolutionService
 ) {
   const authz = service ?? defaultAuthz;
 
@@ -61,14 +105,13 @@ export function requirePermission(
     }
 
     try {
-      const context = req.authContext;
-      if (context) {
-        await authz.authorize(context, permissionCode);
+      if (req.authContext) {
+        await authz.authorize(req.authContext, permissionCode);
         next();
         return;
       }
 
-      const perms = getPermissionSet(req);
+      const perms = await resolvePermissions(req, resolver);
       if (perms.has(permissionCode)) {
         next();
         return;
@@ -95,10 +138,9 @@ export function requirePermission(
 
 export function requireAnyPermission(
   permissionCodes: string[],
-  service?: AuthorizationService
+  _service?: AuthorizationService,
+  resolver?: PermissionResolutionService
 ) {
-  const authz = service ?? defaultAuthz;
-
   return async (
     req: AuthenticatedRequest,
     _res: Response,
@@ -112,10 +154,10 @@ export function requireAnyPermission(
     }
 
     try {
-      const context = req.authContext;
-      const perms = context
-        ? new Set(context.permissions)
-        : getPermissionSet(req);
+      const perms = req.authContext
+        ? new Set(req.authContext.permissions)
+        : await resolvePermissions(req, resolver);
+
       const hasAny = permissionCodes.some((code) => perms.has(code));
 
       if (hasAny) {
@@ -135,7 +177,7 @@ export function requireAnyPermission(
   };
 }
 
-export function requireRole(roleCode: string) {
+export function requireRole(roleCode: string, resolver?: PermissionResolutionService) {
   return async (
     req: AuthenticatedRequest,
     _res: Response,
@@ -148,7 +190,7 @@ export function requireRole(roleCode: string) {
       return;
     }
 
-    const roleCodes = getRoleCodes(req);
+    const roleCodes = await resolveRoleCodes(req, resolver);
     if (roleCodes.has(roleCode)) {
       next();
       return;
@@ -164,7 +206,8 @@ export function requireRole(roleCode: string) {
 }
 
 export function requireRestaurantAccess(
-  paramName: string = "restaurantId"
+  paramName: string = "restaurantId",
+  resolver?: PermissionResolutionService
 ) {
   return async (
     req: AuthenticatedRequest,
@@ -185,16 +228,26 @@ export function requireRestaurantAccess(
       return;
     }
 
-    const context = req.authContext;
-    if (!context) {
-      next(new ForbiddenError("Authorization context not available"));
+    if (req.authContext) {
+      const evaluator = defaultEvaluator;
+      const hasScope = await evaluator.evaluateScope(req.authContext, targetOrgId);
+
+      if (!hasScope) {
+        const base = getRequestLogger(req);
+        logger.warn(
+          { ...base, reason: "restaurant_access_denied", targetOrgId },
+          "Restaurant access denied"
+        );
+        next(new ForbiddenError("Access denied to this restaurant"));
+        return;
+      }
+
+      next();
       return;
     }
 
-    const evaluator = defaultEvaluator;
-    const hasScope = await evaluator.evaluateScope(context, targetOrgId);
-
-    if (!hasScope) {
+    const resolved = await resolvePermissions(req, resolver);
+    if (resolved.size === 0 && req.organizationId !== targetOrgId) {
       const base = getRequestLogger(req);
       logger.warn(
         { ...base, reason: "restaurant_access_denied", targetOrgId },

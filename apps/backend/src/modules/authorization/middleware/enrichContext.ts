@@ -1,15 +1,20 @@
 import type { Response, NextFunction } from "express";
 import type { AuthenticatedRequest } from "../../../middlewares/auth.js";
 import type { AuthorizationService } from "../application/services/AuthorizationService.js";
+import type { PermissionResolutionService } from "../domain/services/PermissionResolutionService.js";
 import { AuthorizationServiceImpl } from "../application/services/AuthorizationServiceImpl.js";
+import { PermissionResolutionServiceImpl } from "../infrastructure/services/PermissionResolutionServiceImpl.js";
 import { getCache, setCache, createCachedPermissions } from "./PermissionCache.js";
 
 const defaultService = new AuthorizationServiceImpl();
+const defaultResolver = new PermissionResolutionServiceImpl();
 
 export function enrichContext(
-  service?: AuthorizationService
+  service?: AuthorizationService,
+  resolver?: PermissionResolutionService
 ) {
   const authz = service ?? defaultService;
+  const permissionResolver = resolver ?? defaultResolver;
 
   return async (
     req: AuthenticatedRequest,
@@ -24,11 +29,21 @@ export function enrichContext(
     try {
       const cached = getCache(req);
       if (cached) {
+        const resolved = await permissionResolver.resolve(
+          {
+            userId: req.userId,
+            restaurantId: req.organizationId,
+            organizationId: req.organizationId,
+            requestId: req.requestId,
+          },
+          req
+        );
+
         req.authContext = {
           userId: req.userId,
           organizationId: req.organizationId,
           roles: [],
-          permissions: Array.from(cached.permissions),
+          permissions: Array.from(resolved.permissionCodes),
           scope: { type: "organization", organizationId: req.organizationId },
           sessionId: req.jti,
           requestMetadata: {

@@ -3,7 +3,7 @@ import type { AuthorizationContext, UserRoleInfo } from "../../domain/models/Aut
 /**
  * Core authorization service.
  * Orchestrates permission evaluation, scope enforcement, and context creation.
- * Implementations coordinate between PermissionEvaluator and PermissionResolver.
+ * Implementations coordinate between PermissionEvaluator and PermissionResolutionService.
  */
 export interface AuthorizationService {
   /**

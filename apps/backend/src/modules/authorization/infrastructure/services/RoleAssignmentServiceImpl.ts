@@ -10,6 +10,7 @@ import type {
   ReplaceRolesResult,
   RestaurantUser,
 } from "../../application/services/RoleAssignmentService.js";
+import type { CacheInvalidationService } from "../../../shared/cache/domain/CacheInvalidationService.js";
 import { RoleAssignmentPolicy } from "../../application/services/RoleAssignmentPolicy.js";
 import { RoleNotFoundError } from "../../errors/RoleNotFoundError.js";
 import { UserNotFoundError } from "../../errors/UserNotFoundError.js";
@@ -26,13 +27,16 @@ import {
 
 export class RoleAssignmentServiceImpl implements RoleAssignmentService {
   private readonly policy: RoleAssignmentPolicy;
+  private readonly invalidation: CacheInvalidationService | null;
 
   constructor(
     private readonly userRoleRepo: UserRoleRepository,
     private readonly roleRepo: RoleRepository,
-    private readonly db: PrismaClient = prisma
+    private readonly db: PrismaClient = prisma,
+    invalidation?: CacheInvalidationService
   ) {
     this.policy = new RoleAssignmentPolicy();
+    this.invalidation = invalidation ?? null;
   }
 
   async assignRole(
@@ -87,6 +91,8 @@ export class RoleAssignmentServiceImpl implements RoleAssignmentService {
       expiresAt: options?.expiresAt ?? null,
     });
 
+    await this.invalidation?.invalidateUserForRestaurant(userId, restaurantId);
+
     return { assignment };
   }
 
@@ -109,6 +115,8 @@ export class RoleAssignmentServiceImpl implements RoleAssignmentService {
     }
 
     await this.userRoleRepo.deleteByUserAndRole(userId, roleId, restaurantId);
+
+    await this.invalidation?.invalidateUserForRestaurant(userId, restaurantId);
   }
 
   async replaceUserRoles(
@@ -166,6 +174,8 @@ export class RoleAssignmentServiceImpl implements RoleAssignmentService {
       });
       assigned.push(result);
     }
+
+    await this.invalidation?.invalidateUserForRestaurant(userId, restaurantId);
 
     return {
       removed,
@@ -239,7 +249,14 @@ export class RoleAssignmentServiceImpl implements RoleAssignmentService {
       );
     }
 
-    return this.userRoleRepo.updateStatus(assignmentId, status);
+    const updated = await this.userRoleRepo.updateStatus(assignmentId, status);
+
+    await this.invalidation?.invalidateUserForRestaurant(
+      existing.userId,
+      existing.restaurantId
+    );
+
+    return updated;
   }
 
   async updateAssignmentExpiry(
@@ -258,7 +275,14 @@ export class RoleAssignmentServiceImpl implements RoleAssignmentService {
       );
     }
 
-    return this.userRoleRepo.updateExpiresAt(assignmentId, expiresAt);
+    const updated = await this.userRoleRepo.updateExpiresAt(assignmentId, expiresAt);
+
+    await this.invalidation?.invalidateUserForRestaurant(
+      existing.userId,
+      existing.restaurantId
+    );
+
+    return updated;
   }
 
   async validateAssignment(

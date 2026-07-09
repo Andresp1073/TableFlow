@@ -80,7 +80,9 @@ export async function seedAdminUser(
       data: {
         userId: user.id,
         roleId: sysAdminRole.id,
+        restaurantId: org.id,
         branchId: null,
+        assignedBy: user.id,
       },
     });
   }

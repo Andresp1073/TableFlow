@@ -13,7 +13,7 @@ import {
   notFoundHandler,
   errorHandler,
 } from './middlewares/index.js';
-import { healthRouter, authRouter } from './routes/index.js';
+import { healthRouter, authRouter, restaurantRouter, auditRouter } from './routes/index.js';
 import { eventBus } from './events/index.js';
 const app = express();
 
@@ -54,6 +54,8 @@ app.get('/', (_req, res) => {
 
 app.use(`${APP.API_PREFIX}/health`, healthRouter);
 app.use(`${APP.API_PREFIX}/auth`, authRouter);
+app.use(`${APP.API_PREFIX}/restaurants`, restaurantRouter);
+app.use(`${APP.API_PREFIX}/audit`, auditRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

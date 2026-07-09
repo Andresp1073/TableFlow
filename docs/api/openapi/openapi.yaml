@@ -728,23 +728,65 @@ paths:
           $ref: "#/components/responses/Forbidden"
 
   # ============================================================================
-  # ORGANIZATIONS (RESTAURANTS)
+  # RESTAURANTS
   # ============================================================================
-  /organizations:
-    get:
-      summary: List organizations (system admin only)
-      operationId: listOrganizations
+  /restaurants:
+    post:
+      summary: Create a new restaurant
+      operationId: createRestaurant
       tags: [Restaurants]
       security:
-        - BearerAuth: []
+        - BearerAuth: [restaurants.create]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRestaurantRequest"
+            example:
+              name: My Restaurant
+              slug: my-restaurant
+              email: contact@myrestaurant.com
+              phone: "+14155551234"
+              timezone: America/New_York
+              currency: USD
+              language: en
+      responses:
+        "201":
+          description: Restaurant created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    get:
+      summary: List restaurants
+      operationId: listRestaurants
+      tags: [Restaurants]
+      security:
+        - BearerAuth: [restaurants.read]
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/pageSize"
         - $ref: "#/components/parameters/sortBy"
         - $ref: "#/components/parameters/sortDirection"
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, pending, active, suspended, inactive, archived]
+          description: Filter by status
+        - $ref: "#/components/parameters/searchQuery"
       responses:
         "200":
-          description: Paginated list of organizations
+          description: Paginated list of restaurants
           content:
             application/json:
               schema:
@@ -755,7 +797,7 @@ paths:
                       data:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Organization"
+                          $ref: "#/components/schemas/Restaurant"
                       meta:
                         $ref: "#/components/schemas/PaginationMeta"
         "401":
@@ -763,18 +805,18 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
-  /organizations/{id}:
+  /restaurants/{id}:
     get:
-      summary: Get organization details
-      operationId: getOrganization
+      summary: Get a restaurant by ID
+      operationId: getRestaurant
       tags: [Restaurants]
       security:
-        - BearerAuth: []
+        - BearerAuth: [restaurants.read]
       parameters:
         - $ref: "#/components/parameters/resourceId"
       responses:
         "200":
-          description: Organization details
+          description: Restaurant details
           content:
             application/json:
               schema:
@@ -783,19 +825,19 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: "#/components/schemas/Organization"
+                        $ref: "#/components/schemas/Restaurant"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
-    patch:
-      summary: Update organization settings
-      operationId: updateOrganization
+    put:
+      summary: Update a restaurant
+      operationId: updateRestaurant
       tags: [Restaurants]
       security:
-        - BearerAuth: []
+        - BearerAuth: [restaurants.update]
       parameters:
         - $ref: "#/components/parameters/resourceId"
       requestBody:
@@ -803,21 +845,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateOrganizationRequest"
+              $ref: "#/components/schemas/UpdateRestaurantRequest"
             example:
-              name: La Trattoria Group Inc.
-              email: contact@latrattoriagroup.com
-              phone: "+14155559876"
-              address: 456 Oak Ave, New York, NY 10002
-              logoUrl: "https://cdn.tableflow.com/logos/new-logo.png"
-              timezone: America/New_York
+              name: Updated Restaurant Name
+              timezone: America/Chicago
       responses:
         "200":
-          description: Organization updated
+          description: Restaurant updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessResponse"
+                $ref: "#/components/schemas/RestaurantResponse"
         "400":
           $ref: "#/components/responses/ValidationError"
         "401":
@@ -826,6 +864,796 @@ paths:
           $ref: "#/components/responses/Forbidden"
         "404":
           $ref: "#/components/responses/NotFound"
+
+  /restaurants/{id}/activate:
+    patch:
+      summary: Activate a restaurant
+      operationId: activateRestaurant
+      tags: [Restaurants]
+      security:
+        - BearerAuth: [restaurants.activate]
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Restaurant activated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /restaurants/{id}/suspend:
+    patch:
+      summary: Suspend a restaurant
+      operationId: suspendRestaurant
+      tags: [Restaurants]
+      security:
+        - BearerAuth: [restaurants.suspend]
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  maxLength: 500
+            example:
+              reason: Temporary closure for renovation
+      responses:
+        "200":
+          description: Restaurant suspended
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /restaurants/{id}/archive:
+    patch:
+      summary: Archive a restaurant
+      operationId: archiveRestaurant
+      tags: [Restaurants]
+      security:
+        - BearerAuth: [restaurants.archive]
+      parameters:
+        - $ref: "#/components/parameters/resourceId"
+      responses:
+        "200":
+          description: Restaurant archived
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  # ============================================================================
+  # CALENDAR EXCEPTIONS
+  # ============================================================================
+  /restaurants/{restaurantId}/calendar-exceptions:
+    get:
+      summary: List calendar exceptions for a restaurant
+      operationId: listCalendarExceptions
+      tags: [Calendar Exceptions]
+      security:
+        - BearerAuth: [restaurants.calendar-exceptions.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter from date (YYYY-MM-DD)
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter to date (YYYY-MM-DD)
+      responses:
+        "200":
+          description: List of calendar exceptions
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/CalendarException"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+    post:
+      summary: Create a calendar exception
+      operationId: createCalendarException
+      tags: [Calendar Exceptions]
+      security:
+        - BearerAuth: [restaurants.calendar-exceptions.create]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCalendarExceptionInput"
+      responses:
+        "201":
+          description: Calendar exception created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/CalendarException"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          description: Duplicate exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /restaurants/{restaurantId}/calendar-exceptions/{id}:
+    put:
+      summary: Update a calendar exception
+      operationId: updateCalendarException
+      tags: [Calendar Exceptions]
+      security:
+        - BearerAuth: [restaurants.calendar-exceptions.update]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCalendarExceptionInput"
+      responses:
+        "200":
+          description: Calendar exception updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/CalendarException"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Duplicate exception
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Delete a calendar exception
+      operationId: deleteCalendarException
+      tags: [Calendar Exceptions]
+      security:
+        - BearerAuth: [restaurants.calendar-exceptions.delete]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Calendar exception deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # RESTAURANT CONFIGURATION
+  # ============================================================================
+  /restaurants/{restaurantId}/configuration:
+    get:
+      summary: Get unified restaurant configuration
+      operationId: getRestaurantConfiguration
+      tags: [Restaurant Configuration]
+      security:
+        - BearerAuth: [restaurants.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Unified restaurant configuration
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/RestaurantConfiguration"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Inactive restaurant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Refresh restaurant configuration (bypass cache)
+      operationId: refreshRestaurantConfiguration
+      tags: [Restaurant Configuration]
+      security:
+        - BearerAuth: [restaurants.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Restaurant configuration refreshed
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/RestaurantConfiguration"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Inactive restaurant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ============================================================================
+  # RESTAURANT ASSETS
+  # ============================================================================
+  /restaurants/{restaurantId}/assets:
+    get:
+      summary: List restaurant assets
+      operationId: listRestaurantAssets
+      tags: [Restaurant Assets]
+      security:
+        - BearerAuth: [restaurants.assets.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [logo, cover, gallery, menu_image, qr_image, document, brand_asset]
+          description: Filter by asset type
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RestaurantAsset"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Upload a restaurant asset
+      operationId: uploadRestaurantAsset
+      tags: [Restaurant Assets]
+      security:
+        - BearerAuth: [restaurants.assets.upload]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, type]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Asset file (image or document)
+                type:
+                  type: string
+                  enum: [logo, cover, gallery, menu_image, qr_image, document, brand_asset]
+                name:
+                  type: string
+                  maxLength: 255
+                isPrimary:
+                  type: boolean
+      responses:
+        "201":
+          description: Asset uploaded
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/RestaurantAsset"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /restaurants/{restaurantId}/assets/{assetId}:
+    get:
+      summary: Get a restaurant asset by ID
+      operationId: getRestaurantAsset
+      tags: [Restaurant Assets]
+      security:
+        - BearerAuth: [restaurants.assets.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Asset details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/RestaurantAsset"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      summary: Delete a restaurant asset
+      operationId: deleteRestaurantAsset
+      tags: [Restaurant Assets]
+      security:
+        - BearerAuth: [restaurants.assets.delete]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Asset deleted
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /restaurants/{restaurantId}/assets/{assetId}/primary:
+    patch:
+      summary: Set an asset as primary for its type
+      operationId: setAssetPrimary
+      tags: [Restaurant Assets]
+      security:
+        - BearerAuth: [restaurants.assets.update]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: assetId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Asset marked as primary
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/RestaurantAsset"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ============================================================================
+  # DINING AREAS
+  # ============================================================================
+  /restaurants/{restaurantId}/dining-areas:
+    get:
+      summary: List dining areas
+      operationId: listDiningAreas
+      tags: [Dining Areas]
+      security:
+        - BearerAuth: [restaurants.dining-areas.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, archived]
+          description: Filter by status
+      responses:
+        "200":
+          description: List of dining areas
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/DiningArea"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Create a dining area
+      operationId: createDiningArea
+      tags: [Dining Areas]
+      security:
+        - BearerAuth: [restaurants.dining-areas.create]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, code]
+              properties:
+                name:
+                  type: string
+                  maxLength: 100
+                code:
+                  type: string
+                  maxLength: 30
+                description:
+                  type: string
+                  nullable: true
+                displayOrder:
+                  type: integer
+                  minimum: 0
+                  maximum: 9999
+                isReservable:
+                  type: boolean
+                  default: true
+      responses:
+        "201":
+          description: Dining area created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DiningArea"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /restaurants/{restaurantId}/dining-areas/{diningAreaId}:
+    get:
+      summary: Get a dining area by ID
+      operationId: getDiningArea
+      tags: [Dining Areas]
+      security:
+        - BearerAuth: [restaurants.dining-areas.read]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: diningAreaId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Dining area details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DiningArea"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update a dining area
+      operationId: updateDiningArea
+      tags: [Dining Areas]
+      security:
+        - BearerAuth: [restaurants.dining-areas.update]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: diningAreaId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, code]
+              properties:
+                name:
+                  type: string
+                  maxLength: 100
+                code:
+                  type: string
+                  maxLength: 30
+                description:
+                  type: string
+                  nullable: true
+                displayOrder:
+                  type: integer
+                  minimum: 0
+                  maximum: 9999
+                isReservable:
+                  type: boolean
+      responses:
+        "200":
+          description: Dining area updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DiningArea"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /restaurants/{restaurantId}/dining-areas/{diningAreaId}/archive:
+    patch:
+      summary: Archive a dining area (soft delete)
+      operationId: archiveDiningArea
+      tags: [Dining Areas]
+      security:
+        - BearerAuth: [restaurants.dining-areas.archive]
+      parameters:
+        - name: restaurantId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: diningAreaId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Dining area archived
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DiningArea"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          description: Invalid status transition
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 
   # ============================================================================
   # BRANCHES
@@ -3468,6 +4296,118 @@ webhooks:
                 data:
                   $ref: "#/components/schemas/Reservation"
 
+  # ============================================================================
+  # AUDIT
+  # ============================================================================
+  /audit:
+    get:
+      summary: List audit entries
+      operationId: listAuditEntries
+      tags: [Audit Logs]
+      security:
+        - BearerAuth: [audit.read]
+      parameters:
+        - name: module
+          in: query
+          schema:
+            type: string
+          description: Filter by module
+        - name: entityType
+          in: query
+          schema:
+            type: string
+          description: Filter by entity type
+        - name: entityId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by entity ID
+        - name: action
+          in: query
+          schema:
+            type: string
+          description: Filter by action
+        - name: performedBy
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by user who performed the action
+        - name: restaurantId
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter by restaurant
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Start date for range filter
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: End date for range filter
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/pageSize"
+      responses:
+        "200":
+          description: Paginated list of audit entries
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AuditEntry"
+                      meta:
+                        $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  /audit/{id}:
+    get:
+      summary: Get an audit entry by ID
+      operationId: getAuditEntry
+      tags: [Audit]
+      security:
+        - BearerAuth: [audit.read]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Audit entry details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/AuditEntry"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
 components:
   securitySchemes:
     BearerAuth:
@@ -3586,6 +4526,18 @@ components:
             error:
               code: resource.duplicate
               message: Resource already exists
+              details: []
+    UnprocessableEntity:
+      description: Unprocessable entity — business rule violation or invalid state transition
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error:
+              code: domain.invalid_status_transition
+              message: Cannot transition restaurant from active to archived
               details: []
     InternalServerError:
       description: Unexpected server error
@@ -3961,6 +4913,174 @@ components:
           type: string
 
     # ==============================
+    # RESTAURANT
+    # ==============================
+    Restaurant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        slug:
+          type: string
+        legalName:
+          type: string
+          nullable: true
+        taxId:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        website:
+          type: string
+          format: uri
+          nullable: true
+        logoUrl:
+          type: string
+          format: uri
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [draft, pending, active, suspended, inactive, archived]
+        timezone:
+          type: string
+        currency:
+          type: string
+        language:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    CreateRestaurantRequest:
+      type: object
+      required: [name, slug]
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Restaurant display name
+        slug:
+          type: string
+          maxLength: 100
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          description: URL-friendly identifier
+        legalName:
+          type: string
+          maxLength: 255
+          nullable: true
+        taxId:
+          type: string
+          maxLength: 50
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          nullable: true
+        phone:
+          type: string
+          maxLength: 20
+          nullable: true
+        website:
+          type: string
+          maxLength: 500
+          nullable: true
+        logoUrl:
+          type: string
+          maxLength: 500
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        timezone:
+          type: string
+          default: UTC
+          description: IANA timezone identifier
+        currency:
+          type: string
+          default: USD
+          pattern: "^[A-Z]{3}$"
+          description: ISO 4217 currency code
+        language:
+          type: string
+          default: en
+          pattern: "^[a-z]{2}(?:-[A-Z]{2})?$"
+          description: ISO 639-1 language code
+
+    UpdateRestaurantRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 100
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        legalName:
+          type: string
+          maxLength: 255
+          nullable: true
+        taxId:
+          type: string
+          maxLength: 50
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+          nullable: true
+        phone:
+          type: string
+          maxLength: 20
+          nullable: true
+        website:
+          type: string
+          maxLength: 500
+          nullable: true
+        logoUrl:
+          type: string
+          maxLength: 500
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        timezone:
+          type: string
+        currency:
+          type: string
+          pattern: "^[A-Z]{3}$"
+        language:
+          type: string
+          pattern: "^[a-z]{2}(?:-[A-Z]{2})?$"
+
+    RestaurantResponse:
+      allOf:
+        - $ref: "#/components/schemas/SuccessResponse"
+        - type: object
+          properties:
+            data:
+              $ref: "#/components/schemas/Restaurant"
+
+    # ==============================
     # BRANCH
     # ==============================
     Branch:
@@ -4127,6 +5247,342 @@ components:
         description:
           type: string
           maxLength: 255
+
+    CalendarException:
+      type: object
+      required: [id, restaurantId, title, type, date, isClosed, allDay, priority]
+      properties:
+        id:
+          type: string
+          format: uuid
+        restaurantId:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        type:
+          type: string
+          enum: [holiday, special_opening, temporary_closure, maintenance, private_event, seasonal_hours, emergency_closure]
+        date:
+          type: string
+          format: date
+        isClosed:
+          type: boolean
+        openTime:
+          type: string
+          nullable: true
+          example: "09:00"
+        closeTime:
+          type: string
+          nullable: true
+          example: "17:00"
+        allDay:
+          type: boolean
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 100
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CreateCalendarExceptionInput:
+      type: object
+      required: [title, type, date, isClosed, allDay]
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        type:
+          type: string
+          enum: [holiday, special_opening, temporary_closure, maintenance, private_event, seasonal_hours, emergency_closure]
+        date:
+          type: string
+          format: date
+        isClosed:
+          type: boolean
+        openTime:
+          type: string
+          nullable: true
+          example: "09:00"
+        closeTime:
+          type: string
+          nullable: true
+          example: "17:00"
+        allDay:
+          type: boolean
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 100
+          default: 50
+
+    UpdateCalendarExceptionInput:
+      type: object
+      required: [title, type, date, isClosed, allDay]
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        type:
+          type: string
+          enum: [holiday, special_opening, temporary_closure, maintenance, private_event, seasonal_hours, emergency_closure]
+        date:
+          type: string
+          format: date
+        isClosed:
+          type: boolean
+        openTime:
+          type: string
+          nullable: true
+          example: "09:00"
+        closeTime:
+          type: string
+          nullable: true
+          example: "17:00"
+        allDay:
+          type: boolean
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 100
+
+    # ==============================
+    # RESTAURANT CONFIGURATION
+    # ==============================
+    RestaurantConfiguration:
+      type: object
+      required: [restaurant, metadata]
+      properties:
+        restaurant:
+          type: object
+          required: [id, name, slug, status, timezone, currency, language, isActive]
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            slug:
+              type: string
+            status:
+              type: string
+              enum: [draft, pending, active, suspended, inactive, archived]
+            timezone:
+              type: string
+            currency:
+              type: string
+            language:
+              type: string
+            isActive:
+              type: boolean
+        settings:
+          type: object
+          nullable: true
+          description: Restaurant settings or null if not configured
+        reservationPolicy:
+          type: object
+          nullable: true
+          description: Reservation policy or null if not configured
+        businessHours:
+          type: object
+          nullable: true
+          description: Weekly business hours schedule or null if not configured
+        calendarExceptions:
+          type: array
+          items:
+            type: object
+          description: Date-specific calendar exceptions
+        metadata:
+          type: object
+          required: [retrievedAt, version]
+          properties:
+            retrievedAt:
+              type: string
+              format: date-time
+            version:
+              type: string
+              description: Cache version based on latest update timestamp
+
+    # ==============================
+    # RESTAURANT ASSET
+    # ==============================
+    RestaurantAsset:
+      type: object
+      required:
+        - id
+        - restaurantId
+        - type
+        - originalFilename
+        - extension
+        - mimeType
+        - size
+        - storageProvider
+        - storageKey
+        - publicUrl
+        - isPrimary
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        restaurantId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [logo, cover, gallery, menu_image, qr_image, document, brand_asset]
+        name:
+          type: string
+          nullable: true
+        originalFilename:
+          type: string
+        extension:
+          type: string
+        mimeType:
+          type: string
+        size:
+          type: integer
+        width:
+          type: integer
+          nullable: true
+        height:
+          type: integer
+          nullable: true
+        storageProvider:
+          type: string
+        storageKey:
+          type: string
+        publicUrl:
+          type: string
+          format: uri
+        isPrimary:
+          type: boolean
+        metadata:
+          type: object
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # AUDIT ENTRY
+    # ==============================
+    AuditEntry:
+      type: object
+      required:
+        - id
+        - organizationId
+        - module
+        - entityType
+        - entityId
+        - action
+        - createdAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        organizationId:
+          type: string
+          format: uuid
+        module:
+          type: string
+        entityType:
+          type: string
+        entityId:
+          type: string
+          format: uuid
+        action:
+          type: string
+        performedBy:
+          type: string
+          format: uuid
+          nullable: true
+        restaurantId:
+          type: string
+          format: uuid
+          nullable: true
+        ipAddress:
+          type: string
+          nullable: true
+        userAgent:
+          type: string
+          nullable: true
+        requestId:
+          type: string
+          nullable: true
+        oldValues:
+          type: object
+          nullable: true
+        newValues:
+          type: object
+          nullable: true
+        metadata:
+          type: object
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    # ==============================
+    # DINING AREA
+    # ==============================
+    DiningArea:
+      type: object
+      required:
+        - id
+        - restaurantId
+        - name
+        - code
+        - displayOrder
+        - status
+        - isReservable
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        restaurantId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: string
+          nullable: true
+        displayOrder:
+          type: integer
+        status:
+          type: string
+          enum: [active, archived]
+        isReservable:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
     # ==============================
     # TABLE
@@ -4793,7 +6249,15 @@ tags:
   - name: Permissions
     description: Permission catalog
   - name: Restaurants
-    description: Organization/tenant management
+    description: Restaurant management (CRUD, status transitions)
+  - name: Calendar Exceptions
+    description: Override business hours for specific dates (holidays, closures, events)
+  - name: Restaurant Configuration
+    description: Unified view of all restaurant configuration data (info, settings, policies, hours, exceptions)
+  - name: Restaurant Assets
+    description: Manage restaurant media assets (logos, covers, menus, documents)
+  - name: Dining Areas
+    description: Physical zones inside a restaurant (Main Hall, Terrace, VIP Room, etc.)
   - name: Branches
     description: Branch management
   - name: Tables
@@ -4813,7 +6277,7 @@ tags:
   - name: Settings
     description: Branch and organization configuration
   - name: Audit Logs
-    description: Immutable system event log
+    description: Immutable audit trail for all module actions (entries, queries, retention)
   - name: Webhooks
     description: Outbound webhook subscriptions
   - name: Search

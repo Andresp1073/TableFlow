@@ -8,6 +8,10 @@ export type {
   AuthorizationContext,
   AuthorizationScope,
   UserRoleInfo,
+  PermissionResolutionContext,
+  PermissionResolutionResult,
+  ResourceContext,
+  ResourceType,
 } from "./domain/models/index.js";
 
 // ── Domain Validation ───────────────────────────────────────────────────────
@@ -59,7 +63,7 @@ export type {
 } from "./domain/repositories/index.js";
 
 // ── Domain Services ────────────────────────────────────────────────────────
-export type { PermissionEvaluator, PermissionResolver } from "./domain/services/index.js";
+export type { PermissionEvaluator, PermissionResolver, PermissionResolutionService, AuthorizationPolicy, PolicyEvaluation, PolicyEvaluator, ResourceAuthorizationService } from "./domain/services/index.js";
 
 // ── Application Services ───────────────────────────────────────────────────
 export type {
@@ -72,7 +76,7 @@ export type {
   RolePermissionService,
   AssignPermissionsResult,
 } from "./application/services/index.js";
-export { AuthorizationServiceImpl, PermissionEvaluatorImpl, RoleAssignmentPolicy } from "./application/services/index.js";
+export { AuthorizationServiceImpl, PermissionEvaluatorImpl, RoleAssignmentPolicy, PlatformAdminPolicy, SameRestaurantPolicy, OwnerPolicy, AssignedEmployeePolicy, PolicyEvaluatorImpl, ResourceAuthorizationServiceImpl } from "./application/services/index.js";
 
 // ── Infrastructure ──────────────────────────────────────────────────────────
 export {
@@ -80,6 +84,7 @@ export {
   UserRoleRepositoryImpl,
   RolePermissionServiceImpl,
   RoleAssignmentServiceImpl,
+  PermissionResolutionServiceImpl,
 } from "./infrastructure/index.js";
 
 // ── Middleware ──────────────────────────────────────────────────────────────
@@ -101,4 +106,5 @@ export {
   DuplicateAssignmentError,
   UserNotFoundError,
   AssignmentNotFoundError,
+  ResourceForbiddenError,
 } from "./errors/index.js";
