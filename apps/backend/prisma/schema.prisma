@@ -280,6 +280,8 @@ model Organization {
   calendarExceptions CalendarException[]
   restaurantAssets   RestaurantAsset[]
   diningAreas        DiningArea[]
+  tableTypes         TableType[]
+  tables             RestaurantTable[]
   reservations Reservation[]
   auditLogs    AuditLog[]
   userRoles    UserRole[]
@@ -582,34 +584,88 @@ model TableZone {
 }
 
 // ── RestaurantTable ────────────────────────────────────────────────────────
-// A physical table in a branch. Status tracks real-time availability.
+// A physical table in a restaurant. Links to Dining Area and Table Type for
+// classification and floor plan layout. Supports soft delete via deletedAt.
+// Status tracks real-time availability for the reservation engine.
 
 model RestaurantTable {
-  id          String   @id @default(uuid()) @db.Char(36)
-  branchId    String   @db.Char(36)
-  zoneId      String?  @db.Char(36)
-  tableNumber String   @db.VarChar(10)
-  minCapacity Int      @default(1)
-  maxCapacity Int
-  shape       String   @default("rectangle") @db.VarChar(20)
-  width       Int      @default(60)
-  height      Int      @default(60)
-  positionX   Float?
-  positionY   Float?
-  isActive    Boolean  @default(true)
-  status      String   @default("available") @db.VarChar(20)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  updatedBy   String?  @db.Char(36)
+  id              String   @id @default(uuid()) @db.Char(36)
+  restaurantId    String   @db.Char(36)
+  branchId        String   @db.Char(36)
+  diningAreaId    String?  @db.Char(36)
+  tableTypeId     String?  @db.Char(36)
+  zoneId          String?  @db.Char(36)
+  tableNumber     String   @db.VarChar(10)
+  name            String?  @db.VarChar(100)
+  description     String?  @db.Text
+  minCapacity     Int      @default(1)
+  maxCapacity     Int
+  currentCapacity Int      @default(0)
+  shape           String   @default("rectangle") @db.VarChar(20)
+  width           Int      @default(60)
+  height          Int      @default(60)
+  positionX       Float?
+  positionY       Float?
+  rotation        Float?
+  qrIdentifier    String?  @db.VarChar(100)
+  isReservable    Boolean  @default(true)
+  isAccessible    Boolean  @default(true)
+  isActive        Boolean  @default(true)
+  status          String   @default("available") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  updatedBy       String?  @db.Char(36)
+  deletedAt       DateTime?
 
-  branch       Branch           @relation(fields: [branchId], references: [id], onDelete: Cascade)
-  zone         TableZone?       @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  restaurant  Organization  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  branch      Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  diningArea  DiningArea?   @relation(fields: [diningAreaId], references: [id], onDelete: SetNull)
+  tableType   TableType?    @relation(fields: [tableTypeId], references: [id], onDelete: SetNull)
+  zone        TableZone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
   reservations ReservationTable[]
 
-  @@unique([branchId, tableNumber])
+  @@unique([restaurantId, tableNumber])
+  @@unique([restaurantId, qrIdentifier])
+  @@index([restaurantId, status])
+  @@index([restaurantId, diningAreaId])
+  @@index([restaurantId, tableTypeId])
+  @@index([restaurantId, isActive])
   @@index([branchId, status])
+  @@index([branchId, tableNumber])
   @@index([zoneId])
   @@map("restaurant_tables")
+}
+
+// ── TableType ──────────────────────────────────────────────────────────────
+// Reusable table classification (Standard, VIP, Booth, Bar, Outdoor, etc.).
+// Defines shared characteristics for groups of physical tables.
+// Soft-deletable via status.
+
+model TableType {
+  id              String   @id @default(uuid()) @db.Char(36)
+  restaurantId    String   @db.Char(36)
+  name            String   @db.VarChar(100)
+  code            String   @db.VarChar(30)
+  description     String?  @db.Text
+  defaultCapacity Int      @default(4)
+  minimumCapacity Int      @default(1)
+  maximumCapacity Int      @default(8)
+  shape           String   @default("rectangle") @db.VarChar(20)
+  isReservable    Boolean  @default(true)
+  displayOrder    Int      @default(0)
+  status          String   @default("active") @db.VarChar(20)
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  tables     RestaurantTable[]
+
+  @@unique([restaurantId, name])
+  @@unique([restaurantId, code])
+  @@index([restaurantId, status])
+  @@map("table_types")
 }
 
 // ── DiningArea ─────────────────────────────────────────────────────────────
@@ -629,11 +685,54 @@ model DiningArea {
   updatedAt       DateTime @updatedAt
 
   restaurant Organization @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  tables     RestaurantTable[]
 
   @@unique([restaurantId, name])
   @@unique([restaurantId, code])
   @@index([restaurantId, status])
   @@map("dining_areas")
+}
+
+// ── TableGroup ──────────────────────────────────────────────────────────────
+// Temporary grouping of 2+ tables for merge/split operations.
+// Does NOT modify the RestaurantTable entity; tableId references are logical.
+// Statuses: active → reserved → occupied → released → archived
+// Capacity is NOT persisted — computed at runtime by GroupCapacityCalculator.
+
+model TableGroup {
+  id           String   @id @default(uuid()) @db.Char(36)
+  restaurantId String   @db.Char(36)
+  name         String   @db.VarChar(100)
+  description  String?  @db.Text
+  status       String   @default("active") @db.VarChar(20)
+  isActive     Boolean  @default(true)
+  createdBy    String   @db.Char(36)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  releasedAt   DateTime?
+
+  restaurant Organization        @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  members    TableGroupMember[]
+
+  @@index([restaurantId])
+  @@index([restaurantId, status])
+  @@index([restaurantId, isActive])
+  @@map("table_groups")
+}
+
+model TableGroupMember {
+  id           String   @id @default(uuid()) @db.Char(36)
+  tableGroupId String   @db.Char(36)
+  tableId      String   @db.Char(36)
+  displayOrder Int      @default(0)
+  joinedAt     DateTime @default(now())
+
+  tableGroup TableGroup @relation(fields: [tableGroupId], references: [id], onDelete: Cascade)
+
+  @@unique([tableGroupId, tableId])
+  @@index([tableId])
+  @@index([tableGroupId])
+  @@map("table_group_members")
 }
 
 // ============================================================================

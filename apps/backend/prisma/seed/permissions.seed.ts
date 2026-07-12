@@ -451,6 +451,44 @@ const PERMISSIONS: PermissionSeed[] = [
     riskLevel: "high",
   },
 
+  // ── Table Types ─────────────────────────────────────────────────────────
+  {
+    code: "table-types.create",
+    name: "Create Table Types",
+    description: "Create a new table type definition",
+    module: "tables",
+    resource: "table-types",
+    action: "create",
+    riskLevel: "medium",
+  },
+  {
+    code: "table-types.read",
+    name: "Read Table Types",
+    description: "View table type definitions",
+    module: "tables",
+    resource: "table-types",
+    action: "read",
+    riskLevel: "low",
+  },
+  {
+    code: "table-types.update",
+    name: "Update Table Types",
+    description: "Modify table type configuration",
+    module: "tables",
+    resource: "table-types",
+    action: "update",
+    riskLevel: "medium",
+  },
+  {
+    code: "table-types.archive",
+    name: "Archive Table Types",
+    description: "Archive (soft-delete) a table type",
+    module: "tables",
+    resource: "table-types",
+    action: "archive",
+    riskLevel: "high",
+  },
+
   // ── Branches ────────────────────────────────────────────────────────────
   {
     code: "branches.create",
@@ -554,6 +592,15 @@ const PERMISSIONS: PermissionSeed[] = [
     riskLevel: "high",
   },
   {
+    code: "tables.archive",
+    name: "Archive Tables",
+    description: "Archive (soft-delete) a table",
+    module: "tables",
+    resource: "tables",
+    action: "archive",
+    riskLevel: "high",
+  },
+  {
     code: "tables.list",
     name: "List Tables",
     description: "List all tables in a branch",
@@ -590,6 +637,15 @@ const PERMISSIONS: PermissionSeed[] = [
     riskLevel: "low",
   },
   {
+    code: "tables.status.update",
+    name: "Change Table Status (FSM)",
+    description: "Change table status via the status engine (validates FSM transitions)",
+    module: "tables",
+    resource: "tables",
+    action: "status.update",
+    riskLevel: "medium",
+  },
+  {
     code: "tables.merge",
     name: "Merge Tables",
     description: "Merge two or more tables into one",
@@ -623,6 +679,35 @@ const PERMISSIONS: PermissionSeed[] = [
     module: "tables",
     resource: "tables",
     action: "configureLayout",
+    riskLevel: "medium",
+  },
+
+  // ── Table Groups ─────────────────────────────────────────────────────────
+  {
+    code: "restaurants.table-groups.create",
+    name: "Create Table Groups",
+    description: "Create a merged table group from multiple tables",
+    module: "restaurants",
+    resource: "table-groups",
+    action: "create",
+    riskLevel: "medium",
+  },
+  {
+    code: "restaurants.table-groups.read",
+    name: "Read Table Groups",
+    description: "View table group details and status",
+    module: "restaurants",
+    resource: "table-groups",
+    action: "read",
+    riskLevel: "low",
+  },
+  {
+    code: "restaurants.table-groups.release",
+    name: "Release Table Groups",
+    description: "Release/end a table group, returning tables to individual status",
+    module: "restaurants",
+    resource: "table-groups",
+    action: "release",
     riskLevel: "medium",
   },
 

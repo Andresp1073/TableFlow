@@ -27,6 +27,9 @@ import { calendarExceptionsRouter } from "../../calendar-exceptions/presentation
 import { configurationResolverRouter } from "../../configuration-resolver/presentation/index.js";
 import { assetsRouter } from "../../assets/presentation/index.js";
 import { diningAreasRouter } from "../../dining-areas/presentation/index.js";
+import { tableTypesRouter } from "../../table-types/presentation/index.js";
+import { tablesRouter, tablesAvailabilityRouter } from "../../tables/presentation/index.js";
+import { tableGroupsRouter } from "../../table-groups/presentation/index.js";
 
 const repository = new PrismaRestaurantRepository(prisma);
 const queryRepository = new PrismaRestaurantQueryRepository(prisma);
@@ -121,5 +124,9 @@ router.use("/:id", calendarExceptionsRouter);
 router.use("/:id", configurationResolverRouter);
 router.use("/:id", assetsRouter);
 router.use("/:id", diningAreasRouter);
+router.use("/:id", tableTypesRouter);
+router.use("/:id", tablesRouter);
+router.use("/:id", tablesAvailabilityRouter);
+router.use("/:id", tableGroupsRouter);
 
 export default router;
