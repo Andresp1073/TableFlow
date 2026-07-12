@@ -15,3 +15,6 @@ prisma/migrations/
 
 # Test artifacts
 vitest-output.txt
+
+# Uploaded assets (generated)
+uploads/
