@@ -46,7 +46,7 @@ export function createTableGroupController(service: TableGroupApplicationService
           requestId: req.requestId,
         },
       );
-      sendSuccess(res, result, "Table group updated successfully");
+      sendSuccess(res, result, undefined, "Table group updated successfully");
     }),
 
     release: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {

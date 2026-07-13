@@ -5,13 +5,6 @@ import { GroupCapacityCalculator } from "../../domain/services/GroupCapacityCalc
 
 export class TableGroupMapper {
   static toDTO(group: TableGroup): TableGroupDTO {
-    const calculator = new GroupCapacityCalculator();
-    const totalCapacity = calculator.calculate(
-      group.members.map((m) => ({
-        maximumCapacity: { value: 0 },
-      })),
-    );
-
     return {
       id: group.id.value,
       restaurantId: group.restaurantId,

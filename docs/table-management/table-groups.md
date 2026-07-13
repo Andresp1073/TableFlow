@@ -22,7 +22,7 @@ Table Groups are a separate aggregate. The `Table` entity is **not modified**.
 |----|--------|------------|
 | `TableGroupName` | `value: string` | 1–100 chars, trimmed |
 | `TableGroupStatus` | `value: "active" \| "reserved" \| "occupied" \| "released" \| "archived"` | Transition matrix |
-| `TableGroupCapacity` | `value: number` | Integer, 0–9999 |
+| `DisplayOrder` | `value: number` | Integer, 0–9999 |
 
 ### Status Transitions
 
@@ -55,11 +55,12 @@ Table Groups are a separate aggregate. The `Table` entity is **not modified**.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | `string` | UUID |
+| `id` | `TableGroupId` | UUID (type-safe value object) |
 | `restaurantId` | `string` | Parent restaurant |
 | `name` | `TableGroupName` | Human-readable label |
+| `description` | `string \| null` | Optional notes |
 | `status` | `TableGroupStatus` | Current lifecycle state |
-| `capacity` | `TableGroupCapacity` | Sum of all member tables' maxCapacity |
+| `isActive` | `boolean` | Soft deactivation flag |
 | `createdBy` | `string` | User UUID who created the group |
 | `members` | `TableGroupMember[]` | Member tables |
 | `createdAt` | `Date` | Creation timestamp |
@@ -70,10 +71,9 @@ Table Groups are a separate aggregate. The `Table` entity is **not modified**.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | `string` | UUID |
-| `tableGroupId` | `string` | Parent group FK |
 | `tableId` | `string` | Logical reference to RestaurantTable |
-| `order` | `number` | Display order within the group |
+| `displayOrder` | `DisplayOrder` | Display order within the group |
+| `joinedAt` | `Date` | When the table joined the group |
 
 ## Domain Rules (`TableGroupRules`)
 
@@ -94,8 +94,9 @@ All endpoints are mounted under `/api/v1/restaurants/:id/`.
 | Method | Path | Description | Permission |
 |--------|------|-------------|------------|
 | `POST` | `/table-groups` | Create a new table group | `restaurants.table-groups.create` |
-| `GET` | `/table-groups` | List table groups | `restaurants.table-groups.read` |
+| `GET` | `/table-groups` | List table groups (optional `?status=` filter) | `restaurants.table-groups.read` |
 | `GET` | `/table-groups/:groupId` | Get a single group | `restaurants.table-groups.read` |
+| `PUT` | `/table-groups/:groupId` | Update a table group | `restaurants.table-groups.update` |
 | `PATCH` | `/table-groups/:groupId/release` | Release a group | `restaurants.table-groups.release` |
 
 ### `POST /table-groups`
@@ -119,12 +120,13 @@ All endpoints are mounted under `/api/v1/restaurants/:id/`.
     "id": "uuid",
     "restaurantId": "uuid",
     "name": "Table 3+4 Merged",
+    "description": null,
     "status": "active",
-    "capacity": 8,
+    "isActive": true,
     "createdBy": "user-uuid",
     "members": [
-      { "id": "m-uuid", "tableId": "uuid-of-table-3", "order": 1 },
-      { "id": "m-uuid", "tableId": "uuid-of-table-4", "order": 2 }
+      { "tableId": "uuid-of-table-3", "displayOrder": 1, "joinedAt": "2026-07-12T10:00:00.000Z" },
+      { "tableId": "uuid-of-table-4", "displayOrder": 2, "joinedAt": "2026-07-12T10:00:00.000Z" }
     ],
     "createdAt": "2026-07-12T10:00:00.000Z",
     "updatedAt": "2026-07-12T10:00:00.000Z",
@@ -144,9 +146,12 @@ All endpoints are mounted under `/api/v1/restaurants/:id/`.
     "id": "uuid",
     "restaurantId": "uuid",
     "name": "Table 3+4 Merged",
+    "description": null,
     "status": "released",
-    "capacity": 8,
+    "isActive": false,
     "members": [...],
+    "createdAt": "2026-07-12T10:00:00.000Z",
+    "updatedAt": "2026-07-12T12:00:00.000Z",
     "releasedAt": "2026-07-12T12:00:00.000Z"
   },
   "message": "Table group released successfully"
@@ -176,7 +181,8 @@ All mutating operations are audited:
 
 | Action | Entity Type | Fields Logged |
 |--------|-------------|---------------|
-| `create` | `table_group` | name, status, capacity, tableCount, tableIds |
+| `create` | `table_group` | name, description, status, tableCount, tableIds |
+| `update` | `table_group` | oldValues (name, description, status, tableIds), newValues |
 | `release` | `table_group` | oldStatus, newStatus, releasedAt |
 
 ## Database Schema
@@ -188,15 +194,17 @@ CREATE TABLE `table_groups` (
     `id` CHAR(36) NOT NULL,
     `restaurantId` CHAR(36) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
+    `description` TEXT NULL,
     `status` VARCHAR(20) NOT NULL DEFAULT 'active',
-    `capacity` INT NOT NULL DEFAULT 0,
+    `isActive` BOOLEAN NOT NULL DEFAULT true,
     `createdBy` CHAR(36) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `releasedAt` DATETIME(3) NULL,
     PRIMARY KEY (`id`),
     INDEX `table_groups_restaurantId_idx` (`restaurantId`),
-    INDEX `table_groups_restaurantId_status_idx` (`restaurantId`, `status`)
+    INDEX `table_groups_restaurantId_status_idx` (`restaurantId`, `status`),
+    INDEX `table_groups_restaurantId_isActive_idx` (`restaurantId`, `isActive`)
 ) ENGINE=InnoDB;
 ```
 
@@ -207,8 +215,8 @@ CREATE TABLE `table_group_members` (
     `id` CHAR(36) NOT NULL,
     `tableGroupId` CHAR(36) NOT NULL,
     `tableId` CHAR(36) NOT NULL,
-    `order` INT NOT NULL DEFAULT 0,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `displayOrder` INT NOT NULL DEFAULT 0,
+    `joinedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (`id`),
     UNIQUE INDEX `table_group_members_tableGroupId_tableId_key` (`tableGroupId`, `tableId`),
     INDEX `table_group_members_tableId_idx` (`tableId`),

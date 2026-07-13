@@ -282,9 +282,10 @@ model Organization {
   diningAreas        DiningArea[]
   tableTypes         TableType[]
   tables             RestaurantTable[]
-  reservations Reservation[]
-  auditLogs    AuditLog[]
-  userRoles    UserRole[]
+  tableGroups        TableGroup[]
+  reservations       Reservation[]
+  auditLogs          AuditLog[]
+  userRoles          UserRole[]
 
   @@index([status])
   @@map("organizations")
@@ -786,8 +787,8 @@ model Reservation {
   id               String    @id @default(uuid()) @db.Char(36)
   organizationId   String    @db.Char(36)
   branchId         String    @db.Char(36)
-  customerId       String    @db.Char(36)
-  confirmationCode String   @unique @db.VarChar(20)
+  customerId       String?   @db.Char(36)
+  confirmationCode String    @unique @db.VarChar(20)
   partySize        Int
   reservationDate  DateTime  @db.Date
   startTime        DateTime
@@ -797,6 +798,7 @@ model Reservation {
   notes            String?   @db.Text
   walkIn           Boolean   @default(false)
   source           String    @default("staff") @db.VarChar(20)
+  tableGroupId     String?   @db.Char(36)
   createdBy        String    @db.Char(36)
   assignedTo       String?   @db.Char(36)
   cancelledAt      DateTime?
@@ -810,7 +812,7 @@ model Reservation {
 
   organization      Organization                @relation(fields: [organizationId], references: [id])
   branch            Branch                      @relation(fields: [branchId], references: [id])
-  customer          Customer                    @relation(fields: [customerId], references: [id])
+  customer          Customer?                   @relation(fields: [customerId], references: [id])
   createdByUser     User                        @relation("CreatedBy", fields: [createdBy], references: [id])
   assignedToUser    User?                       @relation("AssignedTo", fields: [assignedTo], references: [id])
   updatedByUser     User?                       @relation("UpdatedBy", fields: [updatedBy], references: [id])
@@ -823,6 +825,7 @@ model Reservation {
   @@index([customerId])
   @@index([organizationId, status])
   @@index([confirmationCode])
+  @@index([tableGroupId])
   @@map("reservations")
 }
 
