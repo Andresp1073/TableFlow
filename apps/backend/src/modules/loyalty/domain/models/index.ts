@@ -1,0 +1,16 @@
+export { CustomerProfile, CustomerTier } from "./CustomerProfile.js";
+export type { CustomerProfileConfig, CustomerPreferences } from "./CustomerProfile.js";
+export { LoyaltyProgram } from "./LoyaltyProgram.js";
+export type { LoyaltyProgramConfig, TierConfig, ProgramRule } from "./LoyaltyProgram.js";
+export { PointsAccount } from "./PointsAccount.js";
+export type { PointsAccountConfig } from "./PointsAccount.js";
+export { PointsTransaction, PointsTransactionType } from "./PointsTransaction.js";
+export type { PointsTransactionConfig } from "./PointsTransaction.js";
+export { Reward, RewardType } from "./Reward.js";
+export type { RewardConfig } from "./Reward.js";
+export { RewardRedemption, RedemptionStatus, REDEMPTION_TRANSITIONS } from "./RewardRedemption.js";
+export type { RewardRedemptionConfig } from "./RewardRedemption.js";
+export { CustomerSegment, VisitFrequency, SpendingLevel, EngagementLevel } from "./CustomerSegment.js";
+export type { CustomerSegmentConfig, SegmentCriteria } from "./CustomerSegment.js";
+export { LoyaltyPolicy } from "./LoyaltyPolicy.js";
+export type { LoyaltyPolicyConfig } from "./LoyaltyPolicy.js";
