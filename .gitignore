@@ -16,5 +16,8 @@ prisma/migrations/
 # Test artifacts
 vitest-output.txt
 
+# Next.js
+.next/
+
 # Uploaded assets (generated)
 uploads/
