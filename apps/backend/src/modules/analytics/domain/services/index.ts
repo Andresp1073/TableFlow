@@ -1,0 +1,12 @@
+export { MetricsEngine } from "./MetricsEngine.js";
+export type { MetricStrategy, MetricCalculationParams, MetricResult, MetricProvider } from "./MetricsEngine.js";
+export { RevenueMetricStrategy, AverageTicketStrategy, OccupancyRateStrategy, ReservationConversionStrategy, NoShowRateStrategy, CustomerRetentionStrategy, InventoryTurnoverStrategy, KitchenPrepTimeStrategy } from "./MetricsEngine.js";
+export { KpiEngine } from "./KpiEngine.js";
+export type { KpiCalculationParams } from "./KpiEngine.js";
+export { TrendAnalyzer } from "./TrendAnalyzer.js";
+export type { TrendDirection, TrendAnalysis, ComparisonResult } from "./TrendAnalyzer.js";
+export { DatasetBuilder } from "./DatasetBuilder.js";
+export type { DatasetBuildParams } from "./DatasetBuilder.js";
+export { ReportGenerator } from "./ReportGenerator.js";
+export type { ReportGenerationParams } from "./ReportGenerator.js";
+export { AnalyticsManager } from "./AnalyticsManager.js";

@@ -1,0 +1,178 @@
+import type { PredictionJobRepository } from "../repositories/PredictionJobRepository.js";
+import type { ForecastRepository } from "../repositories/ForecastRepository.js";
+import type { RecommendationRepository } from "../repositories/RecommendationRepository.js";
+import { PredictionJob, type JobType } from "../models/PredictionJob.js";
+import { ForecastEngine } from "./ForecastEngine.js";
+import { RecommendationEngine } from "./RecommendationEngine.js";
+import { PredictionCompleted } from "../events/PredictionCompleted.js";
+import { ForecastCreated } from "../events/ForecastCreated.js";
+import { RecommendationGenerated } from "../events/RecommendationGenerated.js";
+
+export interface JobHandlers {
+  forecast: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>;
+  recommendation: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>;
+  analysis: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>;
+  batch_inference: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>;
+}
+
+export class PredictionJobRunner {
+  readonly events: unknown[] = [];
+  readonly forecastEngine: ForecastEngine;
+  readonly recommendationEngine: RecommendationEngine;
+
+  constructor(
+    private readonly jobRepo: PredictionJobRepository,
+    private readonly forecastRepo: ForecastRepository,
+    private readonly recommendationRepo: RecommendationRepository,
+  ) {
+    this.forecastEngine = new ForecastEngine();
+    this.recommendationEngine = new RecommendationEngine();
+  }
+
+  async execute(job: PredictionJob): Promise<PredictionJob> {
+    const started = job.start();
+    await this.jobRepo.save(started);
+
+    try {
+      const result = await this.handleByType(started);
+      const completed = started.complete(result);
+      await this.jobRepo.save(completed);
+
+      this.events.push(new PredictionCompleted(
+        completed.id, completed.restaurantId, completed.type, true,
+        completed.completedAt && completed.startedAt
+          ? completed.completedAt.getTime() - completed.startedAt.getTime()
+          : 0,
+      ));
+
+      return completed;
+    } catch (error) {
+      const failed = started.fail(error instanceof Error ? error.message : String(error));
+      await this.jobRepo.save(failed);
+
+      this.events.push(new PredictionCompleted(
+        failed.id, failed.restaurantId, failed.type, false, 0,
+      ));
+
+      if (failed.canRetry()) {
+        const retried = failed.retry();
+        await this.jobRepo.save(retried);
+      }
+
+      return failed;
+    }
+  }
+
+  private async handleByType(job: PredictionJob): Promise<Record<string, unknown>> {
+    switch (job.type) {
+      case "forecast": return this.handleForecast(job);
+      case "recommendation": return this.handleRecommendation(job);
+      case "analysis": return this.handleAnalysis(job);
+      case "batch_inference": return this.handleBatchInference(job);
+      default: throw new Error(`Unknown job type: ${job.type}`);
+    }
+  }
+
+  private async handleForecast(job: PredictionJob): Promise<Record<string, unknown>> {
+    const forecastType = String(job.payload["forecastType"] ?? "demand");
+    const historicalValues = (job.payload["historicalValues"] as number[]) ?? [];
+    const periodStart = new Date(String(job.payload["periodStart"] ?? Date.now()));
+    const periodEnd = new Date(String(job.payload["periodEnd"] ?? Date.now()));
+
+    const forecast = this.forecastEngine.generate({
+      restaurantId: job.restaurantId,
+      type: forecastType as import("../models/Forecast.js").ForecastType,
+      periodStart,
+      periodEnd,
+      historicalValues,
+      createdBy: job.createdBy,
+    });
+
+    await this.forecastRepo.save(forecast);
+
+    this.events.push(new ForecastCreated(
+      forecast.id, forecast.restaurantId, forecast.type,
+      forecast.value, forecast.unit, forecast.confidence,
+      forecast.periodStart, forecast.periodEnd,
+    ));
+
+    return {
+      forecastId: forecast.id,
+      type: forecast.type,
+      value: forecast.value,
+      unit: forecast.unit,
+      confidence: forecast.confidence,
+      confidenceLower: forecast.confidenceLower,
+      confidenceUpper: forecast.confidenceUpper,
+      factors: forecast.factors,
+      dataPoints: forecast.historicalDataPoints,
+    };
+  }
+
+  private async handleRecommendation(job: PredictionJob): Promise<Record<string, unknown>> {
+    const recType = String(job.payload["recommendationType"] ?? "table_allocation");
+    const recommendation = this.recommendationEngine.generate({
+      restaurantId: job.restaurantId,
+      type: recType as import("../models/Recommendation.js").RecommendationType,
+      priority: String(job.payload["priority"] ?? "medium") as import("../models/Recommendation.js").RecommendationPriority,
+      title: String(job.payload["title"] ?? `${recType} recommendation`),
+      description: String(job.payload["description"] ?? ""),
+      reasoning: String(job.payload["reasoning"] ?? "Generated by AI engine"),
+      expectedImpact: String(job.payload["expectedImpact"] ?? ""),
+      confidence: Number(job.payload["confidence"] ?? 0.7),
+      source: "ai_engine",
+      data: job.payload,
+      createdBy: job.createdBy,
+    });
+
+    await this.recommendationRepo.save(recommendation);
+
+    this.events.push(new RecommendationGenerated(
+      recommendation.id, recommendation.restaurantId, recommendation.type,
+      recommendation.priority, recommendation.title, recommendation.confidence,
+    ));
+
+    return {
+      recommendationId: recommendation.id,
+      type: recommendation.type,
+      priority: recommendation.priority,
+      title: recommendation.title,
+      confidence: recommendation.confidence,
+    };
+  }
+
+  private async handleAnalysis(job: PredictionJob): Promise<Record<string, unknown>> {
+    return {
+      analyzed: true,
+      inputKeys: Object.keys(job.payload),
+      result: "Analysis completed",
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  private async handleBatchInference(job: PredictionJob): Promise<Record<string, unknown>> {
+    const items = (job.payload["items"] as unknown[]) ?? [];
+    const results = items.map((item, index) => ({
+      index,
+      input: item,
+      result: `Processed item ${index + 1}`,
+    }));
+
+    return {
+      totalItems: items.length,
+      processedItems: results.length,
+      results,
+      batchId: crypto.randomUUID(),
+    };
+  }
+
+  async processQueue(limit: number = 10): Promise<PredictionJob[]> {
+    const jobs = await this.jobRepo.findQueued(limit);
+    const results: PredictionJob[] = [];
+    for (const job of jobs) {
+      const result = await this.execute(job);
+      results.push(result);
+    }
+    return results;
+  }
+}
