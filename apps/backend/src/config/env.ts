@@ -32,13 +32,13 @@ function envBoolean(key: string, defaultValue?: boolean): boolean {
 }
 
 function buildDatabaseUrl(): string {
-  const host = process.env.DATABASE_HOST ?? 'localhost';
-  const port = process.env.DATABASE_PORT ?? '3306';
-  const name = process.env.DATABASE_NAME ?? 'tableflow';
-  const user = process.env.DATABASE_USER ?? 'root';
-  const password = process.env.DATABASE_PASSWORD ?? 'password';
+  const host = process.env['DATABASE_HOST'] ?? 'localhost';
+  const port = process.env['DATABASE_PORT'] ?? '3306';
+  const name = process.env['DATABASE_NAME'] ?? 'tableflow';
+  const user = process.env['DATABASE_USER'] ?? 'root';
+  const password = process.env['DATABASE_PASSWORD'] ?? 'password';
 
-  return process.env.DATABASE_URL ?? `mysql://${user}:${password}@${host}:${port}/${name}`;
+  return process.env['DATABASE_URL'] ?? `mysql://${user}:${password}@${host}:${port}/${name}`;
 }
 
 export const env = {
@@ -57,7 +57,7 @@ export const env = {
   DB_POOL_MAX: envNumber('DB_POOL_MAX', 10),
   DB_SLOW_QUERY_THRESHOLD_MS: envNumber('DB_SLOW_QUERY_THRESHOLD_MS', 500),
 
-  JWT_SECRET: envString('JWT_SECRET', 'change-me-in-production'),
+  JWT_SECRET: envString('JWT_SECRET'),
   JWT_EXPIRES_IN: envString('JWT_EXPIRES_IN', '15m'),
   JWT_REFRESH_EXPIRES_IN: envString('JWT_REFRESH_EXPIRES_IN', '7d'),
 
@@ -86,7 +86,7 @@ export const env = {
 
   TZ: envString('TZ', 'UTC'),
 
-  isDevelopment: process.env.NODE_ENV === 'development',
-  isProduction: process.env.NODE_ENV === 'production',
-  isTest: process.env.NODE_ENV === 'test',
+  isDevelopment: process.env['NODE_ENV'] === 'development',
+  isProduction: process.env['NODE_ENV'] === 'production',
+  isTest: process.env['NODE_ENV'] === 'test',
 };

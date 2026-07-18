@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export function QueryProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -10,8 +11,14 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
         defaultOptions: {
           queries: {
             staleTime: 30_000,
-            retry: 1,
+            retry: 2,
             refetchOnWindowFocus: false,
+          },
+          mutations: {
+            onError: (error: unknown) => {
+              const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+              toast.error(message);
+            },
           },
         },
       }),

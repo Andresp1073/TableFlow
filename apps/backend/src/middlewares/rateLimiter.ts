@@ -25,7 +25,7 @@ export interface RateLimiterOptions {
 
 export function rateLimiter(options: RateLimiterOptions) {
   return (req: Request, _res: Response, next: NextFunction): void => {
-    const key = req.ip ?? req.requestId;
+    const key = req.ip ?? req.requestId ?? 'global';
     const now = Date.now();
     const entry = store.get(key);
 
@@ -38,7 +38,8 @@ export function rateLimiter(options: RateLimiterOptions) {
     if (entry.count >= options.maxRequests) {
       const retryAfter = Math.ceil((entry.resetAt - now) / 1000);
 
-      throw new TooManyRequestsError(retryAfter);
+      next(new TooManyRequestsError(retryAfter));
+      return;
     }
 
     entry.count += 1;

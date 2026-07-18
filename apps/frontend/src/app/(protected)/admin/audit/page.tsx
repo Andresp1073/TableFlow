@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
@@ -84,25 +84,35 @@ export default function AdminAuditPage() {
             aria-label="Search audit entries"
           />
         </div>
-        <Select value={module} onChange={(e) => { setModule(e.target.value); setPage(1); }} aria-label="Filter by module">
-          <option value="">All Modules</option>
-          <option value="auth">Auth</option>
-          <option value="users">Users</option>
-          <option value="roles">Roles</option>
-          <option value="restaurants">Restaurants</option>
-          <option value="reservations">Reservations</option>
-          <option value="orders">Orders</option>
-          <option value="payments">Payments</option>
+        <Select value={module} onValueChange={(value) => { setModule(value); setPage(1); }}>
+          <SelectTrigger aria-label="Filter by module" className="w-36">
+            <SelectValue placeholder="All Modules" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Modules</SelectItem>
+            <SelectItem value="auth">Auth</SelectItem>
+            <SelectItem value="users">Users</SelectItem>
+            <SelectItem value="roles">Roles</SelectItem>
+            <SelectItem value="restaurants">Restaurants</SelectItem>
+            <SelectItem value="reservations">Reservations</SelectItem>
+            <SelectItem value="orders">Orders</SelectItem>
+            <SelectItem value="payments">Payments</SelectItem>
+          </SelectContent>
         </Select>
-        <Select value={action} onChange={(e) => { setAction(e.target.value); setPage(1); }} aria-label="Filter by action">
-          <option value="">All Actions</option>
-          <option value="create">Create</option>
-          <option value="update">Update</option>
-          <option value="delete">Delete</option>
-          <option value="login">Login</option>
-          <option value="logout">Logout</option>
+        <Select value={action} onValueChange={(value) => { setAction(value); setPage(1); }}>
+          <SelectTrigger aria-label="Filter by action" className="w-36">
+            <SelectValue placeholder="All Actions" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All Actions</SelectItem>
+            <SelectItem value="create">Create</SelectItem>
+            <SelectItem value="update">Update</SelectItem>
+            <SelectItem value="delete">Delete</SelectItem>
+            <SelectItem value="login">Login</SelectItem>
+            <SelectItem value="logout">Logout</SelectItem>
+          </SelectContent>
         </Select>
-        <Button variant="outline" size="icon" onClick={() => refetch()} aria-label="Refresh">
+        <Button variant="outline" size="icon-sm" onClick={() => refetch()} aria-label="Refresh">
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
@@ -119,7 +129,7 @@ export default function AdminAuditPage() {
         />
       ) : (
         <div className="rounded-lg border">
-          <table className="w-full">
+          <table className="w-full" aria-label="Audit log entries">
             <thead>
               <tr className="border-b bg-muted/50">
                 <th className="text-left p-3 text-sm font-medium">Timestamp</th>
@@ -163,7 +173,7 @@ export default function AdminAuditPage() {
 
       {meta && meta.totalPages > 1 && (
         <div className="mt-4">
-          <Pagination currentPage={page} totalPages={meta.totalPages} onPageChange={setPage} />
+          <Pagination currentPage={page} totalPages={meta.totalPages} onPageChange={setPage} paginationRange={[]} />
         </div>
       )}
     </AdminPageLayout>

@@ -91,7 +91,7 @@ export const createUser = asyncHandler(
       await adminRepo.replaceUserRoles(
         user.id,
         roleIds as string[],
-        '00000000-0000-0000-0000-000000000000',
+        req.organizationId!,
         req.userId!,
       );
     }
@@ -152,7 +152,7 @@ export const replaceUserRoles = asyncHandler(
     await adminRepo.replaceUserRoles(
       params['userId']!,
       body.roleIds,
-      '00000000-0000-0000-0000-000000000000',
+      req.organizationId!,
       req.userId!,
     );
 

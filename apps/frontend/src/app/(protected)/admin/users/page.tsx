@@ -11,7 +11,7 @@ import { ErrorState } from '@/components/ui/error-state';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Pagination } from '@/components/ui/pagination';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { Plus, Search, Eye, Ban, CheckCircle, RefreshCw, Users } from 'lucide-react';
@@ -45,8 +45,8 @@ export default function AdminUsersPage() {
       title="User Management"
       description="Manage platform users and their roles"
       action={
-        <Link href="/admin/users/new">
-          <Button><Plus className="h-4 w-4 mr-1" />Create User</Button>
+        <Link href="/admin/users/new" className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-9 px-4 text-sm font-medium hover:bg-primary/90">
+          <Plus className="h-4 w-4 mr-1" />Create User
         </Link>
       }
     >
@@ -70,15 +70,19 @@ export default function AdminUsersPage() {
         </div>
         <Select
           value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-          aria-label="Filter by status"
+          onValueChange={(value) => { setStatusFilter(value); setPage(1); }}
         >
-          <option value="all">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="locked">Locked</option>
+          <SelectTrigger aria-label="Filter by status" className="w-36">
+            <SelectValue placeholder="All Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="inactive">Inactive</SelectItem>
+            <SelectItem value="locked">Locked</SelectItem>
+          </SelectContent>
         </Select>
-        <Button variant="outline" size="icon" onClick={() => refetch()} aria-label="Refresh">
+        <Button variant="outline" size="icon-sm" onClick={() => refetch()} aria-label="Refresh">
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
@@ -95,7 +99,8 @@ export default function AdminUsersPage() {
         />
       ) : (
         <div className="rounded-lg border">
-          <table className="w-full">
+          <table className="w-full" aria-label="Users list">
+            <caption className="sr-only">Users list</caption>
             <thead>
               <tr className="border-b bg-muted/50">
                 <th className="text-left p-3 text-sm font-medium">Name</th>
@@ -110,12 +115,12 @@ export default function AdminUsersPage() {
               {users.map((user: AdminUser) => (
                 <tr key={user.id} className="border-b last:border-0 hover:bg-muted/30">
                   <td className="p-3">
-                    <button
-                      onClick={() => router.push(`/admin/users/${user.id}`)}
-                      className="font-medium hover:text-primary text-left"
+                    <Link
+                      href={`/admin/users/${user.id}`}
+                      className="font-medium hover:text-primary"
                     >
                       {user.firstName} {user.lastName}
-                    </button>
+                    </Link>
                   </td>
                   <td className="p-3 text-sm text-muted-foreground">{user.email}</td>
                   <td className="p-3"><UserStatusBadge user={user} /></td>
@@ -127,15 +132,15 @@ export default function AdminUsersPage() {
                   </td>
                   <td className="p-3 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <Link href={`/admin/users/${user.id}`}>
-                        <Button variant="ghost" size="icon" aria-label="View user">
+                      <Button variant="ghost" size="icon-sm" asChild aria-label="View user">
+                        <Link href={`/admin/users/${user.id}`}>
                           <Eye className="h-4 w-4" />
-                        </Button>
-                      </Link>
+                        </Link>
+                      </Button>
                       {user.isActive ? (
                         <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon-sm"
                           onClick={() => handleDeactivate(user.id)}
                           disabled={deactivateMutation.isPending}
                           aria-label="Deactivate user"
@@ -145,7 +150,7 @@ export default function AdminUsersPage() {
                       ) : (
                         <Button
                           variant="ghost"
-                          size="icon"
+                          size="icon-sm"
                           onClick={() => handleActivate(user.id)}
                           disabled={activateMutation.isPending}
                           aria-label="Activate user"

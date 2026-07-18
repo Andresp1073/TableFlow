@@ -6,9 +6,9 @@ import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Select } from '@/components/ui/select';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Globe, Palette, Bell, Shield, Clock, DollarSign } from 'lucide-react';
+import { Globe, Palette, Bell, Shield, DollarSign } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   return (
@@ -31,37 +31,57 @@ export default function AdminSettingsPage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
             <div className="space-y-2">
-              <Label htmlFor="locale">Default Locale</Label>
-              <Select id="locale" defaultValue="en-US">
-                <option value="en-US">English (US)</option>
-                <option value="es-MX">Spanish (Mexico)</option>
-                <option value="fr-FR">French (France)</option>
-                <option value="de-DE">German (Germany)</option>
+              <Label>Default Locale</Label>
+              <Select defaultValue="en-US">
+                <SelectTrigger aria-label="Default Locale">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="en-US">English (US)</SelectItem>
+                  <SelectItem value="es-MX">Spanish (Mexico)</SelectItem>
+                  <SelectItem value="fr-FR">French (France)</SelectItem>
+                  <SelectItem value="de-DE">German (Germany)</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="timezone">Timezone</Label>
-              <Select id="timezone" defaultValue="UTC">
-                <option value="UTC">UTC</option>
-                <option value="America/New_York">Eastern (US)</option>
-                <option value="America/Chicago">Central (US)</option>
-                <option value="America/Denver">Mountain (US)</option>
-                <option value="America/Los_Angeles">Pacific (US)</option>
+              <Label>Timezone</Label>
+              <Select defaultValue="UTC">
+                <SelectTrigger aria-label="Timezone">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="UTC">UTC</SelectItem>
+                  <SelectItem value="America/New_York">Eastern (US)</SelectItem>
+                  <SelectItem value="America/Chicago">Central (US)</SelectItem>
+                  <SelectItem value="America/Denver">Mountain (US)</SelectItem>
+                  <SelectItem value="America/Los_Angeles">Pacific (US)</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="dateFormat">Date Format</Label>
-              <Select id="dateFormat" defaultValue="MM/DD/YYYY">
-                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+              <Label>Date Format</Label>
+              <Select defaultValue="MM/DD/YYYY">
+                <SelectTrigger aria-label="Date Format">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
+                  <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
+                  <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="timeFormat">Time Format</Label>
-              <Select id="timeFormat" defaultValue="12h">
-                <option value="12h">12-hour (AM/PM)</option>
-                <option value="24h">24-hour</option>
+              <Label>Time Format</Label>
+              <Select defaultValue="12h">
+                <SelectTrigger aria-label="Time Format">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="12h">12-hour (AM/PM)</SelectItem>
+                  <SelectItem value="24h">24-hour</SelectItem>
+                </SelectContent>
               </Select>
             </div>
           </div>
@@ -149,12 +169,17 @@ export default function AdminSettingsPage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
             <div className="space-y-2">
-              <Label htmlFor="currency">Default Currency</Label>
-              <Select id="currency" defaultValue="USD">
-                <option value="USD">USD ($)</option>
-                <option value="EUR">EUR (€)</option>
-                <option value="GBP">GBP (£)</option>
-                <option value="MXN">MXN ($)</option>
+              <Label>Default Currency</Label>
+              <Select defaultValue="USD">
+                <SelectTrigger aria-label="Default Currency">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">USD ($)</SelectItem>
+                  <SelectItem value="EUR">EUR (€)</SelectItem>
+                  <SelectItem value="GBP">GBP (£)</SelectItem>
+                  <SelectItem value="MXN">MXN ($)</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">

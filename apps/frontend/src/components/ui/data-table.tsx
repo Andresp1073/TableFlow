@@ -170,6 +170,9 @@ function DataTable<TData extends { id?: string | number }, TValue>({
                     onRowClick && 'cursor-pointer',
                   )}
                   onClick={() => onRowClick?.(row.original)}
+                  onKeyDown={(e) => { if (onRowClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onRowClick(row.original); } }}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  role={onRowClick ? 'button' : undefined}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="p-3 align-middle">

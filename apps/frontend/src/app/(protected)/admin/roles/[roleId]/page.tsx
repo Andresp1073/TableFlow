@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { RoleForm } from '@/components/admin/role-form';
 import { PermissionMatrix } from '@/components/admin/permission-matrix';
@@ -11,9 +11,7 @@ import { ErrorState } from '@/components/ui/error-state';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs } from '@/components/ui/tabs';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import { Save } from 'lucide-react';
 
 export default function RoleDetailPage() {
   const params = useParams();

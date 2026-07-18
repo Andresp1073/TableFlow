@@ -36,7 +36,7 @@ function Pagination({ currentPage, totalPages, onPageChange, paginationRange, cl
           {paginationRange.map((item, index) => {
             if (item === 'ellipsis') {
               return (
-                <span key={`ellipsis-${index}`} className="flex h-8 w-8 items-center justify-center">
+                <span key={`ellipsis-${index}`} className="flex h-8 w-8 items-center justify-center" aria-hidden="true">
                   <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
                 </span>
               );
