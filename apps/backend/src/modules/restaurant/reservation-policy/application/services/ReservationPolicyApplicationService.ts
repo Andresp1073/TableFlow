@@ -1,7 +1,7 @@
 import type { ReservationPolicyRepository, ReservationPolicyFactory } from "../../domain/repositories/index.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { PartySize } from "../../domain/models/PartySize.js";
 import { ReservationDuration } from "../../domain/models/ReservationDuration.js";
 import { AdvanceBookingWindow } from "../../domain/models/AdvanceBookingWindow.js";

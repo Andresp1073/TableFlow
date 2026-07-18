@@ -1,8 +1,8 @@
 import type { PrismaClient } from "@prisma/client";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
 import type { TableGroupCacheInvalidator } from "../../application/services/TableGroupCacheInvalidator.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { ConcreteTableGroupFactory } from "../repositories/ConcreteTableGroupFactory.js";
 import { PrismaTableGroupRepository } from "../repositories/PrismaTableGroupRepository.js";
 import { TableGroupApplicationService } from "../../application/services/TableGroupApplicationService.js";

@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { RestaurantSettingsApplicationService } from "../application/services/RestaurantSettingsApplicationService.js";
 import { ConcreteRestaurantSettingsFactory } from "../infrastructure/repositories/ConcreteRestaurantSettingsFactory.js";
 import type { RestaurantSettingsRepository } from "../domain/repositories/RestaurantSettingsRepository.js";
-import type { AuthorizationService } from "../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../authorization/domain/models/AuthorizationContext.js";
+import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
 import { EventBus } from "../../../../events/EventBus.js";
 
 function makeAuthContext(): AuthorizationContext {

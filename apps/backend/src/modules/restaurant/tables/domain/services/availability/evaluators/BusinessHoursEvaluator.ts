@@ -2,7 +2,7 @@ import type { AvailabilityEvaluator } from "../AvailabilityEvaluator.js";
 import type { AvailabilityContext } from "../AvailabilityContext.js";
 import type { AvailabilityResult } from "../AvailabilityResult.js";
 import { unavailable, available } from "../AvailabilityResult.js";
-import type { BusinessHours } from "../../../../business-hours/domain/models/BusinessHours.js";
+import type { BusinessHours } from "../../../../../business-hours/domain/models/BusinessHours.js";
 
 export interface BusinessHoursRepository {
   findByRestaurantId(restaurantId: string): Promise<BusinessHours | null>;

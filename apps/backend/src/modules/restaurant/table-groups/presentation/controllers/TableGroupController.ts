@@ -8,7 +8,7 @@ export function createTableGroupController(service: TableGroupApplicationService
   return {
     create: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.create(
-        { restaurantId: req.params.id, ...req.body },
+        { restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -22,7 +22,7 @@ export function createTableGroupController(service: TableGroupApplicationService
     list: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const { status } = req.query as { status?: string };
       const result = await service.list(
-        { restaurantId: req.params.id, status },
+        { restaurantId: String(req.params['id']), status },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -30,7 +30,7 @@ export function createTableGroupController(service: TableGroupApplicationService
 
     getById: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.getById(
-        { id: req.params.groupId, restaurantId: req.params.id },
+        { id: String(req.params['groupId']), restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -38,7 +38,7 @@ export function createTableGroupController(service: TableGroupApplicationService
 
     update: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.update(
-        { id: req.params.groupId, restaurantId: req.params.id, ...req.body },
+        { id: String(req.params['groupId']), restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -51,7 +51,7 @@ export function createTableGroupController(service: TableGroupApplicationService
 
     release: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.release(
-        { id: req.params.groupId, restaurantId: req.params.id },
+        { id: String(req.params['groupId']), restaurantId: String(req.params['id']) },
         req.authContext!,
         {
           ipAddress: req.ip,

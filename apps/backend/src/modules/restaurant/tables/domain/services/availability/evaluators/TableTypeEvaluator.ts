@@ -2,7 +2,7 @@ import type { AvailabilityEvaluator } from "../AvailabilityEvaluator.js";
 import type { AvailabilityContext } from "../AvailabilityContext.js";
 import type { AvailabilityResult } from "../AvailabilityResult.js";
 import { unavailable, available } from "../AvailabilityResult.js";
-import type { TableType } from "../../../../table-types/domain/models/TableType.js";
+import type { TableType } from "../../../../../table-types/domain/models/TableType.js";
 
 export interface TableTypeRepository {
   findByIdAndRestaurant(id: string, restaurantId: string): Promise<TableType | null>;

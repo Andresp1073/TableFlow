@@ -1,9 +1,9 @@
 import type { DiningAreaRepository } from "../../domain/repositories/DiningAreaRepository.js";
 import type { DiningAreaFactory } from "../../domain/repositories/DiningAreaFactory.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { DiningAreaName } from "../../domain/models/DiningAreaName.js";
 import { DiningAreaCode } from "../../domain/models/DiningAreaCode.js";
 import { DisplayOrder } from "../../domain/models/DisplayOrder.js";

@@ -1,10 +1,10 @@
 import type { CustomerRepository } from "../../domain/repositories/CustomerRepository.js";
 import type { CustomerFactory } from "../../domain/repositories/CustomerFactory.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
 import type { CustomerCacheInvalidator } from "./CustomerCacheInvalidator.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { CustomerName } from "../../domain/models/CustomerName.js";
 import { CustomerEmail } from "../../domain/models/CustomerEmail.js";
 import { CustomerPhone } from "../../domain/models/CustomerPhone.js";

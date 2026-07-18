@@ -1,2 +1,2 @@
-export { RestaurantSettingsRepository } from "./RestaurantSettingsRepository.js";
-export { RestaurantSettingsFactory } from "./RestaurantSettingsFactory.js";
+export type { RestaurantSettingsRepository } from "./RestaurantSettingsRepository.js";
+export type { RestaurantSettingsFactory } from "./RestaurantSettingsFactory.js";

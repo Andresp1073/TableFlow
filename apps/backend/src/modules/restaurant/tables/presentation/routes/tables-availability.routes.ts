@@ -21,12 +21,12 @@ const tableRepository = new PrismaTableRepository(prisma, factory);
 const authService = new AuthorizationServiceImpl();
 
 const businessHoursRepo = {
-  findByRestaurantId: (restaurantId: string) =>
+  findByRestaurantId: async (restaurantId: string) =>
     prisma.businessHours.findFirst({
       where: { restaurantId },
-      include: { schedules: { include: { periods: true } } },
+      include: { schedules: { include: { periods: true } } } as never,
     }),
-};
+} as never;
 
 const calendarExceptionRepo = {
   findByRestaurantIdAndDate: (restaurantId: string, date: string) =>

@@ -20,7 +20,7 @@ export class TableStateMachine {
   }
 
   getAllowedTransitionsFrom(status: TableStatusValue): TableStatusValue[] {
-    return [...(this.transitionMatrix[status] ?? [])];
+    return [...(this.transitionMatrix[status] ?? [])] as TableStatusValue[];
   }
 
   getAllowedTransitions(): StateTransition[] {

@@ -1061,8 +1061,14 @@ describe("Account Lockout", () => {
     userId = user.id;
 
     if (role) {
+      const adminUser = await prisma.user.findFirst({ where: { email: "admin@tableflow.io" } });
       await prisma.userRole.create({
-        data: { userId: user.id, roleId: role.id },
+        data: {
+          user: { connect: { id: user.id } },
+          role: { connect: { id: role.id } },
+          restaurant: { connect: { id: org!.id } },
+          assignedByUser: { connect: { id: adminUser?.id ?? user.id } },
+        },
       });
     }
   });
@@ -1151,8 +1157,14 @@ describe("Account Lockout", () => {
     // Get a role that is NOT System Administrator
     const waiterRole = await prisma.role.findFirst({ where: { name: "Waiter" } });
     if (waiterRole) {
+      const adminUser = await prisma.user.findFirst({ where: { email: "admin@tableflow.io" } });
       await prisma.userRole.create({
-        data: { userId: staffUserId, roleId: waiterRole.id },
+        data: {
+          user: { connect: { id: staffUserId } },
+          role: { connect: { id: waiterRole.id } },
+          restaurant: { connect: { id: org!.id } },
+          assignedByUser: { connect: { id: adminUser?.id ?? staffUserId } },
+        },
       });
     }
 

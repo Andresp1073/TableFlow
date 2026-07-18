@@ -8,7 +8,7 @@ export function createTableTypeController(service: TableTypeApplicationService) 
   return {
     create: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.create(
-        { restaurantId: req.params.id, ...req.body },
+        { restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -22,7 +22,7 @@ export function createTableTypeController(service: TableTypeApplicationService) 
     list: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const { status } = req.query as { status?: string };
       const result = await service.list(
-        { restaurantId: req.params.id, status },
+        { restaurantId: String(req.params['id']), status },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -30,7 +30,7 @@ export function createTableTypeController(service: TableTypeApplicationService) 
 
     getById: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.getById(
-        { id: req.params.tableTypeId, restaurantId: req.params.id },
+        { id: String(req.params['tableTypeId']), restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -38,7 +38,7 @@ export function createTableTypeController(service: TableTypeApplicationService) 
 
     update: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.update(
-        { id: req.params.tableTypeId, restaurantId: req.params.id, ...req.body },
+        { id: String(req.params['tableTypeId']), restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -51,7 +51,7 @@ export function createTableTypeController(service: TableTypeApplicationService) 
 
     archive: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.archive(
-        { id: req.params.tableTypeId, restaurantId: req.params.id },
+        { id: String(req.params['tableTypeId']), restaurantId: String(req.params['id']) },
         req.authContext!,
         {
           ipAddress: req.ip,

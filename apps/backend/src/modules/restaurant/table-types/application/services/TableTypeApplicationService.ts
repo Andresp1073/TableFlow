@@ -1,9 +1,9 @@
 import type { TableTypeRepository } from "../../domain/repositories/TableTypeRepository.js";
 import type { TableTypeFactory } from "../../domain/repositories/TableTypeFactory.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { TableTypeName } from "../../domain/models/TableTypeName.js";
 import { TableTypeCode } from "../../domain/models/TableTypeCode.js";
 import { TableCapacity } from "../../domain/models/TableCapacity.js";

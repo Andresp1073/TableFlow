@@ -74,7 +74,7 @@ export class RevenueManager {
 
     const snapshots = await this.demandRepo.findByRestaurant(restaurantId);
     const currentOcc = snapshots.length > 0
-      ? snapshots[snapshots.length - 1].occupancyRate : 0;
+      ? snapshots[snapshots.length - 1]!.occupancyRate : 0;
 
     return this.capacityAnalyzer.analyze(capacity, currentOcc);
   }

@@ -1,15 +1,15 @@
 export function isDevelopment(): boolean {
-  return process.env.NODE_ENV === 'development';
+  return process.env['NODE_ENV'] === 'development';
 }
 
 export function isProduction(): boolean {
-  return process.env.NODE_ENV === 'production';
+  return process.env['NODE_ENV'] === 'production';
 }
 
 export function isTest(): boolean {
-  return process.env.NODE_ENV === 'test';
+  return process.env['NODE_ENV'] === 'test';
 }
 
 export function isDebugEnabled(): boolean {
-  return process.env.LOG_LEVEL === 'debug';
+  return process.env['LOG_LEVEL'] === 'debug';
 }

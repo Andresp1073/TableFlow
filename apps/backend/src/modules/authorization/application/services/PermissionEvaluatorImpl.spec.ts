@@ -1,6 +1,6 @@
 ﻿import { describe, it, expect } from "vitest";
 import { PermissionEvaluatorImpl } from "./PermissionEvaluatorImpl.js";
-import type { AuthorizationContext } from "../../../domain/models/AuthorizationContext.js";
+import type { AuthorizationContext } from "../../domain/models/AuthorizationContext.js";
 
 function makeContext(overrides?: Partial<AuthorizationContext>): AuthorizationContext {
   return {

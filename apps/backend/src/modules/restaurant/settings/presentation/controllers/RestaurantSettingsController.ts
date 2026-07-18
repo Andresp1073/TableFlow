@@ -8,7 +8,7 @@ export function createRestaurantSettingsController(service: RestaurantSettingsAp
   return {
     get: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.get(
-        { restaurantId: req.params.id },
+        { restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -16,7 +16,7 @@ export function createRestaurantSettingsController(service: RestaurantSettingsAp
 
     getOrCreate: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.getOrCreate(
-        { restaurantId: req.params.id },
+        { restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -24,11 +24,11 @@ export function createRestaurantSettingsController(service: RestaurantSettingsAp
 
     update: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       await service.getOrCreate(
-        { restaurantId: req.params.id },
+        { restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       const result = await service.update(
-        { restaurantId: req.params.id, ...req.body },
+        { restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
       );
       sendSuccess(res, result, undefined, "Restaurant settings updated successfully");

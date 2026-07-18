@@ -1,6 +1,6 @@
 import type { ReservationRepository } from "../domain/repositories/ReservationRepository.js";
 import type { ReservationFactory } from "../domain/repositories/ReservationFactory.js";
-import type { EventBus } from "../../../events/EventBus.js";
+import type { EventBus } from "../../../../events/EventBus.js";
 import type { AuditService } from "../../../audit/application/services/AuditService.js";
 import type { AvailabilityService } from "../application/ports/AvailabilityService.js";
 import type { ReservationCacheInvalidator } from "../application/services/ReservationCacheInvalidator.js";

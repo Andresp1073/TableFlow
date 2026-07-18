@@ -7,7 +7,7 @@ export type {
   RestaurantUser,
 } from "./RoleAssignmentService.js";
 export type { RolePermissionService, AssignPermissionsResult } from "./RolePermissionService.js";
-export type { ResourceAuthorizationService } from "../domain/services/ResourceAuthorizationService.js";
+export type { ResourceAuthorizationService } from "../../domain/services/ResourceAuthorizationService.js";
 export { AuthorizationServiceImpl } from "./AuthorizationServiceImpl.js";
 export { PermissionEvaluatorImpl } from "./PermissionEvaluatorImpl.js";
 export { RoleAssignmentPolicy } from "./RoleAssignmentPolicy.js";

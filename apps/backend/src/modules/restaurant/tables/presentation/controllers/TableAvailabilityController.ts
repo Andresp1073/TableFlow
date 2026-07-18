@@ -10,8 +10,8 @@ export function createTableAvailabilityController(service: TableAvailabilityServ
       const { date, time, partySize, duration } = req.query as Record<string, string | undefined>;
       const result = await service.checkTableAvailability(
         {
-          restaurantId: req.params.id,
-          tableId: req.params.tableId,
+          restaurantId: String(req.params['id']),
+          tableId: String(req.params['tableId']),
           date: date!,
           time,
           partySize: partySize ? Number(partySize) : undefined,
@@ -36,7 +36,7 @@ export function createTableAvailabilityController(service: TableAvailabilityServ
       } = req.query as Record<string, string | undefined>;
       const result = await service.listAvailableTables(
         {
-          restaurantId: req.params.id,
+          restaurantId: String(req.params['id']),
           date: date!,
           time,
           partySize: partySize ? Number(partySize) : undefined,

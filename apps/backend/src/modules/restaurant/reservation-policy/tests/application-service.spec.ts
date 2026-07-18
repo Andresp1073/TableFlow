@@ -2,9 +2,8 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ReservationPolicyApplicationService } from "../application/services/ReservationPolicyApplicationService.js";
 import { ConcreteReservationPolicyFactory } from "../infrastructure/repositories/ConcreteReservationPolicyFactory.js";
 import type { ReservationPolicyRepository } from "../domain/repositories/ReservationPolicyRepository.js";
-import type { AuthorizationService } from "../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../authorization/domain/models/AuthorizationContext.js";
-import type { ReservationPolicy } from "../domain/models/ReservationPolicy.js";
+import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
 import { EventBus } from "../../../../events/EventBus.js";
 
 function makeAuthContext(): AuthorizationContext {

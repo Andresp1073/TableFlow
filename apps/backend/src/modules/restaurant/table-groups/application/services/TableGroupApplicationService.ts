@@ -1,10 +1,10 @@
 import type { TableGroupRepository } from "../../domain/repositories/TableGroupRepository.js";
 import type { TableGroupFactory } from "../../domain/repositories/TableGroupFactory.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
 import type { TableGroupCacheInvalidator } from "./TableGroupCacheInvalidator.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { TableGroupId } from "../../domain/models/TableGroupId.js";
 import { TableGroupName } from "../../domain/models/TableGroupName.js";
 import { TableGroupStatus } from "../../domain/models/TableGroupStatus.js";

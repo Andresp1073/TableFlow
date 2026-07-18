@@ -1,5 +1,5 @@
 import type { ReservationRepository } from "../../domain/repositories/ReservationRepository.js";
-import type { EventBus } from "../../../../events/EventBus.js";
+import type { EventBus } from "../../../../../events/EventBus.js";
 import type { AuditService } from "../../../../audit/application/services/AuditService.js";
 import type { ReservationCacheInvalidator } from "../../application/services/ReservationCacheInvalidator.js";
 import type { CancelReservationCommand } from "../../application/commands/CancelReservationCommand.js";

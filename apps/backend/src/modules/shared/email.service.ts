@@ -23,7 +23,7 @@ const emailService = {
     email: string,
     resetToken: string
   ): Promise<void> {
-    const resetUrl = `${process.env.FRONTEND_URL ?? "http://localhost:3000"}/reset-password?token=${resetToken}`;
+    const resetUrl = `${process.env['FRONTEND_URL'] ?? "http://localhost:3000"}/reset-password?token=${resetToken}`;
 
     await emailService.send({
       to: email,
@@ -37,7 +37,7 @@ const emailService = {
     email: string,
     verificationToken: string
   ): Promise<void> {
-    const verifyUrl = `${process.env.FRONTEND_URL ?? "http://localhost:3000"}/verify-email?token=${verificationToken}`;
+    const verifyUrl = `${process.env['FRONTEND_URL'] ?? "http://localhost:3000"}/verify-email?token=${verificationToken}`;
 
     await emailService.send({
       to: email,

@@ -1,6 +1,10 @@
 import type { Response } from 'express';
 import type { ApiResponse, PaginationMeta } from '../types/index.js';
 
+function timestamp(): string {
+  return new Date().toISOString();
+}
+
 export function sendSuccess<T>(
   res: Response,
   data: T,
@@ -11,6 +15,7 @@ export function sendSuccess<T>(
   const response: ApiResponse<T> = {
     success: true,
     data,
+    timestamp: timestamp(),
     ...(meta && { meta }),
     ...(message && { message }),
   };
@@ -24,6 +29,15 @@ export function sendCreated<T>(
   message?: string,
 ): void {
   sendSuccess(res, data, undefined, message ?? 'Created successfully', 201);
+}
+
+export function sendPaginated<T>(
+  res: Response,
+  data: T[],
+  meta: PaginationMeta,
+  message?: string,
+): void {
+  sendSuccess(res, data, meta, message);
 }
 
 export function sendNoContent(res: Response): void {

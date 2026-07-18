@@ -2,7 +2,7 @@ import type { AvailabilityEvaluator } from "../AvailabilityEvaluator.js";
 import type { AvailabilityContext } from "../AvailabilityContext.js";
 import type { AvailabilityResult } from "../AvailabilityResult.js";
 import { unavailable, available } from "../AvailabilityResult.js";
-import type { CalendarException } from "../../../../calendar-exceptions/domain/models/CalendarException.js";
+import type { CalendarException } from "../../../../../calendar-exceptions/domain/models/CalendarException.js";
 
 export interface CalendarExceptionRepository {
   findByRestaurantIdAndDate(restaurantId: string, date: string): Promise<CalendarException[]>;

@@ -8,7 +8,7 @@ export function createTableController(service: TableApplicationService) {
   return {
     create: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.create(
-        { restaurantId: req.params.id, ...req.body },
+        { restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -30,7 +30,7 @@ export function createTableController(service: TableApplicationService) {
       } = req.query as Record<string, string | undefined>;
       const result = await service.list(
         {
-          restaurantId: req.params.id,
+          restaurantId: String(req.params['id']),
           diningAreaId,
           tableTypeId,
           status,
@@ -45,7 +45,7 @@ export function createTableController(service: TableApplicationService) {
 
     getById: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.getById(
-        { id: req.params.tableId, restaurantId: req.params.id },
+        { id: String(req.params['tableId']), restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       sendSuccess(res, result);
@@ -53,7 +53,7 @@ export function createTableController(service: TableApplicationService) {
 
     update: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.update(
-        { id: req.params.tableId, restaurantId: req.params.id, ...req.body },
+        { id: String(req.params['tableId']), restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -66,7 +66,7 @@ export function createTableController(service: TableApplicationService) {
 
     archive: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.archive(
-        { id: req.params.tableId, restaurantId: req.params.id },
+        { id: String(req.params['tableId']), restaurantId: String(req.params['id']) },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -79,7 +79,7 @@ export function createTableController(service: TableApplicationService) {
 
     changeStatus: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.changeStatus(
-        { id: req.params.tableId, restaurantId: req.params.id, ...req.body },
+        { id: String(req.params['tableId']), restaurantId: String(req.params['id']), ...req.body },
         req.authContext!,
         {
           ipAddress: req.ip,
@@ -92,7 +92,7 @@ export function createTableController(service: TableApplicationService) {
 
     getTransitions: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.getAvailableTransitions(
-        { id: req.params.tableId, restaurantId: req.params.id },
+        { id: String(req.params['tableId']), restaurantId: String(req.params['id']) },
         req.authContext!,
       );
       sendSuccess(res, result);

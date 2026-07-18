@@ -1,7 +1,7 @@
 import type { BusinessHoursRepository, BusinessHoursFactory } from "../../domain/repositories/index.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { DayOfWeek } from "../../domain/models/DayOfWeek.js";
 import { OpeningTime } from "../../domain/models/OpeningTime.js";
 import { ClosingTime } from "../../domain/models/ClosingTime.js";

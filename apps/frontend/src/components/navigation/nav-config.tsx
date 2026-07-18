@@ -1,0 +1,134 @@
+import {
+  LayoutDashboard,
+  Building2,
+  CalendarCheck,
+  Sofa,
+  Table2,
+  ShoppingCart,
+  ChefHat,
+  Package,
+  Users,
+  CreditCard,
+  BarChart3,
+  Settings,
+} from 'lucide-react';
+import type { NavGroup, NavItem } from './nav-types';
+
+export const NAV_ITEMS: NavGroup = [
+  {
+    title: 'Overview',
+    items: [
+      {
+        label: 'Dashboard',
+        href: '/dashboard',
+        icon: <LayoutDashboard className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    title: 'Operations',
+    items: [
+      {
+        label: 'Restaurants',
+        href: '/restaurants',
+        icon: <Building2 className="h-4 w-4" />,
+      },
+      {
+        label: 'Reservations',
+        href: '/reservations',
+        icon: <CalendarCheck className="h-4 w-4" />,
+      },
+      {
+        label: 'Dining Areas',
+        href: '/dining-areas',
+        icon: <Sofa className="h-4 w-4" />,
+      },
+      {
+        label: 'Tables',
+        href: '/tables',
+        icon: <Table2 className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    title: 'Service',
+    items: [
+      {
+        label: 'Orders',
+        href: '/orders',
+        icon: <ShoppingCart className="h-4 w-4" />,
+      },
+      {
+        label: 'Kitchen',
+        href: '/kitchen',
+        icon: <ChefHat className="h-4 w-4" />,
+      },
+      {
+        label: 'Inventory',
+        href: '/inventory',
+        icon: <Package className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    title: 'People',
+    items: [
+      {
+        label: 'Customers',
+        href: '/customers',
+        icon: <Users className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    title: 'Finance',
+    items: [
+      {
+        label: 'Payments',
+        href: '/payments',
+        icon: <CreditCard className="h-4 w-4" />,
+      },
+      {
+        label: 'Analytics',
+        href: '/analytics',
+        icon: <BarChart3 className="h-4 w-4" />,
+      },
+    ],
+  },
+  {
+    title: 'System',
+    items: [
+      {
+        label: 'Settings',
+        href: '/settings',
+        icon: <Settings className="h-4 w-4" />,
+      },
+    ],
+  },
+];
+
+export function getNavItemByHref(href: string, items: NavGroup = NAV_ITEMS): NavItem | undefined {
+  for (const section of items) {
+    for (const item of section.items) {
+      if (item.href === href) return item;
+      if (item.items) {
+        const found = getNavItemByHref(href, [{ items: item.items }]);
+        if (found) return found;
+      }
+    }
+  }
+  return undefined;
+}
+
+export function findActiveSection(pathname: string, items: NavGroup = NAV_ITEMS): string | undefined {
+  for (const section of items) {
+    for (const item of section.items) {
+      if (pathname.startsWith(item.href) && item.href !== '/') return section.title;
+      if (item.items) {
+        const found = findActiveSection(pathname, [{ items: item.items }]);
+        if (found) return section.title;
+      }
+    }
+  }
+  return undefined;
+}

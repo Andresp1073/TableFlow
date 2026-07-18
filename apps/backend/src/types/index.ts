@@ -4,12 +4,16 @@ export interface ApiResponse<T> {
   meta?: PaginationMeta;
   error?: ApiError;
   message?: string;
+  timestamp: string;
 }
 
 export interface ApiError {
   code: string;
   message: string;
   details?: Record<string, string[]>;
+  timestamp?: string;
+  path?: string;
+  correlationId?: string;
 }
 
 export interface PaginationParams {

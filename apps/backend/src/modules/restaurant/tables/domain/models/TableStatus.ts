@@ -49,7 +49,7 @@ export class TableStatus {
   }
 
   getAllowedTransitions(): TableStatusValue[] {
-    return [...(TRANSITION_MATRIX[this.value] ?? [])];
+    return [...(TRANSITION_MATRIX[this.value] ?? [])] as TableStatusValue[];
   }
 
   isTerminal(): boolean {
@@ -69,7 +69,7 @@ export class TableStatus {
   }
 
   isServiceable(): boolean {
-    return this.value !== "archived" && this.value !== "deleted";
+    return (this.value as string) !== "archived" && (this.value as string) !== "deleted";
   }
 
   static readonly TRANSITION_MATRIX = TRANSITION_MATRIX;

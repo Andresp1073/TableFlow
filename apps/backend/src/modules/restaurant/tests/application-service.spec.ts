@@ -20,6 +20,7 @@ import { RestaurantLanguage } from "../domain/models/RestaurantLanguage.js";
 import { RestaurantEmail } from "../domain/models/RestaurantEmail.js";
 import { RestaurantTaxId } from "../domain/models/RestaurantTaxId.js";
 import { RestaurantPhone } from "../domain/models/RestaurantPhone.js";
+import { RestaurantNotFoundError } from "../errors/RestaurantNotFoundError.js";
 
 function makeAuthContext(overrides?: Partial<AuthorizationContext>): AuthorizationContext {
   return {
@@ -116,6 +117,7 @@ function createMockAuthService(): AuthorizationService {
     authorizeScoped: vi.fn(async () => {}),
     createContext: vi.fn() as never,
     getPermissions: vi.fn() as never,
+    hasPermission: vi.fn() as never,
   };
 }
 
@@ -178,7 +180,7 @@ describe("RestaurantApplicationService", () => {
 
     it("emits RestaurantCreated event", async () => {
       const emitted: unknown[] = [];
-      bus.on("RestaurantCreated", (e: unknown) => emitted.push(e));
+      bus.on("RestaurantCreated", (e: unknown) => { emitted.push(e); });
 
       await service.create(
         { name: "Event Test", slug: "event-test" },
@@ -269,7 +271,7 @@ describe("RestaurantApplicationService", () => {
 
     it("emits RestaurantArchived event", async () => {
       const emitted: unknown[] = [];
-      bus.on("RestaurantArchived", (e: unknown) => emitted.push(e));
+      bus.on("RestaurantArchived", (e: unknown) => { emitted.push(e); });
       const r = makeRestaurant("rest-1", { status: RestaurantStatus.draft() });
       mockRepo.store.set("rest-1", r);
 

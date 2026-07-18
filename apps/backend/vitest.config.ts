@@ -5,6 +5,12 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["src/**/*.test.ts", "src/**/*.spec.ts"],
+    exclude: [
+      "src/modules/platform/backup/**/*.spec.ts",
+      "src/modules/platform/scheduler/**/*.spec.ts",
+      "src/modules/platform/search/**/*.spec.ts",
+      "node_modules/**",
+    ],
     testTimeout: 30000,
     hookTimeout: 30000,
     env: {

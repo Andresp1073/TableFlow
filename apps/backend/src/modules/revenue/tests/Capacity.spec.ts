@@ -23,7 +23,7 @@ describe("CapacityAnalyzer", () => {
     expect(result.totalCapacity).toBe(110);
     expect(result.activeAreas).toBe(2);
     expect(result.totalAreaCapacity).toBe(110);
-    expect(result.estimatedTurnsPerSlot.lunch).toBeGreaterThan(0);
+    expect(result.estimatedTurnsPerSlot['lunch']).toBeGreaterThan(0);
   });
 
   it("detects unused capacity", () => {
@@ -43,12 +43,12 @@ describe("CapacityAnalyzer", () => {
   });
 
   it("estimates table turn time", () => {
-    const area = testCapacity.diningAreas[0];
+    const area = testCapacity.diningAreas[0]!;
     expect(analyzer.estimateTableTurnTime(area)).toBe(75);
   });
 
   it("calculates max covers", () => {
-    const area = testCapacity.diningAreas[0];
+    const area = testCapacity.diningAreas[0]!;
     const covers = analyzer.calculateMaxCovers(area, 240);
     expect(covers).toBeGreaterThan(0);
   });

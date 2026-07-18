@@ -2,7 +2,7 @@ import type { AvailabilityEvaluator } from "../AvailabilityEvaluator.js";
 import type { AvailabilityContext } from "../AvailabilityContext.js";
 import type { AvailabilityResult } from "../AvailabilityResult.js";
 import { unavailable, available } from "../AvailabilityResult.js";
-import type { ReservationPolicy } from "../../../../reservation-policy/domain/models/ReservationPolicy.js";
+import type { ReservationPolicy } from "../../../../../reservation-policy/domain/models/ReservationPolicy.js";
 
 export interface ReservationPolicyRepository {
   findByRestaurantId(restaurantId: string): Promise<ReservationPolicy | null>;

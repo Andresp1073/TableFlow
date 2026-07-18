@@ -1,9 +1,9 @@
 import type { PrismaClient } from "@prisma/client";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
 import type { ReservationCacheInvalidator } from "../../application/services/ReservationCacheInvalidator.js";
 import type { AvailabilityService } from "../../application/ports/AvailabilityService.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { ConcreteReservationFactory } from "../repositories/ConcreteReservationFactory.js";
 import { PrismaReservationRepository } from "../repositories/PrismaReservationRepository.js";
 import { ReservationApplicationService } from "../../application/services/ReservationApplicationService.js";

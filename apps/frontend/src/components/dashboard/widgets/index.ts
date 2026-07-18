@@ -1,0 +1,10 @@
+export { TodayReservationsWidget } from './today-reservations';
+export { CurrentOccupancyWidget } from './current-occupancy';
+export { AvailableTablesWidget } from './available-tables';
+export { KitchenStatusWidget } from './kitchen-status';
+export { PendingOrdersWidget } from './pending-orders';
+export { LowInventoryAlertsWidget } from './low-inventory-alerts';
+export { RevenueSummaryWidget } from './revenue-summary';
+export { RecentActivityWidget } from './recent-activity';
+export { UpcomingReservationsWidget } from './upcoming-reservations';
+export { QuickStatisticsWidget } from './quick-statistics';

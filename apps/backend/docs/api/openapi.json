@@ -1,0 +1,828 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TableFlow API",
+    "version": "1.0.0",
+    "description": "REST API for TableFlow restaurant management platform.\n\nBase URL: `https://api.tableflow.io/api/v1`\n\n## Conventions\n- All endpoints require `Authorization: Bearer <token>` unless noted\n- All timestamps are ISO 8601 UTC\n- All UUIDs are v4 format\n- Pagination: `page` (1-indexed), `limit` (1-100, default 10)",
+    "contact": {
+      "name": "TableFlow Support",
+      "email": "support@tableflow.io"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000/api/v1",
+      "description": "Local development"
+    },
+    {
+      "url": "https://api.tableflow.io/api/v1",
+      "description": "Production"
+    }
+  ],
+  "tags": [
+    { "name": "Health", "description": "Server health checks" },
+    { "name": "Auth", "description": "Authentication & session management" },
+    { "name": "Restaurants", "description": "Restaurant CRUD and management" },
+    { "name": "Settings", "description": "Restaurant settings" },
+    { "name": "Reservation Policy", "description": "Reservation business rules" },
+    { "name": "Business Hours", "description": "Operating hours schedules" },
+    { "name": "Calendar Exceptions", "description": "Date-based overrides" },
+    { "name": "Configuration", "description": "Aggregated restaurant configuration" },
+    { "name": "Assets", "description": "Digital assets (images, logos)" },
+    { "name": "Dining Areas", "description": "Restaurant sections and zones" },
+    { "name": "Table Types", "description": "Table classifications" },
+    { "name": "Tables", "description": "Restaurant table management" },
+    { "name": "Table Availability", "description": "Table availability checking" },
+    { "name": "Table Groups", "description": "Table merging and splitting" },
+    { "name": "Reservations", "description": "Reservation management" },
+    { "name": "Audit", "description": "Audit log" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Access token from POST /auth/login"
+      }
+    },
+    "schemas": {
+      "ApiError": {
+        "type": "object",
+        "required": ["code", "message", "timestamp", "path", "correlationId"],
+        "properties": {
+          "code": { "type": "string", "description": "Dot-notation error code", "example": "validation.failed" },
+          "message": { "type": "string", "description": "Human-readable error message", "example": "Validation failed" },
+          "details": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } }, "description": "Per-field validation errors" },
+          "timestamp": { "type": "string", "format": "date-time", "description": "Error timestamp" },
+          "path": { "type": "string", "description": "Request URL path", "example": "/api/v1/auth/login" },
+          "correlationId": { "type": "string", "format": "uuid", "description": "Request correlation ID" }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "required": ["page", "limit", "total", "totalPages"],
+        "properties": {
+          "page": { "type": "integer", "minimum": 1, "description": "Current page (1-indexed)" },
+          "limit": { "type": "integer", "minimum": 1, "maximum": 100, "description": "Items per page" },
+          "total": { "type": "integer", "minimum": 0, "description": "Total items matching query" },
+          "totalPages": { "type": "integer", "minimum": 0, "description": "Total number of pages" }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "required": ["success", "data", "timestamp"],
+        "properties": {
+          "success": { "type": "boolean", "enum": [true] },
+          "data": { "description": "Response payload" },
+          "meta": { "$ref": "#/components/schemas/PaginationMeta" },
+          "message": { "type": "string", "description": "Optional success message" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["success", "data", "error", "timestamp"],
+        "properties": {
+          "success": { "type": "boolean", "enum": [false] },
+          "data": { "nullable": true, "type": "null" },
+          "error": { "$ref": "#/components/schemas/ApiError" },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "admin@tableflow.io" },
+          "password": { "type": "string", "minLength": 1, "example": "Admin123!" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "required": ["accessToken", "refreshToken", "expiresIn", "user"],
+        "properties": {
+          "accessToken": { "type": "string", "description": "JWT access token (15min expiry)" },
+          "refreshToken": { "type": "string", "description": "JWT refresh token (7d expiry, rotation pattern)" },
+          "expiresIn": { "type": "integer", "description": "Seconds until access token expiry" },
+          "user": {
+            "type": "object",
+            "required": ["id", "email", "firstName", "lastName", "role"],
+            "properties": {
+              "id": { "type": "string", "format": "uuid" },
+              "email": { "type": "string", "format": "email" },
+              "firstName": { "type": "string" },
+              "lastName": { "type": "string" },
+              "role": { "type": "string" }
+            }
+          }
+        }
+      },
+      "RefreshTokenRequest": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": { "type": "string", "description": "Current refresh token" }
+        }
+      },
+      "LogoutRequest": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": { "type": "string", "description": "Refresh token to revoke" }
+        }
+      },
+      "ChangePasswordRequest": {
+        "type": "object",
+        "required": ["currentPassword", "newPassword"],
+        "properties": {
+          "currentPassword": { "type": "string" },
+          "newPassword": { "type": "string", "minLength": 8, "description": "Password must contain uppercase, lowercase, number, and special character" }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": { "type": "string", "format": "email" }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "required": ["token", "password"],
+        "properties": {
+          "token": { "type": "string", "description": "Reset token from email" },
+          "password": { "type": "string", "minLength": 8 }
+        }
+      },
+      "Restaurant": {
+        "type": "object",
+        "required": ["id", "name", "slug", "email", "status", "timezone", "currency", "language", "createdAt", "updatedAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "slug": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "phone": { "type": "string", "nullable": true },
+          "status": { "type": "string", "enum": ["active", "suspended", "archived", "inactive"] },
+          "timezone": { "type": "string" },
+          "currency": { "type": "string" },
+          "language": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CreateRestaurantRequest": {
+        "type": "object",
+        "required": ["name", "slug", "email"],
+        "properties": {
+          "name": { "type": "string", "example": "My Restaurant" },
+          "slug": { "type": "string", "example": "my-restaurant" },
+          "email": { "type": "string", "format": "email", "example": "info@myrestaurant.com" },
+          "phone": { "type": "string", "example": "+1234567890" },
+          "timezone": { "type": "string", "default": "UTC" },
+          "currency": { "type": "string", "default": "USD" },
+          "language": { "type": "string", "default": "en" }
+        }
+      },
+      "AuditEntry": {
+        "type": "object",
+        "required": ["id", "organizationId", "module", "entityType", "entityId", "action", "createdAt"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "organizationId": { "type": "string", "format": "uuid" },
+          "module": { "type": "string" },
+          "entityType": { "type": "string" },
+          "entityId": { "type": "string" },
+          "action": { "type": "string" },
+          "performedBy": { "type": "string", "format": "uuid", "nullable": true },
+          "restaurantId": { "type": "string", "format": "uuid", "nullable": true },
+          "ipAddress": { "type": "string", "nullable": true },
+          "userAgent": { "type": "string", "nullable": true },
+          "oldValues": { "type": "object", "nullable": true },
+          "newValues": { "type": "object", "nullable": true },
+          "metadata": { "type": "object", "nullable": true },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "SessionInfo": {
+        "type": "object",
+        "required": ["id", "createdAt", "expiresAt", "isCurrent"],
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "ipAddress": { "type": "string", "nullable": true },
+          "userAgent": { "type": "string", "nullable": true },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "expiresAt": { "type": "string", "format": "date-time" },
+          "isCurrent": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Server health check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "enum": [true] },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": { "type": "string", "enum": ["ok"] },
+                        "version": { "type": "string" },
+                        "timestamp": { "type": "string", "format": "date-time" },
+                        "uptime": { "type": "number" },
+                        "environment": { "type": "string" },
+                        "memory": {
+                          "type": "object",
+                          "properties": {
+                            "heapUsed": { "type": "string" },
+                            "heapTotal": { "type": "string" },
+                            "rss": { "type": "string" }
+                          }
+                        },
+                        "database": {
+                          "type": "object",
+                          "properties": {
+                            "status": { "type": "string", "enum": ["connected", "disconnected"] },
+                            "latencyMs": { "type": "integer" }
+                          }
+                        }
+                      }
+                    },
+                    "timestamp": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service degraded (database down)",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Authenticate with email and password",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "$ref": "#/components/schemas/LoginResponse" }, "message": { "type": "string" }, "timestamp": { "type": "string" } } } } }
+          },
+          "401": { "description": "Invalid credentials / Account locked / Account disabled", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "429": { "description": "Rate limit exceeded", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Refresh token pair (rotation pattern)",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RefreshTokenRequest" } } }
+        },
+        "responses": {
+          "200": { "description": "Tokens refreshed", "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "$ref": "#/components/schemas/LoginResponse" }, "message": { "type": "string" }, "timestamp": { "type": "string" } } } } } },
+          "401": { "description": "Invalid/expired/revoked refresh token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Revoke refresh token",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LogoutRequest" } } }
+        },
+        "responses": {
+          "204": { "description": "Successfully logged out (no content)" },
+          "401": { "description": "Invalid or mismatched token", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/auth/change-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Change authenticated user's password",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ChangePasswordRequest" } } }
+        },
+        "responses": {
+          "200": { "description": "Password changed" },
+          "400": { "description": "Validation error" },
+          "401": { "description": "Unauthenticated" }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Request password reset email",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ForgotPasswordRequest" } } }
+        },
+        "responses": {
+          "200": { "description": "Reset email sent (or fake response if email unknown)" },
+          "429": { "description": "Rate limit exceeded" }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Reset password with token",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ResetPasswordRequest" } } }
+        },
+        "responses": {
+          "200": { "description": "Password reset successfully" },
+          "400": { "description": "Invalid/expired token or weak password" }
+        }
+      }
+    },
+    "/auth/verify-email": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Verify email with token",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "object", "properties": { "token": { "type": "string" } }, "required": ["token"] } } }
+        },
+        "responses": {
+          "200": { "description": "Email verified" },
+          "400": { "description": "Invalid/expired token" }
+        }
+      }
+    },
+    "/auth/sessions": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "List active sessions",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "List of active sessions",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/SessionInfo" } }, "timestamp": { "type": "string" } } } } }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Auth"],
+        "summary": "Revoke all sessions except current",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "All other sessions revoked" }
+        }
+      }
+    },
+    "/auth/sessions/{sessionId}": {
+      "delete": {
+        "tags": ["Auth"],
+        "summary": "Revoke a specific session",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": {
+          "204": { "description": "Session revoked" },
+          "404": { "description": "Session not found" }
+        }
+      }
+    },
+    "/restaurants": {
+      "post": {
+        "tags": ["Restaurants"],
+        "summary": "Create a restaurant",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRestaurantRequest" } } } },
+        "responses": {
+          "201": { "description": "Restaurant created" },
+          "400": { "description": "Validation error" },
+          "401": { "description": "Unauthenticated" },
+          "403": { "description": "Insufficient permissions" }
+        }
+      },
+      "get": {
+        "tags": ["Restaurants"],
+        "summary": "List restaurants",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 } },
+          { "name": "sort", "in": "query", "schema": { "type": "string", "default": "createdAt" } },
+          { "name": "order", "in": "query", "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated restaurant list" }
+        }
+      }
+    },
+    "/restaurants/{id}": {
+      "get": {
+        "tags": ["Restaurants"],
+        "summary": "Get restaurant by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": {
+          "200": { "description": "Restaurant details" },
+          "404": { "description": "Restaurant not found" }
+        }
+      },
+      "put": {
+        "tags": ["Restaurants"],
+        "summary": "Update restaurant",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": {
+          "200": { "description": "Restaurant updated" }
+        }
+      }
+    },
+    "/restaurants/{id}/activate": {
+      "patch": {
+        "tags": ["Restaurants"],
+        "summary": "Activate restaurant",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Restaurant activated" } }
+      }
+    },
+    "/restaurants/{id}/suspend": {
+      "patch": {
+        "tags": ["Restaurants"],
+        "summary": "Suspend restaurant",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Restaurant suspended" } }
+      }
+    },
+    "/restaurants/{id}/archive": {
+      "patch": {
+        "tags": ["Restaurants"],
+        "summary": "Archive restaurant",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Restaurant archived" } }
+      }
+    },
+    "/restaurants/{id}/settings": {
+      "get": {
+        "tags": ["Settings"],
+        "summary": "Get or create restaurant settings",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Restaurant settings" } }
+      },
+      "put": {
+        "tags": ["Settings"],
+        "summary": "Update restaurant settings",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Settings updated" } }
+      }
+    },
+    "/restaurants/{id}/reservation-policy": {
+      "get": {
+        "tags": ["Reservation Policy"],
+        "summary": "Get or create reservation policy",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Reservation policy" } }
+      },
+      "put": {
+        "tags": ["Reservation Policy"],
+        "summary": "Update reservation policy",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Policy updated" } }
+      }
+    },
+    "/restaurants/{id}/business-hours": {
+      "get": {
+        "tags": ["Business Hours"],
+        "summary": "Get or create business hours",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Business hours schedule" } }
+      },
+      "put": {
+        "tags": ["Business Hours"],
+        "summary": "Update business hours",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Business hours updated" } }
+      }
+    },
+    "/restaurants/{id}/calendar-exceptions": {
+      "get": {
+        "tags": ["Calendar Exceptions"],
+        "summary": "List calendar exceptions",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "startDate", "in": "query", "schema": { "type": "string", "format": "date" } },
+          { "name": "endDate", "in": "query", "schema": { "type": "string", "format": "date" } }
+        ],
+        "responses": { "200": { "description": "List of calendar exceptions" } }
+      },
+      "post": {
+        "tags": ["Calendar Exceptions"],
+        "summary": "Create calendar exception",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "201": { "description": "Calendar exception created" } }
+      }
+    },
+    "/restaurants/{id}/calendar-exceptions/{exceptionId}": {
+      "put": {
+        "tags": ["Calendar Exceptions"],
+        "summary": "Update calendar exception",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "exceptionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Calendar exception updated" } }
+      },
+      "delete": {
+        "tags": ["Calendar Exceptions"],
+        "summary": "Delete calendar exception",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "exceptionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "204": { "description": "Calendar exception deleted" } }
+      }
+    },
+    "/restaurants/{id}/configuration": {
+      "get": {
+        "tags": ["Configuration"],
+        "summary": "Get aggregated restaurant configuration",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Full restaurant configuration (includes restaurant, settings, policy, hours, exceptions)" } }
+      }
+    },
+    "/restaurants/{id}/configuration/refresh": {
+      "post": {
+        "tags": ["Configuration"],
+        "summary": "Refresh and invalidate configuration cache",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "200": { "description": "Configuration refreshed" } }
+      }
+    },
+    "/restaurants/{id}/assets": {
+      "get": {
+        "tags": ["Assets"],
+        "summary": "List assets",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "type", "in": "query", "schema": { "type": "string" }, "description": "Filter by asset type" }
+        ],
+        "responses": { "200": { "description": "List of assets" } }
+      },
+      "post": {
+        "tags": ["Assets"],
+        "summary": "Upload an asset",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "requestBody": { "content": { "multipart/form-data": { "schema": { "type": "object", "properties": { "file": { "type": "string", "format": "binary" }, "type": { "type": "string" }, "name": { "type": "string" }, "isPrimary": { "type": "boolean" } } } } } },
+        "responses": { "201": { "description": "Asset uploaded" } }
+      }
+    },
+    "/restaurants/{id}/assets/{assetId}": {
+      "get": {
+        "tags": ["Assets"],
+        "summary": "Get asset by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "assetId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Asset details" } }
+      },
+      "delete": {
+        "tags": ["Assets"],
+        "summary": "Delete asset",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "assetId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "204": { "description": "Asset deleted" } }
+      }
+    },
+    "/restaurants/{id}/assets/{assetId}/primary": {
+      "patch": {
+        "tags": ["Assets"],
+        "summary": "Set asset as primary",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "assetId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Primary asset updated" } }
+      }
+    },
+    "/restaurants/{id}/dining-areas": {
+      "get": {
+        "tags": ["Dining Areas"],
+        "summary": "List dining areas",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "status", "in": "query", "schema": { "type": "string" }, "description": "Filter by status" }
+        ],
+        "responses": { "200": { "description": "List of dining areas" } }
+      },
+      "post": {
+        "tags": ["Dining Areas"],
+        "summary": "Create dining area",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "201": { "description": "Dining area created" } }
+      }
+    },
+    "/restaurants/{id}/dining-areas/{diningAreaId}": {
+      "get": {
+        "tags": ["Dining Areas"],
+        "summary": "Get dining area by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "diningAreaId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Dining area details" } }
+      },
+      "put": {
+        "tags": ["Dining Areas"],
+        "summary": "Update dining area",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "diningAreaId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Dining area updated" } }
+      }
+    },
+    "/restaurants/{id}/dining-areas/{diningAreaId}/archive": {
+      "patch": {
+        "tags": ["Dining Areas"],
+        "summary": "Archive dining area",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "diningAreaId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": { "200": { "description": "Dining area archived" } }
+      }
+    },
+    "/restaurants/{id}/table-types": {
+      "get": {
+        "tags": ["Table Types"],
+        "summary": "List table types",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } },
+          { "name": "status", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "List of table types" } }
+      },
+      "post": {
+        "tags": ["Table Types"],
+        "summary": "Create table type",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "responses": { "201": { "description": "Table type created" } }
+      }
+    },
+    "/restaurants/{id}/table-types/{tableTypeId}": {
+      "get": { "tags": ["Table Types"], "summary": "Get table type by ID", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableTypeId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table type details" } } },
+      "put": { "tags": ["Table Types"], "summary": "Update table type", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableTypeId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table type updated" } } }
+    },
+    "/restaurants/{id}/table-types/{tableTypeId}/archive": {
+      "patch": { "tags": ["Table Types"], "summary": "Archive table type", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableTypeId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table type archived" } } }
+    },
+    "/restaurants/{id}/tables": {
+      "get": { "tags": ["Tables"], "summary": "List tables", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "status", "in": "query", "schema": { "type": "string" } }, { "name": "diningAreaId", "in": "query", "schema": { "type": "string", "format": "uuid" } }, { "name": "tableTypeId", "in": "query", "schema": { "type": "string", "format": "uuid" } }, { "name": "isReservable", "in": "query", "schema": { "type": "boolean" } }, { "name": "isActive", "in": "query", "schema": { "type": "boolean" } }], "responses": { "200": { "description": "List of tables" } } },
+      "post": { "tags": ["Tables"], "summary": "Create table", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "201": { "description": "Table created" } } }
+    },
+    "/restaurants/{id}/tables/{tableId}": {
+      "get": { "tags": ["Tables"], "summary": "Get table by ID", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table details" } } },
+      "put": { "tags": ["Tables"], "summary": "Update table", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table updated" } } }
+    },
+    "/restaurants/{id}/tables/{tableId}/archive": {
+      "patch": { "tags": ["Tables"], "summary": "Archive table", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table archived" } } }
+    },
+    "/restaurants/{id}/tables/{tableId}/status": {
+      "patch": { "tags": ["Tables"], "summary": "Change table status", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table status changed" } } }
+    },
+    "/restaurants/{id}/tables/{tableId}/transitions": {
+      "get": { "tags": ["Tables"], "summary": "Get available status transitions", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Available transitions" } } }
+    },
+    "/restaurants/{id}/tables/available": {
+      "get": { "tags": ["Table Availability"], "summary": "List available tables", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "date", "in": "query", "required": true, "schema": { "type": "string", "format": "date" } }, { "name": "time", "in": "query", "schema": { "type": "string" } }, { "name": "partySize", "in": "query", "schema": { "type": "integer" } }, { "name": "duration", "in": "query", "schema": { "type": "integer" } }, { "name": "diningAreaId", "in": "query", "schema": { "type": "string", "format": "uuid" } }, { "name": "tableTypeId", "in": "query", "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Available tables" } } }
+    },
+    "/restaurants/{id}/tables/{tableId}/check-availability": {
+      "get": { "tags": ["Table Availability"], "summary": "Check single table availability", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "date", "in": "query", "required": true, "schema": { "type": "string", "format": "date" } }, { "name": "time", "in": "query", "schema": { "type": "string" } }, { "name": "partySize", "in": "query", "schema": { "type": "integer" } }, { "name": "duration", "in": "query", "schema": { "type": "integer" } }], "responses": { "200": { "description": "Availability check result" } } }
+    },
+    "/restaurants/{id}/table-groups": {
+      "get": { "tags": ["Table Groups"], "summary": "List table groups", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "status", "in": "query", "schema": { "type": "string" } }], "responses": { "200": { "description": "List of table groups" } } },
+      "post": { "tags": ["Table Groups"], "summary": "Create table group", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "201": { "description": "Table group created" } } }
+    },
+    "/restaurants/{id}/table-groups/{tableGroupId}": {
+      "get": { "tags": ["Table Groups"], "summary": "Get table group by ID", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableGroupId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table group details" } } },
+      "put": { "tags": ["Table Groups"], "summary": "Update table group", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableGroupId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table group updated" } } }
+    },
+    "/restaurants/{id}/table-groups/{tableGroupId}/archive": {
+      "patch": { "tags": ["Table Groups"], "summary": "Archive table group", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "tableGroupId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Table group archived" } } }
+    },
+    "/restaurants/{id}/reservations": {
+      "get": { "tags": ["Reservations"], "summary": "List reservations", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "List of reservations" } } },
+      "post": { "tags": ["Reservations"], "summary": "Create reservation", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "201": { "description": "Reservation created" } } }
+    },
+    "/restaurants/{id}/reservations/{reservationId}": {
+      "get": { "tags": ["Reservations"], "summary": "Get reservation by ID", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "reservationId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Reservation details" } } },
+      "put": { "tags": ["Reservations"], "summary": "Update reservation", "security": [{ "bearerAuth": [] }], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }, { "name": "reservationId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Reservation updated" } } }
+    },
+    "/audit": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Search audit entries",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "module", "in": "query", "schema": { "type": "string" }, "description": "Filter by module" },
+          { "name": "entityType", "in": "query", "schema": { "type": "string" }, "description": "Filter by entity type" },
+          { "name": "entityId", "in": "query", "schema": { "type": "string", "format": "uuid" }, "description": "Filter by entity ID" },
+          { "name": "action", "in": "query", "schema": { "type": "string" }, "description": "Filter by action" },
+          { "name": "performedBy", "in": "query", "schema": { "type": "string", "format": "uuid" }, "description": "Filter by user" },
+          { "name": "startDate", "in": "query", "schema": { "type": "string", "format": "date-time" }, "description": "Start date filter" },
+          { "name": "endDate", "in": "query", "schema": { "type": "string", "format": "date-time" }, "description": "End date filter" },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "minimum": 1, "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 50 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated audit entries",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "success": { "type": "boolean" }, "data": { "type": "array", "items": { "$ref": "#/components/schemas/AuditEntry" } }, "meta": { "$ref": "#/components/schemas/PaginationMeta" }, "timestamp": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/audit/{id}": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Get audit entry by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "responses": {
+          "200": { "description": "Audit entry details" },
+          "404": { "description": "Audit entry not found" }
+        }
+      }
+    }
+  }
+}

@@ -25,7 +25,7 @@ describe("RestaurantQueryRepository contract", () => {
       findAllActive: async () => [],
       findByStatus: async () => [],
       searchByName: async () => [],
-      countByStatus: async () => ({ active: 0, inactive: 0, suspended: 0, closing_down: 0 }),
+      countByStatus: async () => ({ active: 0, inactive: 0, suspended: 0, closing_down: 0 } as never),
     };
 
     expect(repo.findAllActive).toBeDefined();

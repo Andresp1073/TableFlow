@@ -19,8 +19,8 @@ import { FutureReservationEvaluator } from "../../domain/services/availability/e
 import { TableGroupEvaluator } from "../../domain/services/availability/evaluators/TableGroupEvaluator.js";
 import type { TableGroupRepositoryForEval } from "../../domain/services/availability/evaluators/TableGroupEvaluator.js";
 import type { TableRepository } from "../../domain/repositories/TableRepository.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
 import type { CheckTableAvailabilityQuery } from "../queries/CheckTableAvailabilityQuery.js";
 import type { ListAvailableTablesQuery } from "../queries/ListAvailableTablesQuery.js";
 import type { TableAvailabilityDTO, AvailabilityCheckDTO, ListAvailableTablesResultDTO } from "../dto/TableAvailabilityDTO.js";
@@ -100,13 +100,13 @@ export class TableAvailabilityService {
     (context as any).tableId = query.tableId;
 
     const results = await this.engine.evaluateAll(context);
-    const finalResult = results.find((r) => !r.available) ?? results[results.length - 1];
+    const finalResult = results.find((r) => !r.available) ?? results[results.length - 1]!;
 
     return {
       available: finalResult.available,
       reason: finalResult.reason,
       details: results.map((r) => ({
-        evaluator: (r.metadata?.evaluator as string) ?? "unknown",
+        evaluator: (r.metadata?.['evaluator'] as string) ?? "unknown",
         available: r.available,
         reason: r.reason,
       })),

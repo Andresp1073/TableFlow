@@ -79,7 +79,7 @@ describe("TableStateMachine", () => {
     expect(fsm.canTransition("maintenance", "blocked")).toBe(false);
     expect(fsm.canTransition("blocked", "occupied")).toBe(false);
     expect(fsm.canTransition("archived", "available")).toBe(false);
-    expect(fsm.canTransition("archived", "anything")).toBe(false);
+    expect(fsm.canTransition("archived", "anything" as any)).toBe(false);
   });
 
   it("getAllowedTransitionsFrom returns correct list", () => {

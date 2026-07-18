@@ -3,9 +3,9 @@ import { prisma } from "../../../../config/database.js";
 import { logger as rootLogger } from "../../../../config/logger.js";
 import type { PermissionResolutionContext, PermissionResolutionResult } from "../../domain/models/PermissionResolution.js";
 import type { PermissionResolutionService } from "../../domain/services/PermissionResolutionService.js";
-import type { CacheProvider } from "../../../shared/cache/domain/CacheProvider.js";
-import type { CacheKeyFactory } from "../../../shared/cache/domain/CacheKeyFactory.js";
-import type { CacheInvalidationService } from "../../../shared/cache/domain/CacheInvalidationService.js";
+import type { CacheProvider } from "../../../../shared/cache/domain/CacheProvider.js";
+import type { CacheKeyFactory } from "../../../../shared/cache/domain/CacheKeyFactory.js";
+import type { CacheInvalidationService } from "../../../../shared/cache/domain/CacheInvalidationService.js";
 import { UserNotFoundError } from "../../errors/UserNotFoundError.js";
 
 const logger = rootLogger.child({ service: "PermissionResolutionService" });

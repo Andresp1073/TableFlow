@@ -4,7 +4,7 @@ import type {
   RolePermissionService,
   AssignPermissionsResult,
 } from "../../application/services/RolePermissionService.js";
-import type { CacheInvalidationService } from "../../../shared/cache/domain/CacheInvalidationService.js";
+import type { CacheInvalidationService } from "../../../../shared/cache/domain/CacheInvalidationService.js";
 import { DuplicateAssignmentError } from "../../errors/DuplicateAssignmentError.js";
 import {
   validateRolePermissionAssignment,

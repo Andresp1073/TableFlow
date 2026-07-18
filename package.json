@@ -1,35 +1,38 @@
 {
-    "name":  "tableflow",
-    "version":  "1.0.0",
-    "private":  true,
-    "description":  "Multi-restaurant reservation SaaS platform",
-    "scripts":  {
-                    "dev:frontend":  "pnpm --filter @tableflow/frontend dev",
-                    "dev:backend":  "pnpm --filter @tableflow/backend dev",
-                    "dev":  "pnpm run --parallel dev:frontend dev:backend",
-                    "build":  "pnpm run --recursive build",
-                    "lint":  "pnpm run --recursive lint",
-                    "lint:fix":  "pnpm run --recursive lint:fix",
-                    "format":  "prettier --write \"**/*.{ts,tsx,json,css,md}\"",
-                    "format:check":  "prettier --check \"**/*.{ts,tsx,json,css,md}\"",
-                    "typecheck":  "pnpm run --recursive typecheck",
-                    "clean":  "pnpm run --recursive clean",
-                    "db:migrate":  "pnpm --filter @tableflow/backend db:migrate",
-                    "db:push":  "pnpm --filter @tableflow/backend db:push",
-                    "db:studio":  "pnpm --filter @tableflow/backend db:studio",
-                    "docker:up":  "docker compose -f docker/docker-compose.yml up -d",
-                    "docker:down":  "docker compose -f docker/docker-compose.yml down"
-                },
-    "engines":  {
-                    "node":  "\u003e=20.0.0",
-                    "pnpm":  "\u003e=9.0.0"
-                },
-    "pnpm":  {
-                 "onlyBuiltDependencies":  [
-                                               "prisma",
-                                               "@prisma/client",
-                                               "@prisma/engines",
-                                               "esbuild"
-                                           ]
-             }
+    "name": "tableflow",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Multi-restaurant reservation SaaS platform",
+    "scripts": {
+        "dev:frontend": "pnpm --filter @tableflow/frontend dev",
+        "dev:backend": "pnpm --filter @tableflow/backend dev",
+"dev":  "concurrently -n backend,frontend -c blue,green \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+        "build": "pnpm run --recursive build",
+        "lint": "pnpm run --recursive lint",
+        "lint:fix": "pnpm run --recursive lint:fix",
+        "format": "prettier --write \"**/*.{ts,tsx,json,css,md}\"",
+        "format:check": "prettier --check \"**/*.{ts,tsx,json,css,md}\"",
+        "typecheck": "pnpm run --recursive typecheck",
+        "clean": "pnpm run --recursive clean",
+        "db:migrate": "pnpm --filter @tableflow/backend db:migrate",
+        "db:push": "pnpm --filter @tableflow/backend db:push",
+        "db:studio": "pnpm --filter @tableflow/backend db:studio",
+        "docker:up": "docker compose -f docker/docker-compose.yml up -d",
+        "docker:down": "docker compose -f docker/docker-compose.yml down"
+    },
+    "engines": {
+        "node": ">=20.0.0",
+        "pnpm": ">=9.0.0"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "prisma",
+            "@prisma/client",
+            "@prisma/engines",
+            "esbuild"
+        ]
+    },
+    "devDependencies": {
+        "concurrently": "^10.0.3"
+    }
 }

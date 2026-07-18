@@ -164,6 +164,7 @@ describe("GET /api/v1/audit", () => {
     expect(res.body.data.length).toBeGreaterThanOrEqual(1);
     expect(res.body.meta).toBeDefined();
     expect(res.body.meta.total).toBeGreaterThanOrEqual(1);
+    expect(typeof res.body.timestamp).toBe("string");
   });
 
   it("filters by module", async () => {
@@ -196,6 +197,12 @@ describe("GET /api/v1/audit", () => {
       .expect(401);
 
     expect(res.body.success).toBe(false);
+    expect(res.body.error).toBeDefined();
+    expect(res.body.error.code).toMatch(/^auth\./);
+    expect(typeof res.body.error.timestamp).toBe("string");
+    expect(typeof res.body.error.path).toBe("string");
+    expect(typeof res.body.error.correlationId).toBe("string");
+    expect(typeof res.body.timestamp).toBe("string");
   });
 
   it("supports pagination", async () => {
@@ -230,6 +237,7 @@ describe("GET /api/v1/audit/:id", () => {
 
     expect(res.body.success).toBe(true);
     expect(res.body.data.id).toBe(createdId);
+    expect(typeof res.body.timestamp).toBe("string");
   });
 
   it("returns 404 for non-existent entry", async () => {
@@ -240,6 +248,10 @@ describe("GET /api/v1/audit/:id", () => {
       .expect(404);
 
     expect(res.body.success).toBe(false);
+    expect(res.body.error.code).toMatch(/^audit_entry\./);
+    expect(typeof res.body.error.timestamp).toBe("string");
+    expect(typeof res.body.error.path).toBe("string");
+    expect(typeof res.body.timestamp).toBe("string");
   });
 
   it("requires authentication", async () => {
@@ -249,5 +261,10 @@ describe("GET /api/v1/audit/:id", () => {
       .expect(401);
 
     expect(res.body.success).toBe(false);
+    expect(res.body.error).toBeDefined();
+    expect(res.body.error.code).toMatch(/^auth\./);
+    expect(typeof res.body.error.timestamp).toBe("string");
+    expect(typeof res.body.error.path).toBe("string");
+    expect(typeof res.body.timestamp).toBe("string");
   });
 });

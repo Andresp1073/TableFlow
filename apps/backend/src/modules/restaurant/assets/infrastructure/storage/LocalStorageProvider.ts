@@ -78,7 +78,7 @@ export class LocalStorageProvider implements StorageProvider {
 
   private async getImageDimensions(filePath: string): Promise<{ width: number; height: number }> {
     const buffer = await fs.promises.readFile(filePath);
-    const { parseImageDimensions } = await import("../../../../utils/imageDimensions.js");
+    const { parseImageDimensions } = await import("../../../../../utils/imageDimensions.js");
     return parseImageDimensions(buffer);
   }
 }

@@ -1,5 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 import { AvailabilityEngine } from "../domain/services/availability/AvailabilityEngine.js";
+
+function futureDate(daysFromNow = 7): string {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().slice(0, 10);
+}
 import { RestaurantStatusEvaluator } from "../domain/services/availability/evaluators/RestaurantStatusEvaluator.js";
 import { BusinessHoursEvaluator } from "../domain/services/availability/evaluators/BusinessHoursEvaluator.js";
 import { CalendarExceptionEvaluator } from "../domain/services/availability/evaluators/CalendarExceptionEvaluator.js";
@@ -48,7 +54,7 @@ describe("AvailabilityEngine", () => {
   it("returns available when all evaluators pass", async () => {
     const evaluators = [new RestaurantStatusEvaluator()];
     const engine = new AvailabilityEngine(evaluators);
-    const result = await engine.evaluate({ restaurantId: "rest-1", date: "2026-07-15" });
+    const result = await engine.evaluate({ restaurantId: "rest-1", date: futureDate() });
     expect(result.available).toBe(true);
     expect(result.reason).toBeNull();
   });
@@ -63,7 +69,7 @@ describe("AvailabilityEngine", () => {
       evaluate: async () => { throw new Error("Should not be called"); },
     };
     const engine = new AvailabilityEngine([alwaysFail, neverReached]);
-    const result = await engine.evaluate({ restaurantId: "rest-1", date: "2026-07-15" });
+    const result = await engine.evaluate({ restaurantId: "rest-1", date: futureDate() });
     expect(result.available).toBe(false);
     expect(result.reason).toBe("restaurant_closed");
   });
@@ -82,7 +88,7 @@ describe("AvailabilityEngine", () => {
       evaluate: async () => available(),
     };
     const engine = new AvailabilityEngine([pass1, fail, pass2]);
-    const results = await engine.evaluateAll({ restaurantId: "rest-1", date: "2026-07-15" });
+    const results = await engine.evaluateAll({ restaurantId: "rest-1", date: futureDate() });
     expect(results).toHaveLength(2);
     expect(results[0].available).toBe(true);
     expect(results[1].available).toBe(false);
@@ -93,13 +99,13 @@ describe("AvailabilityEngine", () => {
 describe("RestaurantStatusEvaluator", () => {
   it("returns available for valid restaurant", async () => {
     const evaluator = new RestaurantStatusEvaluator();
-    const result = await evaluator.evaluate({ restaurantId: "rest-1", date: "2026-07-15" });
+    const result = await evaluator.evaluate({ restaurantId: "rest-1", date: futureDate() });
     expect(result.available).toBe(true);
   });
 
   it("returns unavailable when restaurantId is missing", async () => {
     const evaluator = new RestaurantStatusEvaluator();
-    const result = await evaluator.evaluate({ restaurantId: "", date: "2026-07-15" });
+    const result = await evaluator.evaluate({ restaurantId: "", date: futureDate() });
     expect(result.available).toBe(false);
     expect(result.reason).toBe("unknown");
   });
@@ -203,7 +209,7 @@ describe("CalendarExceptionEvaluator", () => {
     const evaluator = new CalendarExceptionEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });
@@ -242,7 +248,7 @@ describe("CalendarExceptionEvaluator", () => {
     const evaluator = new CalendarExceptionEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(false);
     expect(result.reason).toBe("special_closure");
@@ -262,7 +268,7 @@ describe("CalendarExceptionEvaluator", () => {
     const evaluator = new CalendarExceptionEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       time: "20:00",
     });
     expect(result.available).toBe(true);
@@ -288,7 +294,7 @@ describe("TableStatusEvaluator", () => {
     const evaluator = new TableStatusEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(true);
@@ -299,7 +305,7 @@ describe("TableStatusEvaluator", () => {
     const evaluator = new TableStatusEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(false);
@@ -311,7 +317,7 @@ describe("TableStatusEvaluator", () => {
     const evaluator = new TableStatusEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(false);
@@ -322,7 +328,7 @@ describe("TableStatusEvaluator", () => {
     const evaluator = new TableStatusEvaluator(mockRepo(null));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });
@@ -338,7 +344,7 @@ describe("TableActiveEvaluator", () => {
     const evaluator = new TableActiveEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(true);
@@ -349,7 +355,7 @@ describe("TableActiveEvaluator", () => {
     const evaluator = new TableActiveEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(false);
@@ -361,7 +367,7 @@ describe("TableActiveEvaluator", () => {
     const evaluator = new TableActiveEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(false);
@@ -373,7 +379,7 @@ describe("TableActiveEvaluator", () => {
     const evaluator = new TableActiveEvaluator(mockRepo(table));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(false);
@@ -395,7 +401,7 @@ describe("DiningAreaEvaluator", () => {
     const evaluator = new DiningAreaEvaluator(mockRepo(area));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       diningAreaId: "area-1",
     });
     expect(result.available).toBe(true);
@@ -410,7 +416,7 @@ describe("DiningAreaEvaluator", () => {
     const evaluator = new DiningAreaEvaluator(mockRepo(area));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       diningAreaId: "area-1",
     });
     expect(result.available).toBe(false);
@@ -421,7 +427,7 @@ describe("DiningAreaEvaluator", () => {
     const evaluator = new DiningAreaEvaluator(mockRepo(null));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });
@@ -437,7 +443,7 @@ describe("TableTypeEvaluator", () => {
     const evaluator = new TableTypeEvaluator(mockRepo(type));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableTypeId: "type-1",
     });
     expect(result.available).toBe(true);
@@ -448,7 +454,7 @@ describe("TableTypeEvaluator", () => {
     const evaluator = new TableTypeEvaluator(mockRepo(type));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableTypeId: "type-1",
     });
     expect(result.available).toBe(false);
@@ -459,7 +465,7 @@ describe("TableTypeEvaluator", () => {
     const evaluator = new TableTypeEvaluator(mockRepo(null));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });
@@ -486,7 +492,7 @@ describe("ReservationPolicyEvaluator", () => {
     const evaluator = new ReservationPolicyEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       partySize: 4,
     });
     expect(result.available).toBe(true);
@@ -497,7 +503,7 @@ describe("ReservationPolicyEvaluator", () => {
     const evaluator = new ReservationPolicyEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       partySize: 10,
     });
     expect(result.available).toBe(false);
@@ -509,7 +515,7 @@ describe("ReservationPolicyEvaluator", () => {
     const evaluator = new ReservationPolicyEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       partySize: 1,
     });
     expect(result.available).toBe(false);
@@ -521,7 +527,7 @@ describe("ReservationPolicyEvaluator", () => {
     const evaluator = new ReservationPolicyEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(false);
     expect(result.reason).toBe("reservation_policy_disabled");
@@ -532,7 +538,7 @@ describe("ReservationPolicyEvaluator", () => {
     const evaluator = new ReservationPolicyEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });
@@ -543,7 +549,7 @@ describe("FutureReservationEvaluator", () => {
     const evaluator = new FutureReservationEvaluator();
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });
@@ -559,7 +565,7 @@ describe("TableGroupEvaluator", () => {
     const evaluator = new TableGroupEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(true);
@@ -570,7 +576,7 @@ describe("TableGroupEvaluator", () => {
     const evaluator = new TableGroupEvaluator(repo);
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
       tableId: "table-1",
     } as any);
     expect(result.available).toBe(false);
@@ -581,7 +587,7 @@ describe("TableGroupEvaluator", () => {
     const evaluator = new TableGroupEvaluator(mockRepo(null));
     const result = await evaluator.evaluate({
       restaurantId: "rest-1",
-      date: "2026-07-15",
+      date: futureDate(),
     });
     expect(result.available).toBe(true);
   });

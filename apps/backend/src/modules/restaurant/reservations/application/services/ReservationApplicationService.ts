@@ -1,10 +1,10 @@
 import type { ReservationRepository, ReservationListFilters } from "../../domain/repositories/ReservationRepository.js";
 import type { ReservationFactory } from "../../domain/repositories/ReservationFactory.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import type { AuditService } from "../../../audit/application/services/AuditService.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import type { AuditService } from "../../../../audit/application/services/AuditService.js";
 import type { ReservationCacheInvalidator } from "./ReservationCacheInvalidator.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { ReservationNumber } from "../../domain/models/ReservationNumber.js";
 import { ReservationDate } from "../../domain/models/ReservationDate.js";
 import { ReservationTimeRange } from "../../domain/models/ReservationTimeRange.js";

@@ -96,13 +96,13 @@ export class PrismaTableRepository implements TableRepository {
   async findByFilters(filters: TableListFilters): Promise<Table[]> {
     const where: Record<string, unknown> = { restaurantId: filters.restaurantId };
 
-    if (filters.diningAreaId) where.diningAreaId = filters.diningAreaId;
-    if (filters.tableTypeId) where.tableTypeId = filters.tableTypeId;
-    if (filters.status) where.status = filters.status;
-    if (filters.isReservable !== undefined) where.isReservable = filters.isReservable;
-    if (filters.isActive !== undefined) where.isActive = filters.isActive;
+    if (filters.diningAreaId) where['diningAreaId'] = filters.diningAreaId;
+    if (filters.tableTypeId) where['tableTypeId'] = filters.tableTypeId;
+    if (filters.status) where['status'] = filters.status;
+    if (filters.isReservable !== undefined) where['isReservable'] = filters.isReservable;
+    if (filters.isActive !== undefined) where['isActive'] = filters.isActive;
     if (filters.minCapacity !== undefined) {
-      where.maxCapacity = { gte: filters.minCapacity };
+      where['maxCapacity'] = { gte: filters.minCapacity };
     }
 
     const records = await this.prisma.restaurantTable.findMany({

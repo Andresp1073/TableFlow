@@ -1,7 +1,7 @@
 import type { CalendarExceptionRepository, CalendarExceptionFactory } from "../../domain/repositories/index.js";
-import type { AuthorizationService } from "../../../authorization/application/services/AuthorizationService.js";
-import type { AuthorizationContext } from "../../../authorization/domain/models/AuthorizationContext.js";
-import { EventBus } from "../../../../events/EventBus.js";
+import type { AuthorizationService } from "../../../../authorization/application/services/AuthorizationService.js";
+import type { AuthorizationContext } from "../../../../authorization/domain/models/AuthorizationContext.js";
+import { EventBus } from "../../../../../events/EventBus.js";
 import { ExceptionDate } from "../../domain/models/ExceptionDate.js";
 import { ExceptionType } from "../../domain/models/ExceptionType.js";
 import { Priority } from "../../domain/models/Priority.js";

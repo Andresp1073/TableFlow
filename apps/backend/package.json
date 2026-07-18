@@ -22,7 +22,10 @@
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset",
     "db:validate": "prisma validate",
-    "db:format": "prisma format"
+    "db:format": "prisma format",
+    "api:generate": "openapi-typescript docs/api/openapi.json -o src/generated/api-types.ts",
+    "api:check": "openapi-typescript docs/api/openapi.json -o src/generated/api-types.ts --check",
+    "api:watch": "openapi-typescript docs/api/openapi.json -o src/generated/api-types.ts --watch"
   },
   "prisma": {
     "seed": "tsx prisma/seed/index.ts"
@@ -57,6 +60,7 @@
     "bcryptjs": "^3.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3.4.0",
     "prisma": "^6.0.0",
     "rimraf": "^6.0.0",

@@ -37,6 +37,26 @@ function handlePrismaError(error: Prisma.PrismaClientKnownRequestError): AppErro
   }
 }
 
+function buildErrorEnvelope(
+  error: { code: string; message: string; details?: Record<string, string[]> },
+  statusCode: number,
+  req: Request,
+): ApiResponse<null> {
+  return {
+    success: false,
+    data: null,
+    error: {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      timestamp: new Date().toISOString(),
+      path: req.originalUrl,
+      correlationId: req.requestId ?? 'unknown',
+    },
+    timestamp: new Date().toISOString(),
+  };
+}
+
 export function errorHandler(
   err: Error,
   req: Request,
@@ -44,42 +64,43 @@ export function errorHandler(
   _next: NextFunction,
 ): void {
   if (err instanceof AppError) {
-    res.status(err.statusCode).json(err.toResponse());
+    const response = buildErrorEnvelope(
+      { code: err.code, message: err.message, details: err.details },
+      err.statusCode,
+      req,
+    );
+    res.status(err.statusCode).json(response);
     return;
   }
 
   if (err instanceof ZodError) {
     const details = buildZodDetails(err);
-    const response: ApiResponse<null> = {
-      success: false,
-      data: null,
-      error: {
-        code: 'validation.failed',
-        message: 'Validation failed',
-        details,
-      },
-    };
-
+    const response = buildErrorEnvelope(
+      { code: 'validation.failed', message: 'Validation failed', details },
+      400,
+      req,
+    );
     res.status(400).json(response);
     return;
   }
 
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     const appError = handlePrismaError(err);
-    res.status(appError.statusCode).json(appError.toResponse());
+    const response = buildErrorEnvelope(
+      { code: appError.code, message: appError.message },
+      appError.statusCode,
+      req,
+    );
+    res.status(appError.statusCode).json(response);
     return;
   }
 
   if (err instanceof Prisma.PrismaClientValidationError) {
-    const response: ApiResponse<null> = {
-      success: false,
-      data: null,
-      error: {
-        code: 'validation.failed',
-        message: 'Invalid data format',
-      },
-    };
-
+    const response = buildErrorEnvelope(
+      { code: 'validation.failed', message: 'Invalid data format' },
+      400,
+      req,
+    );
     res.status(400).json(response);
     return;
   }
@@ -91,14 +112,10 @@ export function errorHandler(
     'Unhandled error',
   );
 
-  const response: ApiResponse<null> = {
-    success: false,
-    data: null,
-    error: {
-      code: 'internal.error',
-      message: 'An unexpected error occurred',
-    },
-  };
-
+  const response = buildErrorEnvelope(
+    { code: 'internal.error', message: 'An unexpected error occurred' },
+    500,
+    req,
+  );
   res.status(500).json(response);
 }

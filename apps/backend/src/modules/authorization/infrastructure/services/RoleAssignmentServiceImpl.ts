@@ -10,7 +10,7 @@ import type {
   ReplaceRolesResult,
   RestaurantUser,
 } from "../../application/services/RoleAssignmentService.js";
-import type { CacheInvalidationService } from "../../../shared/cache/domain/CacheInvalidationService.js";
+import type { CacheInvalidationService } from "../../../../shared/cache/domain/CacheInvalidationService.js";
 import { RoleAssignmentPolicy } from "../../application/services/RoleAssignmentPolicy.js";
 import { RoleNotFoundError } from "../../errors/RoleNotFoundError.js";
 import { UserNotFoundError } from "../../errors/UserNotFoundError.js";
