@@ -135,7 +135,7 @@ export function OrderDetailView({
               </div>
               <div className="flex justify-between text-sm pt-1">
                 <span className="text-muted-foreground">Payment</span>
-                <span>{PAYMENT_STATUS_LABELS[order.paymentStatus]}</span>
+                <span>{t(PAYMENT_STATUS_LABELS[order.paymentStatus])}</span>
               </div>
             </CardContent>
           </Card>
@@ -147,7 +147,7 @@ export function OrderDetailView({
             <CardContent className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Source</span>
-                <span>{ORDER_SOURCE_LABELS[order.source]}</span>
+                <span>{t(ORDER_SOURCE_LABELS[order.source])}</span>
               </div>
               {order.tableId && (
                 <div className="flex justify-between">

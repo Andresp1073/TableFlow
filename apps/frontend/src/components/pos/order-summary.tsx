@@ -1,11 +1,10 @@
 'use client';
-import { t } from '@/lib/i18n';
+import { t, formatCurrency } from '@/lib/i18n';
 
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { OrderItem } from '@/lib/sales-types';
-import { formatCurrency } from '@/lib/sales-types';
 
 interface OrderSummaryProps {
   items: OrderItem[];

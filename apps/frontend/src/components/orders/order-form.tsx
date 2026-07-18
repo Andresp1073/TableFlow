@@ -84,7 +84,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(ORDER_SOURCE_LABELS).map(([value, label]) => (
-                    <SelectItem key={value} value={value}>{label}</SelectItem>
+                    <SelectItem key={value} value={value}>{t(label)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

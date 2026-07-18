@@ -69,7 +69,7 @@ export function OrderList({ orders, isLoading, isError, error, onRetry }: OrderL
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Source</span>
-                <span>{ORDER_SOURCE_LABELS[order.source]}</span>
+                <span>{t(ORDER_SOURCE_LABELS[order.source])}</span>
               </div>
               {order.tableId && (
                 <div className="flex justify-between">
