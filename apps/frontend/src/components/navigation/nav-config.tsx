@@ -14,6 +14,9 @@ import {
   ArrowUpDown,
   ClipboardList,
   AlertTriangle,
+  Gift,
+  Award,
+  Star,
 } from 'lucide-react';
 import type { NavGroup, NavItem } from './nav-types';
 
@@ -91,6 +94,12 @@ export const NAV_ITEMS: NavGroup = [
         label: 'Customers',
         href: '/customers',
         icon: <Users className="h-4 w-4" />,
+        items: [
+          { label: 'Dashboard', href: '/customers', icon: <LayoutDashboard className="h-4 w-4" /> },
+          { label: 'All Customers', href: '/customers/list', icon: <Users className="h-4 w-4" /> },
+          { label: 'Loyalty', href: '/loyalty', icon: <Award className="h-4 w-4" /> },
+          { label: 'Reward History', href: '/loyalty/reward-history', icon: <Gift className="h-4 w-4" /> },
+        ],
       },
     ],
   },

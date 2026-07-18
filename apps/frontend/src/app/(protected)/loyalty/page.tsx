@@ -1,18 +1,18 @@
 'use client';
 
 import { useRestaurant } from '@/providers/restaurant-provider';
-import { useCustomerDashboard } from '@/hooks/use-customers';
-import { CustomerDashboardContent } from '@/components/customers/dashboard/customer-dashboard-content';
+import { useLoyaltyDashboard } from '@/hooks/use-loyalty';
+import { LoyaltyDashboardContent } from '@/components/loyalty/loyalty-dashboard-content';
 import { ContentArea } from '@/components/layout/content-area';
 
-export default function CustomersPage() {
+export default function LoyaltyPage() {
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const { data, isLoading, isError, error, refetch } = useCustomerDashboard(restaurantId);
+  const { data, isLoading, isError, error, refetch } = useLoyaltyDashboard(restaurantId);
 
   return (
     <ContentArea>
-      <CustomerDashboardContent
+      <LoyaltyDashboardContent
         data={data}
         isLoading={isLoading}
         isError={isError}
