@@ -4,6 +4,7 @@ import { seedPermissions } from "./permissions.seed";
 import { seedRolePermissions } from "./role-permissions.seed";
 import { seedOrganization } from "./organization.seed";
 import { seedSettings } from "./settings.seed";
+import { seedBranches } from "./branches.seed";
 import { seedAdminUser } from "./admin-user.seed";
 
 const prisma = new PrismaClient();
@@ -23,7 +24,10 @@ const SEEDERS: {
   { name: "Organization", fn: seedOrganization },
   { name: "Settings", fn: seedSettings },
 
-  // Level 3 — Depends on Organization + Role
+  // Level 3 — Depends on Organization
+  { name: "Branches", fn: seedBranches },
+
+  // Level 4 — Depends on Organization + Role
   { name: "AdminUser", fn: seedAdminUser },
 ];
 

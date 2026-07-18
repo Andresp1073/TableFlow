@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRestaurant } from '@/providers/restaurant-provider';
+import { useRestaurants } from '@/hooks/use-restaurants';
 import { useDashboard } from '@/hooks/use-dashboard';
 import { DashboardGrid, DashboardGridItem } from '@/components/dashboard/dashboard-grid';
 import { QuickActions } from '@/components/dashboard/quick-actions';
@@ -17,8 +19,19 @@ import { QuickStatisticsWidget } from '@/components/dashboard/widgets/quick-stat
 import { PageWrapper } from '@/components/layout/page-wrapper';
 
 export default function DashboardPage() {
-  const { current } = useRestaurant();
-  const restaurantId = current?.id ?? 'default';
+  const { current, setCurrent, restaurants, setRestaurants } = useRestaurant();
+  const { data: restaurantsData } = useRestaurants();
+
+  useEffect(() => {
+    if (restaurantsData?.data && restaurantsData.data.length > 0) {
+      setRestaurants(restaurantsData.data);
+      if (!current) {
+        setCurrent(restaurantsData.data[0]);
+      }
+    }
+  }, [restaurantsData, current, setCurrent, setRestaurants]);
+
+  const restaurantId = current?.id ?? '';
   const { data, isLoading, isError, error, refetch } = useDashboard(restaurantId);
 
   return (

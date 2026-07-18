@@ -4,11 +4,25 @@ import { sendSuccess } from '../../../../utils/response.js';
 import type { AuthenticatedRequest } from '../../../../middlewares/auth.js';
 import { prisma } from '../../../../config/database.js';
 
+async function resolveBranchId(id: string, organizationId: string): Promise<string> {
+  const branch = await prisma.branch.findFirst({
+    where: { OR: [{ id }, { organizationId, slug: id }] },
+    select: { id: true },
+  });
+  if (branch) return branch.id;
+
+  const firstBranch = await prisma.branch.findFirst({
+    where: { organizationId },
+    select: { id: true },
+  });
+  return firstBranch?.id ?? id;
+}
+
 export function createDashboardController() {
   return {
     getDashboard: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-      const restaurantId = req.params.id;
       const organizationId = req.organizationId!;
+      const branchId = await resolveBranchId(req.params.id, organizationId);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const tomorrow = new Date(today);
@@ -25,7 +39,7 @@ export function createDashboardController() {
           by: ['status'],
           where: {
             organizationId,
-            restaurantId: restaurantId,
+            branchId,
             reservationDate: { gte: today, lt: tomorrow },
           },
           _count: { id: true },
@@ -34,8 +48,7 @@ export function createDashboardController() {
         prisma.restaurantTable.groupBy({
           by: ['status'],
           where: {
-            organizationId,
-            restaurantId: restaurantId,
+            branchId,
             isActive: true,
             deletedAt: null,
           },
@@ -45,7 +58,7 @@ export function createDashboardController() {
         prisma.reservation.findMany({
           where: {
             organizationId,
-            restaurantId: restaurantId,
+            branchId,
             reservationDate: { gte: today },
             status: { in: ['pending', 'confirmed'] },
           },
@@ -66,7 +79,6 @@ export function createDashboardController() {
           where: { organizationId },
           orderBy: { createdAt: 'desc' },
           take: 10,
-          include: { user: { select: { firstName: true, lastName: true } } },
         }),
 
         prisma.customer.aggregate({
