@@ -19,14 +19,14 @@ import { QuickStatisticsWidget } from '@/components/dashboard/widgets/quick-stat
 import { PageWrapper } from '@/components/layout/page-wrapper';
 
 export default function DashboardPage() {
-  const { current, setCurrent, restaurants, setRestaurants } = useRestaurant();
+  const { current, setCurrent, setRestaurants } = useRestaurant();
   const { data: restaurantsData } = useRestaurants();
 
   useEffect(() => {
     if (restaurantsData?.data && restaurantsData.data.length > 0) {
       setRestaurants(restaurantsData.data);
       if (!current) {
-        setCurrent(restaurantsData.data[0]);
+        setCurrent(restaurantsData.data[0]!);
       }
     }
   }, [restaurantsData, current, setCurrent, setRestaurants]);
