@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { t } from '@/lib/i18n';
 
 interface UserMenuProps {
   name: string;
@@ -23,7 +24,7 @@ export function UserMenu({ name, email, initials }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-md" className="rounded-full" aria-label="User menu">
+        <Button variant="ghost" size="icon-md" className="rounded-full" aria-label={t('User menu')}>
           <Avatar className="h-7 w-7">
             <AvatarFallback className="text-xs bg-primary text-primary-foreground">
               {initials ?? name.charAt(0).toUpperCase()}
@@ -43,20 +44,20 @@ export function UserMenu({ name, email, initials }: UserMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <User className="mr-2 h-4 w-4" />
-          Profile
+          {t('Profile')}
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Settings className="mr-2 h-4 w-4" />
-          Account settings
+          {t('Account settings')}
         </DropdownMenuItem>
         <DropdownMenuItem>
           <HelpCircle className="mr-2 h-4 w-4" />
-          Help &amp; support
+          {t('Help & support')}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-destructive">
           <LogOut className="mr-2 h-4 w-4" />
-          Sign out
+          {t('Sign out')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

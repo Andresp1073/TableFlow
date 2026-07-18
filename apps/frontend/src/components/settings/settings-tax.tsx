@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { t } from '@/lib/i18n';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useSettings, useUpdateSettings } from '@/hooks/use-settings';
 import { updateSettingsSchema } from '@/lib/settings-schemas';
@@ -49,9 +50,9 @@ export function SettingsTax() {
           serviceChargePercentage: Number(data['serviceChargePercentage']),
         },
       });
-      toast.success('Tax settings updated successfully');
+      toast.success(t('Tax settings updated successfully'));
     } catch {
-      toast.error('Failed to update tax settings');
+      toast.error(t('Failed to update tax settings'));
     }
   };
 
@@ -59,7 +60,7 @@ export function SettingsTax() {
     return (
       <Alert variant="warning">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Select a restaurant to configure tax settings.</AlertDescription>
+        <AlertDescription>{t('Select a restaurant to configure tax settings.')}</AlertDescription>
       </Alert>
     );
   }
@@ -71,7 +72,7 @@ export function SettingsTax() {
       <Alert variant="error">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Failed to load settings: {(error as Error)?.message || 'Unexpected error'}
+          {t('Failed to load settings:')} {(error as Error)?.message || t('Unexpected error')}
         </AlertDescription>
       </Alert>
     );
@@ -81,14 +82,14 @@ export function SettingsTax() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <CardTitle>Tax Settings</CardTitle>
+          <CardTitle>{t('Tax Settings')}</CardTitle>
           <CardDescription>
-            Configure tax rate and service charge percentage for your restaurant.
+            {t('Configure tax rate and service charge percentage for your restaurant.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="taxPercentage">Tax Rate (%)</Label>
+            <Label htmlFor="taxPercentage">{t('Tax Rate (%)')}</Label>
             <Input
               id="taxPercentage"
               type="number"
@@ -96,7 +97,7 @@ export function SettingsTax() {
               min="0"
               max="100"
               {...register('taxPercentage', { valueAsNumber: true })}
-              aria-label="Tax rate percentage"
+              aria-label={t('Tax rate percentage')}
             />
             {errors.taxPercentage && (
               <p className="text-sm text-destructive">{errors.taxPercentage.message as string}</p>
@@ -104,7 +105,7 @@ export function SettingsTax() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="serviceChargePercentage">Service Charge (%)</Label>
+            <Label htmlFor="serviceChargePercentage">{t('Service Charge (%)')}</Label>
             <Input
               id="serviceChargePercentage"
               type="number"
@@ -112,7 +113,7 @@ export function SettingsTax() {
               min="0"
               max="100"
               {...register('serviceChargePercentage', { valueAsNumber: true })}
-              aria-label="Service charge percentage"
+              aria-label={t('Service charge percentage')}
             />
             {errors.serviceChargePercentage && (
               <p className="text-sm text-destructive">
@@ -124,7 +125,7 @@ export function SettingsTax() {
           <div className="flex items-center gap-4 pt-2">
             <Button type="submit" disabled={!isDirty || update.isPending}>
               <Save className="h-4 w-4 mr-1.5" />
-              {update.isPending ? 'Saving...' : 'Save Changes'}
+              {update.isPending ? t('Saving...') : t('Save Changes')}
             </Button>
           </div>
         </CardContent>

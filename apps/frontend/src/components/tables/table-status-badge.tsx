@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import type { TableStatus } from '@/lib/table-types';
 import { TABLE_STATUS_VARIANTS, TABLE_STATUS_LABELS } from '@/lib/table-types';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +14,7 @@ export function TableStatusBadgeSmall({ status }: { status: TableStatus }) {
   return (
     <span
       className="inline-flex items-center gap-1 text-xs font-medium"
-      aria-label={`Status: ${label}`}
+      aria-label={t('Status: {label}', { label })}
     >
       <span
         className="h-1.5 w-1.5 rounded-full shrink-0"

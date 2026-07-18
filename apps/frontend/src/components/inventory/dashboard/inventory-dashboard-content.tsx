@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardWidget } from '@/components/dashboard/dashboard-widget';
@@ -66,28 +67,28 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
     <div className="space-y-4">
       <DashboardGrid>
         <DashboardGridItem colSpan={1}>
-          <StatCard title="Total Products" value={data.totalProducts} icon={<Package className="h-4 w-4" />} href="/inventory/products" />
+          <StatCard title={t("Total Products")} value={data.totalProducts} icon={<Package className="h-4 w-4" />} href="/inventory/products" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title="Inventory Value" value={formatCurrency(data.totalStockValue)} icon={<DollarSign className="h-4 w-4" />} />
+          <StatCard title={t("Inventory Value")} value={formatCurrency(data.totalStockValue)} icon={<DollarSign className="h-4 w-4" />} />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title="Low Stock" value={data.lowStockCount} icon={<AlertTriangle className="h-4 w-4 text-warning" />} description="Items below minimum threshold" href="/inventory/alerts" />
+          <StatCard title={t("Low Stock")} value={data.lowStockCount} icon={<AlertTriangle className="h-4 w-4 text-warning" />} description={t("Items below minimum threshold")} href="/inventory/alerts" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title="Out of Stock" value={data.outOfStockCount} icon={<TrendingDown className="h-4 w-4 text-destructive" />} href="/inventory/alerts" />
+          <StatCard title={t("Out of Stock")} value={data.outOfStockCount} icon={<TrendingDown className="h-4 w-4 text-destructive" />} href="/inventory/alerts" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title="Pending Orders" value={data.pendingOrderCount} icon={<ClipboardList className="h-4 w-4" />} href="/inventory/purchase-orders" />
+          <StatCard title={t("Pending Orders")} value={data.pendingOrderCount} icon={<ClipboardList className="h-4 w-4" />} href="/inventory/purchase-orders" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title="Categories" value={data.totalCategories} icon={<Package className="h-4 w-4" />} href="/inventory/categories" />
+          <StatCard title={t("Categories")} value={data.totalCategories} icon={<Package className="h-4 w-4" />} href="/inventory/categories" />
         </DashboardGridItem>
       </DashboardGrid>
 
       <DashboardGrid>
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title="Low Stock Products" isEmpty={data.lowStockProducts.length === 0} emptyMessage="All inventory levels are healthy">
+          <DashboardWidget title={t("Low Stock Products")} isEmpty={data.lowStockProducts.length === 0} emptyMessage={t("All inventory levels are healthy")}>
             <div className="space-y-2">
               {data.lowStockProducts.slice(0, 8).map((p) => (
                 <div key={p.id} className="flex items-center justify-between text-sm">
@@ -103,7 +104,7 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
         </DashboardGridItem>
 
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title="Pending Purchase Orders" isEmpty={data.pendingOrders.length === 0} emptyMessage="No pending orders">
+          <DashboardWidget title={t("Pending Purchase Orders")} isEmpty={data.pendingOrders.length === 0} emptyMessage={t("No pending orders")}>
             <div className="space-y-2">
               {data.pendingOrders.slice(0, 5).map((po) => (
                 <div key={po.id} className="flex items-center justify-between text-sm">
@@ -121,7 +122,7 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
 
       <DashboardGrid>
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title="Recent Movements" isEmpty={data.recentMovements.length === 0} emptyMessage="No recent movements">
+          <DashboardWidget title={t("Recent Movements")} isEmpty={data.recentMovements.length === 0} emptyMessage={t("No recent movements")}>
             <div className="space-y-1">
               {data.recentMovements.slice(0, 10).map((m) => (
                 <div key={m.id} className="flex items-center justify-between text-sm py-1">
@@ -140,7 +141,7 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
         </DashboardGridItem>
 
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title="Top Consumed Products" isEmpty={data.topConsumed.length === 0} emptyMessage="No consumption data">
+          <DashboardWidget title={t("Top Consumed Products")} isEmpty={data.topConsumed.length === 0} emptyMessage={t("No consumption data")}>
             <div className="space-y-2">
               {data.topConsumed.slice(0, 8).map((p, i) => (
                 <div key={p.name} className="flex items-center justify-between text-sm">

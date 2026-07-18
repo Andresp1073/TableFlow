@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import type { KitchenStats } from '@/lib/order-types';
 import { cn } from '@/lib/cn';
@@ -33,11 +34,11 @@ export function KdsHeader({ title = 'Kitchen Display', stats, children, classNam
         <div className="flex items-center gap-4 min-w-0">
           <h1 className="text-lg font-bold tracking-tight truncate">{title}</h1>
           {stats && (
-            <div className="hidden sm:flex items-center gap-3" role="status" aria-label="Kitchen statistics">
-              <StatBadge label="New" value={stats.pending} color="bg-warning" />
-              <StatBadge label="Prep" value={stats.preparing} color="bg-info" />
-              <StatBadge label="Ready" value={stats.ready} color="bg-success" />
-              <StatBadge label="Late" value={stats.slaLate} color="bg-destructive" />
+            <div className="hidden sm:flex items-center gap-3" role="status" aria-label={t("Kitchen statistics")}>
+              <StatBadge label={t("New")} value={stats.pending} color="bg-warning" />
+              <StatBadge label={t("Prep")} value={stats.preparing} color="bg-info" />
+              <StatBadge label={t("Ready")} value={stats.ready} color="bg-success" />
+              <StatBadge label={t("Late")} value={stats.slaLate} color="bg-destructive" />
             </div>
           )}
         </div>

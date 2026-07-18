@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -17,10 +18,10 @@ export default function NewProductPage() {
   const handleSubmit = (data: CreateProductInput) => {
     createProduct.mutate({ restaurantId, data }, {
       onSuccess: () => {
-        toast.success('Product created');
+        toast.success(t("Product created"));
         router.push('/inventory/products');
       },
-      onError: () => toast.error('Failed to create product'),
+      onError: () => toast.error(t("Failed to create product")),
     });
   };
 

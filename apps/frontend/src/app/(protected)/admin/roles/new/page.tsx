@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
@@ -21,12 +22,12 @@ export default function NewRolePage() {
   };
 
   return (
-    <AdminPageLayout title="Create Role" description="Define a new platform role">
+    <AdminPageLayout title={t("Create Role")} description={t("Define a new platform role")}>
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Roles', href: '/admin/roles' },
-          { label: 'New' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Roles'), href: '/admin/roles' },
+          { label: t('New') },
         ]}
       />
       <RoleForm

@@ -3,6 +3,7 @@
 import { DashboardWidget } from '@/components/dashboard/dashboard-widget';
 import { Users, UsersRound, CalendarCheck, Ban, AlertCircle, Clock } from 'lucide-react';
 import type { QuickStatisticsData } from '@/lib/dashboard-types';
+import { t } from '@/lib/i18n';
 
 interface QuickStatisticsWidgetProps {
   data?: QuickStatisticsData;
@@ -21,23 +22,23 @@ type StatItem = {
 };
 
 const STATS: StatItem[] = [
-  { key: 'totalCustomers', label: 'Total Customers', icon: Users, format: (v) => (v as number).toLocaleString() },
-  { key: 'averagePartySize', label: 'Avg Party Size', icon: UsersRound, format: (v) => (v as number).toFixed(1) },
-  { key: 'totalReservationsToday', label: 'Reservations Today', icon: CalendarCheck, format: (v) => (v as number).toString() },
-  { key: 'cancellationRate', label: 'Cancellation Rate', icon: Ban, format: (v) => `${v as number}%` },
-  { key: 'noShowRate', label: 'No-Show Rate', icon: AlertCircle, format: (v) => `${v as number}%` },
-  { key: 'peakHour', label: 'Peak Hour', icon: Clock, format: (v) => v as string },
+  { key: 'totalCustomers', label: t('Total Customers'), icon: Users, format: (v) => (v as number).toLocaleString() },
+  { key: 'averagePartySize', label: t('Avg Party Size'), icon: UsersRound, format: (v) => (v as number).toFixed(1) },
+  { key: 'totalReservationsToday', label: t('Reservations Today'), icon: CalendarCheck, format: (v) => (v as number).toString() },
+  { key: 'cancellationRate', label: t('Cancellation Rate'), icon: Ban, format: (v) => `${v as number}%` },
+  { key: 'noShowRate', label: t('No-Show Rate'), icon: AlertCircle, format: (v) => `${v as number}%` },
+  { key: 'peakHour', label: t('Peak Hour'), icon: Clock, format: (v) => v as string },
 ];
 
 function QuickStatisticsWidget({ data, isLoading, isError, error, onRefresh, onRetry }: QuickStatisticsWidgetProps) {
   return (
     <DashboardWidget
-      title="Quick Statistics"
+      title={t('Quick Statistics')}
       isLoading={isLoading}
       isError={isError}
       isEmpty={!data}
       error={error}
-      emptyMessage="No statistics available"
+      emptyMessage={t('No statistics available')}
       onRefresh={onRefresh}
       onRetry={onRetry}
     >

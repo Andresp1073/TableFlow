@@ -2,6 +2,7 @@ import type { DiningArea } from '@/lib/dining-area-types';
 import { DiningAreaStatusBadge } from '@/components/dining-areas/dining-area-status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, Hash, FileText, ListOrdered, Calendar, Clock, ToggleLeft } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 interface DetailRowProps {
   icon: React.ReactNode;
@@ -37,14 +38,14 @@ export function DiningAreaDetailView({ area }: { area: DiningArea }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Building2 className="h-4 w-4" />
-              Area Information
+              {t('Area Information')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Hash className="h-4 w-4" />} label="Name" value={area.name} />
-            <DetailRow icon={<FileText className="h-4 w-4" />} label="Code" value={area.code} />
+            <DetailRow icon={<Hash className="h-4 w-4" />} label={t('Name')} value={area.name} />
+            <DetailRow icon={<FileText className="h-4 w-4" />} label={t('Code')} value={area.code} />
             {area.description && (
-              <DetailRow icon={<FileText className="h-4 w-4" />} label="Description" value={area.description} />
+              <DetailRow icon={<FileText className="h-4 w-4" />} label={t('Description')} value={area.description} />
             )}
           </CardContent>
         </Card>
@@ -53,13 +54,13 @@ export function DiningAreaDetailView({ area }: { area: DiningArea }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <ListOrdered className="h-4 w-4" />
-              Configuration
+              {t('Configuration')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<ListOrdered className="h-4 w-4" />} label="Display Order" value={String(area.displayOrder)} />
-            <DetailRow icon={<ToggleLeft className="h-4 w-4" />} label="Reservable" value={area.isReservable ? 'Yes' : 'No'} />
-            <DetailRow icon={<Building2 className="h-4 w-4" />} label="Restaurant ID" value={area.restaurantId} />
+            <DetailRow icon={<ListOrdered className="h-4 w-4" />} label={t('Display Order')} value={String(area.displayOrder)} />
+            <DetailRow icon={<ToggleLeft className="h-4 w-4" />} label={t('Reservable')} value={area.isReservable ? t('Yes') : t('No')} />
+            <DetailRow icon={<Building2 className="h-4 w-4" />} label={t('Restaurant ID')} value={area.restaurantId} />
           </CardContent>
         </Card>
 
@@ -67,13 +68,13 @@ export function DiningAreaDetailView({ area }: { area: DiningArea }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              Audit Information
+              {t('Audit Information')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Hash className="h-4 w-4" />} label="ID" value={area.id} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Created" value={new Date(area.createdAt).toLocaleString()} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Updated" value={new Date(area.updatedAt).toLocaleString()} />
+            <DetailRow icon={<Hash className="h-4 w-4" />} label={t('ID')} value={area.id} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t('Created')} value={new Date(area.createdAt).toLocaleString()} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t('Updated')} value={new Date(area.updatedAt).toLocaleString()} />
           </CardContent>
         </Card>
       </div>

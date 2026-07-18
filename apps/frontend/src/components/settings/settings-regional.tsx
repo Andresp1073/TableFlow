@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { t } from '@/lib/i18n';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useSettings, useUpdateSettings } from '@/hooks/use-settings';
 import { updateSettingsSchema, type UpdateSettingsFormData } from '@/lib/settings-schemas';
@@ -56,9 +57,9 @@ export function SettingsRegional() {
     if (!restaurantId) return;
     try {
       await update.mutateAsync({ restaurantId, data });
-      toast.success('Regional settings updated successfully');
+      toast.success(t('Regional settings updated successfully'));
     } catch {
-      toast.error('Failed to update regional settings');
+      toast.error(t('Failed to update regional settings'));
     }
   };
 
@@ -66,7 +67,7 @@ export function SettingsRegional() {
     return (
       <Alert variant="warning">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Select a restaurant to configure regional settings.</AlertDescription>
+        <AlertDescription>{t('Select a restaurant to configure regional settings.')}</AlertDescription>
       </Alert>
     );
   }
@@ -78,7 +79,7 @@ export function SettingsRegional() {
       <Alert variant="error">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Failed to load settings: {(error as Error)?.message || 'Unexpected error'}
+          {t('Failed to load settings:')} {(error as Error)?.message || t('Unexpected error')}
         </AlertDescription>
       </Alert>
     );
@@ -95,13 +96,13 @@ export function SettingsRegional() {
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="timezone">Timezone</Label>
+            <Label htmlFor="timezone">{t('Timezone')}</Label>
             <Select
               value={watchedValues.timezone ?? settings?.timezone ?? 'UTC'}
               onValueChange={(v) => setValue('timezone', v, { shouldDirty: true })}
             >
-              <SelectTrigger id="timezone" aria-label="Select timezone">
-                <SelectValue placeholder="Select timezone" />
+              <SelectTrigger id="timezone" aria-label={t('Select timezone')}>
+                <SelectValue placeholder={t('Select timezone')} />
               </SelectTrigger>
               <SelectContent>
                 {TIMEZONE_OPTIONS.map((tz) => (
@@ -113,13 +114,13 @@ export function SettingsRegional() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="currency">Currency</Label>
+            <Label htmlFor="currency">{t('Currency')}</Label>
             <Select
               value={watchedValues.currency ?? settings?.currency ?? 'USD'}
               onValueChange={(v) => setValue('currency', v, { shouldDirty: true })}
             >
-              <SelectTrigger id="currency" aria-label="Select currency">
-                <SelectValue placeholder="Select currency" />
+              <SelectTrigger id="currency" aria-label={t('Select currency')}>
+                <SelectValue placeholder={t('Select currency')} />
               </SelectTrigger>
               <SelectContent>
                 {CURRENCY_OPTIONS.map((c) => (
@@ -131,13 +132,13 @@ export function SettingsRegional() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="language">Language</Label>
+            <Label htmlFor="language">{t('Language')}</Label>
             <Select
               value={watchedValues.language ?? settings?.language ?? 'en'}
               onValueChange={(v) => setValue('language', v, { shouldDirty: true })}
             >
-              <SelectTrigger id="language" aria-label="Select language">
-                <SelectValue placeholder="Select language" />
+              <SelectTrigger id="language" aria-label={t('Select language')}>
+                <SelectValue placeholder={t('Select language')} />
               </SelectTrigger>
               <SelectContent>
                 {LANGUAGE_OPTIONS.map((l) => (
@@ -149,7 +150,7 @@ export function SettingsRegional() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="dateFormat">Date Format</Label>
+            <Label htmlFor="dateFormat">{t('Date Format')}</Label>
             <Select
               value={watchedValues.dateFormat ?? settings?.dateFormat ?? 'YYYY-MM-DD'}
               onValueChange={(v) => setValue('dateFormat', v, { shouldDirty: true })}
@@ -167,7 +168,7 @@ export function SettingsRegional() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="timeFormat">Time Format</Label>
+            <Label htmlFor="timeFormat">{t('Time Format')}</Label>
             <Select
               value={watchedValues.timeFormat ?? settings?.timeFormat ?? 'HH:mm'}
               onValueChange={(v) => setValue('timeFormat', v, { shouldDirty: true })}

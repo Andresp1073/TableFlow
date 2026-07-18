@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -61,14 +62,14 @@ export function SupplierDetailView({ data, isLoading, isError }: SupplierDetailV
         <Card>
           <CardHeader><CardTitle className="text-base">Contact Information</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label="Contact Name" value={data.contactName ?? '—'} />
-            <DetailRow label="Email" value={
+            <DetailRow label={t("Contact Name")} value={data.contactName ?? '—'} />
+            <DetailRow label={t("Email")} value={
               data.email ? <a href={`mailto:${data.email}`} className="hover:underline flex items-center gap-1"><Mail className="h-3 w-3" />{data.email}</a> : '—'
             } />
-            <DetailRow label="Phone" value={
+            <DetailRow label={t("Phone")} value={
               data.phone ? <a href={`tel:${data.phone}`} className="hover:underline flex items-center gap-1"><Phone className="h-3 w-3" />{data.phone}</a> : '—'
             } />
-            <DetailRow label="Address" value={
+            <DetailRow label={t("Address")} value={
               data.address ? <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{data.address}</span> : '—'
             } />
           </CardContent>
@@ -77,10 +78,10 @@ export function SupplierDetailView({ data, isLoading, isError }: SupplierDetailV
         <Card>
           <CardHeader><CardTitle className="text-base">Business Details</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label="Lead Time" value={<span className="flex items-center gap-1"><Clock className="h-3 w-3" />{data.leadTimeDays} days</span>} />
-            <DetailRow label="Min Order" value={<span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />{formatCurrency(data.minimumOrderAmount)}</span>} />
-            <DetailRow label="Payment Terms" value={data.paymentTerms ?? '—'} />
-            <DetailRow label="Notes" value={data.notes ?? '—'} />
+            <DetailRow label={t("Lead Time")} value={<span className="flex items-center gap-1"><Clock className="h-3 w-3" />{data.leadTimeDays} days</span>} />
+            <DetailRow label={t("Min Order")} value={<span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />{formatCurrency(data.minimumOrderAmount)}</span>} />
+            <DetailRow label={t("Payment Terms")} value={data.paymentTerms ?? '—'} />
+            <DetailRow label={t("Notes")} value={data.notes ?? '—'} />
           </CardContent>
         </Card>
       </div>

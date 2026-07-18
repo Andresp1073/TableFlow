@@ -13,14 +13,15 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { t } from '@/lib/i18n';
 
 const ACTIONS = [
-  { label: 'Create Reservation', href: '/reservations/new', icon: CalendarPlus, color: 'text-blue-600' },
-  { label: 'Open Table', href: '/tables', icon: DoorOpen, color: 'text-emerald-600' },
-  { label: 'Manage Tables', href: '/tables', icon: Table2, color: 'text-violet-600' },
-  { label: 'View Kitchen', href: '/kitchen', icon: ChefHat, color: 'text-orange-600' },
-  { label: 'View Inventory', href: '/inventory', icon: Package, color: 'text-amber-600' },
-  { label: 'Manage Customers', href: '/customers', icon: Users, color: 'text-cyan-600' },
+  { label: t('Create Reservation'), href: '/reservations/new', icon: CalendarPlus, color: 'text-blue-600' },
+  { label: t('Open Table'), href: '/tables', icon: DoorOpen, color: 'text-emerald-600' },
+  { label: t('Manage Tables'), href: '/tables', icon: Table2, color: 'text-violet-600' },
+  { label: t('View Kitchen'), href: '/kitchen', icon: ChefHat, color: 'text-orange-600' },
+  { label: t('View Inventory'), href: '/inventory', icon: Package, color: 'text-amber-600' },
+  { label: t('Manage Customers'), href: '/customers', icon: Users, color: 'text-cyan-600' },
 ] as const;
 
 function QuickActions() {
@@ -29,7 +30,7 @@ function QuickActions() {
   return (
     <Card>
       <CardHeader className="py-3 px-4">
-        <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
+        <CardTitle className="text-sm font-medium">{t('Quick Actions')}</CardTitle>
       </CardHeader>
       <CardContent className="px-4 pb-4 pt-0">
         <div className="grid grid-cols-2 gap-2">

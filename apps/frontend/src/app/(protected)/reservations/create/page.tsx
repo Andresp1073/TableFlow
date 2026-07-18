@@ -6,6 +6,7 @@ import { useCreateReservation } from '@/hooks/use-reservations';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { ReservationForm } from '@/components/reservations/reservation-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
+import { t } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 
 export default function CreateReservationPage() {
@@ -26,18 +27,18 @@ export default function CreateReservationPage() {
 
   return (
     <PageWrapper
-      title="Create Reservation"
-      description="Add a new reservation"
+      title={t('Create Reservation')}
+      description={t('Add a new reservation')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push('/reservations')}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Reservations
+          {t('Back to Reservations')}
         </Button>
       }
     >
       <div className="max-w-2xl">
         {!restaurantId ? (
-          <p className="text-sm text-muted-foreground">Select a restaurant to create a reservation.</p>
+          <p className="text-sm text-muted-foreground">{t('Select a restaurant to create a reservation.')}</p>
         ) : (
           <ReservationForm
             mode="create"

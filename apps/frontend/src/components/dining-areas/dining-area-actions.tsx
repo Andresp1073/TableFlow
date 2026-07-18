@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { MoreHorizontal, Archive, Edit, RotateCcw } from 'lucide-react';
 import { ConfirmActionDialog } from '@/components/restaurants/confirm-action-dialog';
+import { t } from '@/lib/i18n';
 
 interface DiningAreaActionsProps {
   area: DiningArea;
@@ -42,12 +43,12 @@ export function DiningAreaActions({ area, restaurantId: propRestaurantId }: Dini
           onClick={() => router.push(`/restaurants/${restaurantId}/dining-areas/${area.id}/edit`)}
         >
           <Edit className="h-3.5 w-3.5 mr-1.5" />
-          Edit
+          {t('Edit')}
         </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon-sm" aria-label="More actions">
+            <Button variant="ghost" size="icon-sm" aria-label={t('More actions')}>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -55,12 +56,12 @@ export function DiningAreaActions({ area, restaurantId: propRestaurantId }: Dini
             {area.status === 'active' ? (
               <DropdownMenuItem onClick={() => setShowArchiveDialog(true)}>
                 <Archive className="h-4 w-4 mr-2" />
-                Archive
+                {t('Archive')}
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem disabled>
                 <RotateCcw className="h-4 w-4 mr-2" />
-                Restore
+                {t('Restore')}
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
@@ -68,7 +69,7 @@ export function DiningAreaActions({ area, restaurantId: propRestaurantId }: Dini
               onClick={() => router.push(`/restaurants/${restaurantId}/dining-areas/${area.id}/edit`)}
             >
               <Edit className="h-4 w-4 mr-2" />
-              Edit Details
+              {t('Edit Details')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -77,9 +78,9 @@ export function DiningAreaActions({ area, restaurantId: propRestaurantId }: Dini
       <ConfirmActionDialog
         open={showArchiveDialog}
         onOpenChange={setShowArchiveDialog}
-        title="Archive Dining Area"
-        description={`Are you sure you want to archive "${area.name}"? It will no longer be available for reservations.`}
-        confirmLabel="Archive"
+        title={t('Archive Dining Area')}
+        description={t('Are you sure you want to archive "{areaName}"? It will no longer be available for reservations.', { areaName: area.name })}
+        confirmLabel={t('Archive')}
         confirmVariant="danger"
         loading={archiveMutation.isPending}
         onConfirm={handleArchive}

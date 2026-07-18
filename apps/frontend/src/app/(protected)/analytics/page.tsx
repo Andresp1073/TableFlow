@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState, useCallback } from 'react';
 import { ExecutiveDashboardContent } from '@/components/analytics/executive-dashboard';
@@ -19,8 +20,8 @@ export default function ExecutiveDashboardPage() {
     format: 'csv',
     data: [],
     columns: [
-      { key: 'metric', label: 'Metric' },
-      { key: 'value', label: 'Value' },
+      { key: 'metric', label: t('Metric') },
+      { key: 'value', label: t('Value') },
     ],
   };
 
@@ -31,7 +32,7 @@ export default function ExecutiveDashboardPage() {
           <h1 className="text-2xl font-semibold tracking-tight">Executive Dashboard</h1>
           <p className="text-sm text-muted-foreground">High-level business performance overview.</p>
         </div>
-        <ExportButton config={exportConfig} label="Export" />
+        <ExportButton config={exportConfig} label={t("Export")} />
       </div>
       <ReportFilters onDateRangeChange={handleDateRangeChange} />
       <ExecutiveDashboardContent dateRange={dateRange} />

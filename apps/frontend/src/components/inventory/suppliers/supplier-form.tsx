@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -51,19 +52,19 @@ export function SupplierForm({ onSubmit, onCancel, isSubmitting }: SupplierFormP
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="name">Name *</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Supplier name" />
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder={t("Supplier name")} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="contact">Contact Person</Label>
-              <Input id="contact" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Contact name" />
+              <Input id="contact" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder={t("Contact name")} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address" />
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("Email address")} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number" />
+              <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("Phone number")} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="leadTime">Lead Time (days)</Label>
@@ -76,11 +77,11 @@ export function SupplierForm({ onSubmit, onCancel, isSubmitting }: SupplierFormP
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="address">Address</Label>
-            <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street address" />
+            <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder={t("Street address")} />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="paymentTerms">Payment Terms</Label>
-            <Input id="paymentTerms" value={paymentTerms} onChange={(e) => setPaymentTerms(e.target.value)} placeholder="e.g. Net 30" />
+            <Input id="paymentTerms" value={paymentTerms} onChange={(e) => setPaymentTerms(e.target.value)} placeholder={t("e.g. Net 30")} />
           </div>
           <div className="flex items-center gap-2">
             <Switch id="preferred" checked={preferred} onCheckedChange={setPreferred} />
@@ -88,7 +89,7 @@ export function SupplierForm({ onSubmit, onCancel, isSubmitting }: SupplierFormP
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes" />
+            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t("Optional notes")} />
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>

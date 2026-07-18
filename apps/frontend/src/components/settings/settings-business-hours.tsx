@@ -252,7 +252,7 @@ export function SettingsBusinessHours() {
             )}
 
             {entry.isClosed && (
-              <p className="text-sm text-muted-foreground italic pt-2 sm:pt-0">Closed</p>
+              <p className="text-sm text-muted-foreground italic pt-2 sm:pt-0">{t('Closed')}</p>
             )}
           </div>
         ))}
@@ -260,7 +260,7 @@ export function SettingsBusinessHours() {
         <div className="flex items-center gap-4 pt-2">
           <Button onClick={handleSubmit} disabled={!isDirty || update.isPending}>
             <Save className="h-4 w-4 mr-1.5" />
-            {update.isPending ? 'Saving...' : 'Save Changes'}
+            {update.isPending ? t('Saving...') : t('Save Changes')}
           </Button>
         </div>
       </CardContent>

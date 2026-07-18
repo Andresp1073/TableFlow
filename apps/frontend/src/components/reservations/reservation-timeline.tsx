@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { format, parseISO, differenceInMinutes } from 'date-fns';
 import type { ReservationSummary, ReservationStatus } from '@/lib/reservation-types';
 import { RESERVATION_STATUS_LABELS } from '@/lib/reservation-types';
+import { t } from '@/lib/i18n';
 import { cn } from '@/lib/cn';
 
 interface ReservationTimelineProps {
@@ -71,7 +72,7 @@ export function ReservationTimeline({
     <div className={cn('relative', className)}>
       {!hasAny && (
         <div className="flex items-center justify-center py-12 text-sm text-muted-foreground">
-          No reservations for this date.
+          {t('No reservations for this date.')}
         </div>
       )}
       {hasAny && (
@@ -100,7 +101,7 @@ export function ReservationTimeline({
                   ? undefined
                   : 'none',
             }}
-            aria-label="Current time"
+            aria-label={t('Current time')}
           />
 
           {/* Reservation blocks */}
@@ -118,13 +119,13 @@ export function ReservationTimeline({
                 minHeight: '24px',
               }}
               onClick={() => onReservationClick?.(reservation.id)}
-              aria-label={`Reservation ${reservation.reservationNumber}: ${RESERVATION_STATUS_LABELS[reservation.status]}, ${reservation.partySize} guests, ${reservation.formattedStart} - ${reservation.formattedEnd}`}
+              aria-label={t('Reservation {number}: {status}, {partySize} guests, {start} - {end}', { number: reservation.reservationNumber, status: RESERVATION_STATUS_LABELS[reservation.status], partySize: reservation.partySize, start: reservation.formattedStart, end: reservation.formattedEnd })}
             >
               <div className="font-medium truncate">
                 {reservation.reservationNumber}
               </div>
               <div className="opacity-80 truncate">
-                {reservation.partySize} guests
+                {t('{count} guests', { count: reservation.partySize })}
               </div>
               <div className="opacity-60 truncate">
                 {reservation.formattedStart} - {reservation.formattedEnd}

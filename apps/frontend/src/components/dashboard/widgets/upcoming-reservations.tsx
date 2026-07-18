@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Users, Clock } from 'lucide-react';
 import type { UpcomingReservationItem } from '@/lib/dashboard-types';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface UpcomingReservationsWidgetProps {
   data?: UpcomingReservationItem[];
@@ -36,12 +37,12 @@ function getStatusBadge(status: string): string {
 function UpcomingReservationsWidget({ data, isLoading, isError, error, onRefresh, onRetry }: UpcomingReservationsWidgetProps) {
   return (
     <DashboardWidget
-      title="Upcoming Reservations"
+      title={t('Upcoming Reservations')}
       isLoading={isLoading}
       isError={isError}
       isEmpty={!data || data.length === 0}
       error={error}
-      emptyMessage="No upcoming reservations"
+      emptyMessage={t('No upcoming reservations')}
       onRefresh={onRefresh}
       onRetry={onRetry}
     >
@@ -60,7 +61,7 @@ function UpcomingReservationsWidget({ data, isLoading, isError, error, onRefresh
                     <Clock className="h-3 w-3" />
                     {formatTime(r.startTime)}
                   </span>
-                  {r.tableNumber && <span>Table {r.tableNumber}</span>}
+                  {r.tableNumber && <span>{t('Table {tableNumber}', { tableNumber: r.tableNumber })}</span>}
                 </div>
               </div>
               <Badge variant="outline" className={cn('text-[10px]', getStatusBadge(r.status))}>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { t } from '@/lib/i18n';
 import { SettingsSidebar } from '@/components/settings/settings-sidebar';
 import { SettingsDashboard } from '@/components/settings/settings-dashboard';
 import { SettingsRestaurant } from '@/components/settings/settings-restaurant';
@@ -15,16 +16,16 @@ import { SettingsAbout } from '@/components/settings/settings-about';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 
 const SECTION_TITLES: Record<string, { title: string; description: string }> = {
-  dashboard: { title: 'Dashboard', description: 'Overview of your restaurant settings and configuration.' },
-  restaurant: { title: 'Restaurant Info', description: 'View your restaurant information.' },
-  'business-hours': { title: 'Business Hours', description: 'Manage your opening hours and schedule.' },
-  regional: { title: 'Regional Settings', description: 'Configure timezone, currency, and regional preferences.' },
-  tax: { title: 'Tax Settings', description: 'Manage tax rates and service charges.' },
-  business: { title: 'Business Settings', description: 'Configure reservation rules and business policies.' },
-  notifications: { title: 'Notifications', description: 'Manage your notification preferences.' },
-  appearance: { title: 'Appearance', description: 'Customize the look and feel of the application.' },
-  security: { title: 'Security', description: 'Manage your account security settings.' },
-  about: { title: 'About', description: 'Application version and resource links.' },
+  dashboard: { title: t('Dashboard'), description: t('Overview of your restaurant settings and configuration.') },
+  restaurant: { title: t('Restaurant Info'), description: t('View your restaurant information.') },
+  'business-hours': { title: t('Business Hours'), description: t('Manage your opening hours and schedule.') },
+  regional: { title: t('Regional Settings'), description: t('Configure timezone, currency, and regional preferences.') },
+  tax: { title: t('Tax Settings'), description: t('Manage tax rates and service charges.') },
+  business: { title: t('Business Settings'), description: t('Configure reservation rules and business policies.') },
+  notifications: { title: t('Notifications'), description: t('Manage your notification preferences.') },
+  appearance: { title: t('Appearance'), description: t('Customize the look and feel of the application.') },
+  security: { title: t('Security'), description: t('Manage your account security settings.') },
+  about: { title: t('About'), description: t('Application version and resource links.') },
 };
 
 export default function SettingsPage() {

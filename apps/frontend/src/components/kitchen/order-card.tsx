@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { User, ChevronDown, ChevronUp } from 'lucide-react';
 import type { KitchenTicket } from '@/lib/order-types';
@@ -157,7 +158,7 @@ export function OrderCard({ ticket, onStatusChange, className }: OrderCardProps)
 
         {/* Actions */}
         {nextTransitions.length > 0 && (
-          <div className="flex gap-1.5 px-3 pb-3" role="group" aria-label="Order actions">
+          <div className="flex gap-1.5 px-3 pb-3" role="group" aria-label={t("Order actions")}>
             {nextTransitions.map((nextStatus) => (
               <Button
                 key={nextStatus}

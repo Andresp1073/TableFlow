@@ -5,6 +5,7 @@ import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { PanelLeftClose, PanelLeft } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 interface SidebarItem {
   label: string;
@@ -52,12 +53,12 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(
             )}
           </div>
 
-          <nav className="flex-1 overflow-y-auto p-2 scrollbar-thin" aria-label="Sidebar">
+          <nav className="flex-1 overflow-y-auto p-2 scrollbar-thin" aria-label={t('Sidebar navigation')}>
             {sections.map((section, sectionIndex) => (
               <div key={sectionIndex} className="mb-4">
                 {section.title && !collapsed && (
                   <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-sidebar-muted-foreground">
-                    {section.title}
+                    {t(section.title)}
                   </p>
                 )}
                 <ul className="space-y-0.5" role="list">
@@ -79,10 +80,10 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(
                   collapsed && 'justify-center',
                 )}
                 onClick={onToggleCollapse}
-                aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                aria-label={collapsed ? t('Expand sidebar') : t('Collapse sidebar')}
               >
                 {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
-                {!collapsed && <span className="ml-2 text-xs">Collapse</span>}
+                {!collapsed && <span className="ml-2 text-xs">{t('Collapse')}</span>}
               </Button>
             </div>
           )}
@@ -110,7 +111,7 @@ function SidebarItem({ item, collapsed }: { item: SidebarItem; collapsed: boolea
       </span>
       {!collapsed && (
         <>
-          <span className="flex-1 text-left truncate">{item.label}</span>
+          <span className="flex-1 text-left truncate">{t(item.label)}</span>
           {item.badge !== undefined && (
             <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-sidebar-accent px-1 text-xs font-medium">
               {item.badge}

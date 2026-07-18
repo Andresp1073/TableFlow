@@ -7,6 +7,7 @@ import { useRestaurant } from '@/providers/restaurant-provider';
 import { TableForm } from '@/components/tables/table-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 
 export default function CreateTablePage() {
   const router = useRouter();
@@ -25,18 +26,18 @@ export default function CreateTablePage() {
 
   return (
     <PageWrapper
-      title="Create Table"
-      description="Add a new table to the floor plan"
+      title={t('Create Table')}
+      description={t('Add a new table to the floor plan')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push('/tables')}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Tables
+          {t('Back to Tables')}
         </Button>
       }
     >
       <div className="max-w-2xl">
         {!restaurantId ? (
-          <p className="text-sm text-muted-foreground">Select a restaurant to create a table.</p>
+          <p className="text-sm text-muted-foreground">{t('Select a restaurant to create a table.')}</p>
         ) : (
           <TableForm
             mode="create"

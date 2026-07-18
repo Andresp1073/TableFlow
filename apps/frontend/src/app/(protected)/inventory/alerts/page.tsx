@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useInventoryAlerts } from '@/hooks/use-inventory';
@@ -13,7 +14,7 @@ export default function AlertsPage() {
 
   return (
     <PageWrapper>
-      <PageHeader title="Inventory Alerts" description="Low stock, expiring items, and pending receipts" />
+      <PageHeader title={t("Inventory Alerts")} description={t("Low stock, expiring items, and pending receipts")} />
       <AlertsView data={data} isLoading={isLoading} isError={isError} onRefresh={() => refetch()} />
     </PageWrapper>
   );

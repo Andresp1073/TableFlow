@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
@@ -24,7 +25,7 @@ export function ProductList({ data, loading, error, onArchive, onRestore }: Prod
   const columns: ColumnDef<Product>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: t('Name'),
       cell: ({ row }) => (
         <button
           onClick={() => router.push(`/inventory/products/${row.original.id}`)}
@@ -36,16 +37,16 @@ export function ProductList({ data, loading, error, onArchive, onRestore }: Prod
     },
     {
       accessorKey: 'category',
-      header: 'Category',
+      header: t('Category'),
       cell: ({ row }) => <Badge variant="secondary">{row.original.category}</Badge>,
     },
     {
       accessorKey: 'unit',
-      header: 'Unit',
+      header: t('Unit'),
     },
     {
       accessorKey: 'currentStock',
-      header: 'Stock',
+      header: t('Stock'),
       cell: ({ row }) => (
         <span className={row.original.currentStock <= 10 ? 'text-destructive font-medium' : ''}>
           {row.original.currentStock} {row.original.unit}
@@ -54,12 +55,12 @@ export function ProductList({ data, loading, error, onArchive, onRestore }: Prod
     },
     {
       accessorKey: 'costPerUnit',
-      header: 'Cost/Unit',
+      header: t('Cost/Unit'),
       cell: ({ row }) => formatCurrency(row.original.costPerUnit),
     },
     {
       accessorKey: 'isActive',
-      header: 'Status',
+      header: t('Status'),
       cell: ({ row }) => (
         <Badge variant={row.original.isActive ? 'success' : 'secondary'}>
           {row.original.isActive ? 'Active' : 'Archived'}
@@ -102,7 +103,7 @@ export function ProductList({ data, loading, error, onArchive, onRestore }: Prod
       loading={loading}
       error={error}
       searchable
-      emptyMessage="No products found. Create your first product to get started."
+      emptyMessage={t("No products found. Create your first product to get started.")}
     />
   );
 }

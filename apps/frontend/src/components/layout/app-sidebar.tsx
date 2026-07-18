@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { PanelLeftClose, PanelLeft } from 'lucide-react';
 import type { NavGroup } from '@/components/navigation/nav-types';
+import { t } from '@/lib/i18n';
 
 interface AppSidebarProps extends React.HTMLAttributes<HTMLElement> {
   sections: NavGroup;
@@ -41,21 +42,21 @@ const AppSidebar = forwardRef<HTMLElement, AppSidebarProps>(
             </Link>
           </div>
 
-          <nav className="flex-1 overflow-y-auto p-2 scrollbar-thin" aria-label="Sidebar navigation">
+          <nav className="flex-1 overflow-y-auto p-2 scrollbar-thin" aria-label={t('Sidebar navigation')}>
             {sections.map((section, sectionIndex) => (
               <div key={sectionIndex} className="mb-4">
                 {section.title && !collapsed && (
                   <p className="mb-1.5 px-2 text-xs font-semibold uppercase tracking-wider text-sidebar-muted-foreground">
-                    {section.title}
+                    {t(section.title)}
                   </p>
                 )}
                 <ul className="space-y-0.5" role="list">
                   {section.items.map((item, itemIndex) => {
                     const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
                     return (
-                      <SidebarNavItem
-                        key={itemIndex}
-                        label={item.label}
+      <SidebarNavItem
+                          key={itemIndex}
+                          label={t(item.label)}
                         href={item.href}
                         icon={item.icon}
                         badge={item.badge}
@@ -79,10 +80,10 @@ const AppSidebar = forwardRef<HTMLElement, AppSidebarProps>(
                   collapsed && 'justify-center',
                 )}
                 onClick={onToggleCollapse}
-                aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                aria-label={collapsed ? t('Expand sidebar') : t('Collapse sidebar')}
               >
                 {collapsed ? <PanelLeft className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
-                {!collapsed && <span className="ml-2 text-xs">Collapse</span>}
+                {!collapsed && <span className="ml-2 text-xs">{t('Collapse')}</span>}
               </Button>
             </div>
           )}

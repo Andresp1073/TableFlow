@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
@@ -32,26 +33,26 @@ interface PosInterfaceProps {
 }
 
 const QUICK_ITEMS = [
-  { id: 'burger', name: 'Burger', price: 12.99, station: 'grill' },
-  { id: 'fries', name: 'Fries', price: 4.99, station: 'preparation' },
-  { id: 'pizza', name: 'Pizza', price: 14.99, station: 'grill' },
-  { id: 'salad', name: 'Caesar Salad', price: 9.99, station: 'cold' },
-  { id: 'pasta', name: 'Pasta', price: 11.99, station: 'grill' },
-  { id: 'soda', name: 'Soft Drink', price: 2.49, station: 'bar' },
-  { id: 'beer', name: 'Beer', price: 5.99, station: 'bar' },
-  { id: 'wine', name: 'Glass of Wine', price: 8.99, station: 'bar' },
-  { id: 'dessert', name: 'Dessert', price: 6.99, station: 'dessert' },
-  { id: 'coffee', name: 'Coffee', price: 3.49, station: 'bar' },
-  { id: 'sandwich', name: 'Sandwich', price: 10.99, station: 'preparation' },
-  { id: 'soup', name: 'Soup', price: 5.99, station: 'grill' },
+  { id: 'burger', name: t('Burger'), price: 12.99, station: 'grill' },
+  { id: 'fries', name: t('Fries'), price: 4.99, station: 'preparation' },
+  { id: 'pizza', name: t('Pizza'), price: 14.99, station: 'grill' },
+  { id: 'salad', name: t('Caesar Salad'), price: 9.99, station: 'cold' },
+  { id: 'pasta', name: t('Pasta'), price: 11.99, station: 'grill' },
+  { id: 'soda', name: t('Soft Drink'), price: 2.49, station: 'bar' },
+  { id: 'beer', name: t('Beer'), price: 5.99, station: 'bar' },
+  { id: 'wine', name: t('Glass of Wine'), price: 8.99, station: 'bar' },
+  { id: 'dessert', name: t('Dessert'), price: 6.99, station: 'dessert' },
+  { id: 'coffee', name: t('Coffee'), price: 3.49, station: 'bar' },
+  { id: 'sandwich', name: t('Sandwich'), price: 10.99, station: 'preparation' },
+  { id: 'soup', name: t('Soup'), price: 5.99, station: 'grill' },
 ];
 
 const CATEGORIES = [
-  { id: 'all', label: 'All' },
-  { id: 'grill', label: 'Grill' },
-  { id: 'bar', label: 'Bar' },
-  { id: 'cold', label: 'Cold' },
-  { id: 'preparation', label: 'Prep' },
+  { id: 'all', label: t('All') },
+  { id: 'grill', label: t('Grill') },
+  { id: 'bar', label: t('Bar') },
+  { id: 'cold', label: t('Cold') },
+  { id: 'preparation', label: t('Prep') },
 ];
 
 export function PosInterface({
@@ -142,11 +143,11 @@ export function PosInterface({
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
                   <Label htmlFor="pos-table">Table</Label>
-                  <Input id="pos-table" value={tableId} onChange={(e) => setTableId(e.target.value)} placeholder="e.g. T-05" />
+                  <Input id="pos-table" value={tableId} onChange={(e) => setTableId(e.target.value)} placeholder={t("e.g. T-05")} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="pos-customer">Customer</Label>
-                  <Input id="pos-customer" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Walk-in" />
+                  <Input id="pos-customer" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t("Walk-in")} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="pos-guests">Guests</Label>
@@ -154,7 +155,7 @@ export function PosInterface({
                 </div>
               </div>
               <Button onClick={handleNewOrder} className="w-full" disabled={isCreating}>
-                {isCreating ? <LoadingState message="Creating..." /> : 'Start New Order'}
+                {isCreating ? <LoadingState message={t("Creating...")} /> : 'Start New Order'}
               </Button>
             </CardContent>
           </Card>
@@ -217,7 +218,7 @@ export function PosInterface({
               disabled={isSubmitting || submitResult !== null}
             >
               {isSubmitting ? (
-                <LoadingState message="Submitting..." />
+                <LoadingState message={t("Submitting...")} />
               ) : submitResult ? (
                 'Submitted to Kitchen'
               ) : (

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
@@ -63,13 +64,13 @@ export default function AdminAuditPage() {
 
   return (
     <AdminPageLayout
-      title="Audit Log"
-      description="Review platform activity and security events"
+      title={t("Audit Log")}
+      description={t("Review platform activity and security events")}
     >
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Audit' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Audit') },
         ]}
       />
 
@@ -77,16 +78,16 @@ export default function AdminAuditPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search audit entries..."
+            placeholder={t("Search audit entries...")}
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             className="pl-9"
-            aria-label="Search audit entries"
+            aria-label={t("Search audit entries")}
           />
         </div>
         <Select value={module} onValueChange={(value) => { setModule(value); setPage(1); }}>
-          <SelectTrigger aria-label="Filter by module" className="w-36">
-            <SelectValue placeholder="All Modules" />
+          <SelectTrigger aria-label={t("Filter by module")} className="w-36">
+            <SelectValue placeholder={t("All Modules")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">All Modules</SelectItem>
@@ -100,8 +101,8 @@ export default function AdminAuditPage() {
           </SelectContent>
         </Select>
         <Select value={action} onValueChange={(value) => { setAction(value); setPage(1); }}>
-          <SelectTrigger aria-label="Filter by action" className="w-36">
-            <SelectValue placeholder="All Actions" />
+          <SelectTrigger aria-label={t("Filter by action")} className="w-36">
+            <SelectValue placeholder={t("All Actions")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">All Actions</SelectItem>
@@ -112,32 +113,32 @@ export default function AdminAuditPage() {
             <SelectItem value="logout">Logout</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" size="icon-sm" onClick={() => refetch()} aria-label="Refresh">
+        <Button variant="outline" size="icon-sm" onClick={() => refetch()} aria-label={t("Refresh")}>
           <RefreshCw className="h-4 w-4" />
         </Button>
       </div>
 
       {isLoading ? (
-        <LoadingState message="Loading audit log..." />
+        <LoadingState message={t("Loading audit log...")} />
       ) : error ? (
-        <ErrorState message="Failed to load audit log" onRetry={() => refetch()} />
+        <ErrorState message={t("Failed to load audit log")} onRetry={() => refetch()} />
       ) : entries.length === 0 ? (
         <EmptyState
           icon={<FileSearch className="h-8 w-8" />}
-          title="No audit entries"
-          description="Audit entries will appear here as platform activity occurs."
+          title={t("No audit entries")}
+          description={t("Audit entries will appear here as platform activity occurs.")}
         />
       ) : (
         <div className="rounded-lg border">
-          <table className="w-full" aria-label="Audit log entries">
+          <table className="w-full" aria-label={t("Audit log entries")}>
             <thead>
               <tr className="border-b bg-muted/50">
-                <th className="text-left p-3 text-sm font-medium">Timestamp</th>
-                <th className="text-left p-3 text-sm font-medium">Module</th>
-                <th className="text-left p-3 text-sm font-medium">Action</th>
-                <th className="text-left p-3 text-sm font-medium">Entity</th>
-                <th className="text-left p-3 text-sm font-medium">User</th>
-                <th className="text-left p-3 text-sm font-medium">IP</th>
+                <th className="text-left p-3 text-sm font-medium">{t("Timestamp")}</th>
+                <th className="text-left p-3 text-sm font-medium">{t("Module")}</th>
+                <th className="text-left p-3 text-sm font-medium">{t("Action")}</th>
+                <th className="text-left p-3 text-sm font-medium">{t("Entity")}</th>
+                <th className="text-left p-3 text-sm font-medium">{t("User")}</th>
+                <th className="text-left p-3 text-sm font-medium">{t("IP")}</th>
               </tr>
             </thead>
             <tbody>

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -21,21 +22,21 @@ export default function ProductsPage() {
 
   const handleArchive = (id: string) => {
     archiveProduct.mutate({ restaurantId, productId: id }, {
-      onSuccess: () => toast.success('Product archived'),
-      onError: () => toast.error('Failed to archive product'),
+      onSuccess: () => toast.success(t("Product archived")),
+      onError: () => toast.error(t("Failed to archive product")),
     });
   };
 
   const handleRestore = (id: string) => {
     restoreProduct.mutate({ restaurantId, productId: id }, {
-      onSuccess: () => toast.success('Product restored'),
-      onError: () => toast.error('Failed to restore product'),
+      onSuccess: () => toast.success(t("Product restored")),
+      onError: () => toast.error(t("Failed to restore product")),
     });
   };
 
   return (
     <PageWrapper>
-      <PageHeader title="Products" description="Manage your inventory products and ingredients" createHref="/inventory/products/new" createLabel="New Product" />
+      <PageHeader title={t("Products")} description={t("Manage your inventory products and ingredients")} createHref="/inventory/products/new" createLabel={t("New Product")} />
       <div className="space-y-4">
         <InventoryFilters search={search} onSearchChange={setSearch} category={category} onCategoryChange={setCategory} showCategory />
         <ProductList

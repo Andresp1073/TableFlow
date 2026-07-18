@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
@@ -15,16 +16,16 @@ export function MovementTable({ data, loading, error }: MovementTableProps) {
   const columns: ColumnDef<StockMovement>[] = [
     {
       accessorKey: 'ingredientName',
-      header: 'Product',
+      header: t('Product'),
     },
     {
       accessorKey: 'type',
-      header: 'Type',
+      header: t('Type'),
       cell: ({ row }) => <MovementTypeBadge type={row.original.type} />,
     },
     {
       accessorKey: 'quantity',
-      header: 'Quantity',
+      header: t('Quantity'),
       cell: ({ row }) => (
         <span className={row.original.isIncrease ? 'text-success' : row.original.isDecrease ? 'text-destructive' : ''}>
           {row.original.isIncrease ? '+' : row.original.isDecrease ? '-' : ''}{row.original.quantity} {row.original.unit}
@@ -33,16 +34,16 @@ export function MovementTable({ data, loading, error }: MovementTableProps) {
     },
     {
       accessorKey: 'reason',
-      header: 'Reason',
+      header: t('Reason'),
       cell: ({ row }) => row.original.reason ?? '—',
     },
     {
       accessorKey: 'performedBy',
-      header: 'By',
+      header: t('By'),
     },
     {
       accessorKey: 'createdAt',
-      header: 'Date',
+      header: t('Date'),
       cell: ({ row }) => new Date(row.original.createdAt).toLocaleString(),
     },
   ];
@@ -54,7 +55,7 @@ export function MovementTable({ data, loading, error }: MovementTableProps) {
       loading={loading}
       error={error}
       searchable
-      emptyMessage="No stock movements recorded."
+      emptyMessage={t("No stock movements recorded.")}
     />
   );
 }

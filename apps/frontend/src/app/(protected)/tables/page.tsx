@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 export default function TablesPage() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function TablesPage() {
     () => [
       {
         accessorKey: 'tableNumber',
-        header: 'Table',
+        header: t('Table'),
         cell: ({ row }) => (
           <Link
             href={`/tables/${row.original.id}`}
@@ -62,31 +63,31 @@ export default function TablesPage() {
       },
       {
         accessorKey: 'name',
-        header: 'Name',
+        header: t('Name'),
         cell: ({ getValue }) => (getValue<string>() ? getValue<string>() : '—'),
       },
       {
         accessorKey: 'minimumCapacity',
-        header: 'Capacity',
+        header: t('Capacity'),
         cell: ({ row }) => `${row.original.minimumCapacity} – ${row.original.maximumCapacity}`,
       },
       {
         accessorKey: 'currentCapacity',
-        header: 'Occupied',
+        header: t('Occupied'),
         cell: ({ getValue }) => `${getValue<number>()}`,
       },
       {
         accessorKey: 'shape',
-        header: 'Shape',
+        header: t('Shape'),
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: t('Status'),
         cell: ({ getValue }) => <TableStatusBadge status={getValue<TableStatus>()} />,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created',
+        header: t('Created'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
     ],
@@ -106,15 +107,15 @@ export default function TablesPage() {
 
   return (
     <PageWrapper
-      title="Tables"
-      description="Manage table configurations, layouts, and availability"
+      title={t('Tables')}
+      description={t('Manage table configurations, layouts, and availability')}
       actions={
         <div className="flex items-center gap-2">
           {restaurantId && (
             <Link href="/tables/create">
               <Button>
                 <Plus className="h-4 w-4 mr-1.5" />
-                New Table
+                {t('New Table')}
               </Button>
             </Link>
           )}
@@ -126,11 +127,11 @@ export default function TablesPage() {
           <div className="relative max-w-xs w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search tables..."
+              placeholder={t('Search tables...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8"
-              aria-label="Search tables"
+              aria-label={t('Search tables')}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -138,18 +139,18 @@ export default function TablesPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              aria-label="Filter by status"
+              aria-label={t('Filter by status')}
             >
               {TABLE_STATUS_OPTIONS.map((opt) => (
-                <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
               ))}
             </select>
           </div>
         </div>
 
         <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full caption-bottom text-sm" aria-label="Tables list">
-            <caption className="sr-only">List of tables with search and filter options</caption>
+          <table className="w-full caption-bottom text-sm" aria-label={t('Tables list')}>
+            <caption className="sr-only">{t('List of tables with search and filter options')}</caption>
             <thead className="border-b bg-muted/50">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -203,8 +204,8 @@ export default function TablesPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm font-medium text-destructive">Error loading tables</p>
-                      <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                      <p className="text-sm font-medium text-destructive">{t('Error loading tables')}</p>
+                      <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                     </div>
                   </td>
                 </tr>
@@ -212,7 +213,7 @@ export default function TablesPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">Select a restaurant to manage tables</p>
+                      <p className="text-sm">{t('Select a restaurant to manage tables')}</p>
                     </div>
                   </td>
                 </tr>
@@ -220,15 +221,15 @@ export default function TablesPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">No tables found</p>
+                      <p className="text-sm">{t('No tables found')}</p>
                       {search || statusFilter ? (
-                        <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                        <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                       ) : (
                         <Link
                           href="/tables/create"
                           className="text-xs text-primary hover:underline mt-1"
                         >
-                          Create your first table
+                          {t('Create your first table')}
                         </Link>
                       )}
                     </div>
@@ -255,8 +256,8 @@ export default function TablesPage() {
 
         {!isLoading && filteredTables.length > 0 && (
           <p className="text-sm text-muted-foreground">
-            {filteredTables.length} table{filteredTables.length !== 1 ? 's' : ''}
-            {search && ` matching "${search}"`}
+            {filteredTables.length} {filteredTables.length === 1 ? t('table') : t('tables')}
+            {search && t(' matching "{search}"', { search })}
           </p>
         )}
       </div>

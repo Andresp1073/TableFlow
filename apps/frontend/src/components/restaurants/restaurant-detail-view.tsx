@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import type { Restaurant } from '@/lib/restaurant-types';
 import { RestaurantStatusBadge } from '@/components/restaurants/restaurant-status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -41,9 +42,9 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<FileText className="h-4 w-4" />} label="Legal Name" value={restaurant.legalName} />
-            <DetailRow icon={<Tag className="h-4 w-4" />} label="Tax ID" value={restaurant.taxId} />
-            <DetailRow icon={<Globe className="h-4 w-4" />} label="Website" value={restaurant.website} />
+            <DetailRow icon={<FileText className="h-4 w-4" />} label={t("Legal Name")} value={restaurant.legalName} />
+            <DetailRow icon={<Tag className="h-4 w-4" />} label={t("Tax ID")} value={restaurant.taxId} />
+            <DetailRow icon={<Globe className="h-4 w-4" />} label={t("Website")} value={restaurant.website} />
             {restaurant.logoUrl && (
               <div className="flex items-start gap-3">
                 <span className="mt-0.5 text-muted-foreground shrink-0">
@@ -70,9 +71,9 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Mail className="h-4 w-4" />} label="Email" value={restaurant.email} />
-            <DetailRow icon={<Phone className="h-4 w-4" />} label="Phone" value={restaurant.phone} />
-            <DetailRow icon={<MapPin className="h-4 w-4" />} label="Address" value={restaurant.address} />
+            <DetailRow icon={<Mail className="h-4 w-4" />} label={t("Email")} value={restaurant.email} />
+            <DetailRow icon={<Phone className="h-4 w-4" />} label={t("Phone")} value={restaurant.phone} />
+            <DetailRow icon={<MapPin className="h-4 w-4" />} label={t("Address")} value={restaurant.address} />
           </CardContent>
         </Card>
 
@@ -84,9 +85,9 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Timezone" value={restaurant.timezone} />
-            <DetailRow icon={<DollarSign className="h-4 w-4" />} label="Currency" value={restaurant.currency} />
-            <DetailRow icon={<Languages className="h-4 w-4" />} label="Language" value={restaurant.language} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t("Timezone")} value={restaurant.timezone} />
+            <DetailRow icon={<DollarSign className="h-4 w-4" />} label={t("Currency")} value={restaurant.currency} />
+            <DetailRow icon={<Languages className="h-4 w-4" />} label={t("Language")} value={restaurant.language} />
           </CardContent>
         </Card>
 
@@ -98,11 +99,11 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Tag className="h-4 w-4" />} label="ID" value={restaurant.id} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Created" value={new Date(restaurant.createdAt).toLocaleString()} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Updated" value={new Date(restaurant.updatedAt).toLocaleString()} />
+            <DetailRow icon={<Tag className="h-4 w-4" />} label={t("ID")} value={restaurant.id} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t("Created")} value={new Date(restaurant.createdAt).toLocaleString()} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t("Updated")} value={new Date(restaurant.updatedAt).toLocaleString()} />
             {restaurant.deletedAt && (
-              <DetailRow icon={<Clock className="h-4 w-4" />} label="Archived" value={new Date(restaurant.deletedAt).toLocaleString()} />
+              <DetailRow icon={<Clock className="h-4 w-4" />} label={t("Archived")} value={new Date(restaurant.deletedAt).toLocaleString()} />
             )}
           </CardContent>
         </Card>

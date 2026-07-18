@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -20,39 +21,39 @@ export default function AdminRolesPage() {
 
   const handleDelete = async (role: AdminRole) => {
     if (role.isSystem) {
-      alert('System roles cannot be deleted.');
+      alert(t("System roles cannot be deleted."));
       return;
     }
-    if (!confirm(`Delete role "${role.name}"? This action cannot be undone.`)) return;
+    if (!confirm(t('Delete role "{roleName}"? This action cannot be undone.', { roleName: role.name }))) return;
     await deleteMutation.mutateAsync(role.id);
   };
 
   return (
     <AdminPageLayout
-      title="Role Management"
-      description="Define platform roles and their permissions"
+      title={t("Role Management")}
+      description={t("Define platform roles and their permissions")}
       action={
         <Link href="/admin/roles/new">
-          <Button><Plus className="h-4 w-4 mr-1" />Create Role</Button>
+          <Button><Plus className="h-4 w-4 mr-1" />{t("Create Role")}</Button>
         </Link>
       }
     >
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Roles' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Roles') },
         ]}
       />
 
       {isLoading ? (
-        <LoadingState message="Loading roles..." />
+        <LoadingState message={t("Loading roles...")} />
       ) : error ? (
-        <ErrorState message="Failed to load roles" onRetry={() => refetch()} />
+        <ErrorState message={t("Failed to load roles")} onRetry={() => refetch()} />
       ) : !roles || roles.length === 0 ? (
         <EmptyState
           icon={<Key className="h-8 w-8" />}
-          title="No roles defined"
-          description="Create your first role to get started."
+          title={t("No roles defined")}
+          description={t("Create your first role to get started.")}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -63,10 +64,10 @@ export default function AdminRolesPage() {
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold">{role.name}</h3>
                     {role.isSystem && (
-                      <Badge variant="default" className="text-[10px]">System</Badge>
+                      <Badge variant="default" className="text-[10px]">{t("System")}</Badge>
                     )}
                     {role.isDefault && (
-                      <Badge variant="secondary" className="text-[10px]">Default</Badge>
+                      <Badge variant="secondary" className="text-[10px]">{t("Default")}</Badge>
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground font-mono mt-0.5">{role.code}</p>

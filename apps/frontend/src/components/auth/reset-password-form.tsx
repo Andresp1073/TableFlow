@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { t } from '@/lib/i18n';
 
 function getPasswordStrength(password: string): { label: string; color: string; width: string } {
   let score = 0;
@@ -23,9 +24,9 @@ function getPasswordStrength(password: string): { label: string; color: string; 
   if (/[0-9]/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
 
-  if (score <= 2) return { label: 'Weak', color: 'bg-destructive', width: 'w-1/3' };
-  if (score <= 4) return { label: 'Medium', color: 'bg-warning', width: 'w-2/3' };
-  return { label: 'Strong', color: 'bg-success', width: 'w-full' };
+  if (score <= 2) return { label: t('Weak'), color: 'bg-destructive', width: 'w-1/3' };
+  if (score <= 4) return { label: t('Medium'), color: 'bg-warning', width: 'w-2/3' };
+  return { label: t('Strong'), color: 'bg-success', width: 'w-full' };
 }
 
 export function ResetPasswordForm() {
@@ -61,15 +62,15 @@ export function ResetPasswordForm() {
       <Card>
         <CardContent className="p-6 text-center space-y-4">
           <div className="space-y-1.5">
-            <h1 className="text-xl font-semibold tracking-tight">Invalid reset link</h1>
+            <h1 className="text-xl font-semibold tracking-tight">{t('Invalid reset link')}</h1>
             <p className="text-sm text-muted-foreground">
-              This password reset link is invalid or has expired.
+              {t('This password reset link is invalid or has expired.')}
             </p>
           </div>
           <Button variant="outline" size="sm" asChild>
             <Link href="/forgot-password">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Request new link
+              {t('Request new link')}
             </Link>
           </Button>
         </CardContent>
@@ -85,13 +86,13 @@ export function ResetPasswordForm() {
             <ShieldCheck className="h-6 w-6 text-success" />
           </div>
           <div className="space-y-1.5">
-            <h1 className="text-xl font-semibold tracking-tight">Password reset</h1>
+            <h1 className="text-xl font-semibold tracking-tight">{t('Password reset')}</h1>
             <p className="text-sm text-muted-foreground">
-              Your password has been reset successfully.
+              {t('Your password has been reset successfully.')}
             </p>
           </div>
           <Button size="sm" asChild>
-            <Link href="/login">Sign in with new password</Link>
+            <Link href="/login">{t('Sign in with new password')}</Link>
           </Button>
         </CardContent>
       </Card>
@@ -103,9 +104,9 @@ export function ResetPasswordForm() {
       <CardContent className="p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
           <div className="space-y-1.5 text-center">
-            <h1 className="text-xl font-semibold tracking-tight">Set new password</h1>
+            <h1 className="text-xl font-semibold tracking-tight">{t('Set new password')}</h1>
             <p className="text-sm text-muted-foreground">
-              Enter your new password below.
+              {t('Enter your new password below.')}
             </p>
           </div>
 
@@ -119,12 +120,12 @@ export function ResetPasswordForm() {
 
           <FormField name="password" error={errors.password?.message}>
             <FormItem>
-              <FormLabel>New password</FormLabel>
+              <FormLabel>{t('New password')}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter new password"
+                    placeholder={t('Enter new password')}
                     autoComplete="new-password"
                     autoFocus
                     disabled={isLoading}
@@ -137,7 +138,7 @@ export function ResetPasswordForm() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    aria-label={showPassword ? t('Hide password') : t('Show password')}
                     tabIndex={-1}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -151,7 +152,7 @@ export function ResetPasswordForm() {
                     <div className={`h-full ${strength.color} ${strength.width} transition-all duration-300`} />
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Password strength: <span className="font-medium">{strength.label}</span>
+                    {t('Password strength:')} <span className="font-medium">{strength.label}</span>
                   </p>
                 </div>
               )}
@@ -160,12 +161,12 @@ export function ResetPasswordForm() {
 
           <FormField name="passwordConfirmation" error={errors.passwordConfirmation?.message}>
             <FormItem>
-              <FormLabel>Confirm password</FormLabel>
+              <FormLabel>{t('Confirm password')}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
                     type={showConfirm ? 'text' : 'password'}
-                    placeholder="Confirm new password"
+                    placeholder={t('Confirm new password')}
                     autoComplete="new-password"
                     disabled={isLoading}
                     {...register('passwordConfirmation')}
@@ -174,7 +175,7 @@ export function ResetPasswordForm() {
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={showConfirm ? 'Hide password' : 'Show password'}
+                    aria-label={showConfirm ? t('Hide password') : t('Show password')}
                     tabIndex={-1}
                   >
                     {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -186,7 +187,7 @@ export function ResetPasswordForm() {
           </FormField>
 
           <Button type="submit" className="w-full" loading={isLoading}>
-            {isLoading ? 'Resetting...' : 'Reset password'}
+            {isLoading ? t('Resetting...') : t('Reset password')}
           </Button>
         </form>
       </CardContent>

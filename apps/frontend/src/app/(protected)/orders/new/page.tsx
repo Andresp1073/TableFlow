@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
@@ -26,7 +27,7 @@ export default function NewOrderPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon-sm" onClick={() => router.back()} aria-label="Go back">
+        <Button variant="ghost" size="icon-sm" onClick={() => router.back()} aria-label={t("Go back")}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -17,10 +18,10 @@ export default function NewSupplierPage() {
   const handleSubmit = (data: CreateSupplierInput) => {
     createSupplier.mutate({ restaurantId, data }, {
       onSuccess: () => {
-        toast.success('Supplier created');
+        toast.success(t("Supplier created"));
         router.push('/inventory/suppliers');
       },
-      onError: () => toast.error('Failed to create supplier'),
+      onError: () => toast.error(t("Failed to create supplier")),
     });
   };
 

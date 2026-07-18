@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState, useCallback } from 'react';
 import { useRestaurant } from '@/providers/restaurant-provider';

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -58,19 +59,19 @@ export function RoleForm({ initialData, onSubmit, isSubmitting, mode }: RoleForm
             value={code}
             onChange={(e) => setCode(e.target.value)}
             required
-            placeholder="e.g., restaurant_manager"
+            placeholder={t("e.g., restaurant_manager")}
           />
         </div>
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">{t('Name')}</Label>
         <Input
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          placeholder="e.g., Restaurant Manager"
+          placeholder={t("e.g., Restaurant Manager")}
         />
       </div>
 
@@ -98,7 +99,7 @@ export function RoleForm({ initialData, onSubmit, isSubmitting, mode }: RoleForm
         </div>
         <div className="space-y-2">
           <Label htmlFor="color">Color (optional)</Label>
-          <Input id="color" value={color} onChange={(e) => setColor(e.target.value)} placeholder="#000000" />
+          <Input id="color" value={color} onChange={(e) => setColor(e.target.value)} placeholder={t("#000000")} />
         </div>
       </div>
 

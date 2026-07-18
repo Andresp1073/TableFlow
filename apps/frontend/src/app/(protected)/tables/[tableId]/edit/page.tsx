@@ -9,6 +9,7 @@ import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { t } from '@/lib/i18n';
 
 export default function EditTablePage() {
   const params = useParams();
@@ -31,8 +32,8 @@ export default function EditTablePage() {
 
   return (
     <PageWrapper
-      title={table ? `Edit: Table ${table.tableNumber}` : 'Edit Table'}
-      description="Update table configuration"
+      title={table ? t('Edit: Table {tableNumber}', { tableNumber: table.tableNumber }) : t('Edit Table')}
+      description={t('Update table configuration')}
       actions={
         <Button
           variant="outline"
@@ -40,7 +41,7 @@ export default function EditTablePage() {
           onClick={() => router.push(`/tables/${tableId}`)}
         >
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Details
+          {t('Back to Details')}
         </Button>
       }
     >
@@ -54,7 +55,7 @@ export default function EditTablePage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load table: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load table: {error}', { error: (error as Error)?.message || t('An unexpected error occurred') })}
           </AlertDescription>
         </Alert>
       ) : table ? (

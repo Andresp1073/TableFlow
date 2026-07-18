@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { t } from '@/lib/i18n';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -15,11 +16,11 @@ interface NotificationToggle {
 }
 
 const TOGGLES: NotificationToggle[] = [
-  { id: 'email', label: 'Email Notifications', description: 'Receive email notifications for important updates' },
-  { id: 'reservation', label: 'Reservation Notifications', description: 'Get notified when new reservations are made' },
-  { id: 'kitchen', label: 'Kitchen Notifications', description: 'Receive updates from the kitchen' },
-  { id: 'inventory', label: 'Inventory Alerts', description: 'Get alerts when inventory is running low' },
-  { id: 'system', label: 'System Alerts', description: 'Receive system maintenance and outage notifications' },
+  { id: 'email', label: t('Email Notifications'), description: t('Receive email notifications for important updates') },
+  { id: 'reservation', label: t('Reservation Notifications'), description: t('Get notified when new reservations are made') },
+  { id: 'kitchen', label: t('Kitchen Notifications'), description: t('Receive updates from the kitchen') },
+  { id: 'inventory', label: t('Inventory Alerts'), description: t('Get alerts when inventory is running low') },
+  { id: 'system', label: t('System Alerts'), description: t('Receive system maintenance and outage notifications') },
 ];
 
 export function SettingsNotifications() {
@@ -40,31 +41,31 @@ export function SettingsNotifications() {
 
   const handleSave = () => {
     localStorage.setItem('notification-prefs', JSON.stringify(prefs));
-    toast.success('Notification preferences saved');
+    toast.success(t('Notification preferences saved'));
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Notification Preferences</CardTitle>
+        <CardTitle>{t('Notification Preferences')}</CardTitle>
         <CardDescription>
-          Configure which notifications you receive. These settings are stored locally.
+          {t('Configure which notifications you receive. These settings are stored locally.')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
-        {TOGGLES.map((t) => (
-          <div key={t.id} className="flex items-center justify-between gap-4">
+        {TOGGLES.map((item) => (
+          <div key={item.id} className="flex items-center justify-between gap-4">
             <div className="space-y-0.5">
-              <Label htmlFor={`notif-${t.id}`} className="cursor-pointer font-medium">
-                {t.label}
+              <Label htmlFor={`notif-${item.id}`} className="cursor-pointer font-medium">
+                {item.label}
               </Label>
-              <p className="text-sm text-muted-foreground">{t.description}</p>
+              <p className="text-sm text-muted-foreground">{item.description}</p>
             </div>
             <Switch
-              id={`notif-${t.id}`}
-              checked={!!prefs[t.id]}
-              onCheckedChange={(v) => handleToggle(t.id, v)}
-              aria-label={`Toggle ${t.label}`}
+              id={`notif-${item.id}`}
+              checked={!!prefs[item.id]}
+              onCheckedChange={(v) => handleToggle(item.id, v)}
+              aria-label={`${t('Toggle')} ${item.label}`}
             />
           </div>
         ))}

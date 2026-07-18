@@ -35,6 +35,7 @@ import {
   useCheckInReservation,
   useCompleteReservation,
 } from '@/hooks/use-reservations';
+import { t } from '@/lib/i18n';
 
 interface ReservationActionsProps {
   restaurantId: string;
@@ -54,35 +55,35 @@ const ACTION_CONFIG: Record<
   }
 > = {
   confirm: {
-    label: 'Confirm',
+    label: t('Confirm'),
     icon: <CheckCircle2 className="h-4 w-4" />,
-    confirmTitle: 'Confirm Reservation',
-    confirmDescription: 'Are you sure you want to confirm this reservation? The guest is expected to arrive.',
-    confirmButton: 'Confirm Reservation',
+    confirmTitle: t('Confirm Reservation'),
+    confirmDescription: t('Are you sure you want to confirm this reservation? The guest is expected to arrive.'),
+    confirmButton: t('Confirm Reservation'),
     variant: 'success',
   },
   cancel: {
-    label: 'Cancel',
+    label: t('Cancel'),
     icon: <XCircle className="h-4 w-4" />,
-    confirmTitle: 'Cancel Reservation',
-    confirmDescription: 'Are you sure you want to cancel this reservation? This action cannot be undone.',
-    confirmButton: 'Cancel Reservation',
+    confirmTitle: t('Cancel Reservation'),
+    confirmDescription: t('Are you sure you want to cancel this reservation? This action cannot be undone.'),
+    confirmButton: t('Cancel Reservation'),
     variant: 'danger',
   },
   check_in: {
-    label: 'Check In',
+    label: t('Check In'),
     icon: <DoorOpen className="h-4 w-4" />,
-    confirmTitle: 'Check In Guest',
-    confirmDescription: 'Mark this reservation as checked in? The guest has arrived.',
-    confirmButton: 'Check In',
+    confirmTitle: t('Check In Guest'),
+    confirmDescription: t('Mark this reservation as checked in? The guest has arrived.'),
+    confirmButton: t('Check In'),
     variant: 'primary',
   },
   complete: {
-    label: 'Complete',
+    label: t('Complete'),
     icon: <Check className="h-4 w-4" />,
-    confirmTitle: 'Complete Reservation',
-    confirmDescription: 'Mark this reservation as completed? The guest has finished dining.',
-    confirmButton: 'Complete Reservation',
+    confirmTitle: t('Complete Reservation'),
+    confirmDescription: t('Mark this reservation as completed? The guest has finished dining.'),
+    confirmButton: t('Complete Reservation'),
     variant: 'primary',
   },
 };
@@ -127,21 +128,21 @@ export function ReservationActions({
     try {
       await mutation.mutateAsync({ restaurantId, reservationId });
       toast.success(
-        `Reservation ${ACTION_CONFIG[action]?.label.toLowerCase()} successfully.`,
+        t('Reservation {action} successfully.', { action: ACTION_CONFIG[action]!.label.toLowerCase() }),
       );
       setOpen((prev) => ({ ...prev, [action]: false }));
       router.refresh();
     } catch {
-      toast.error(`Failed to ${action} reservation. Please try again.`);
+      toast.error(t('Failed to {action} reservation. Please try again.', { action }));
     }
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" aria-label="Reservation actions">
+        <Button variant="outline" size="sm" aria-label={t('Reservation actions')}>
           <AlertCircle className="h-4 w-4 mr-1" aria-hidden="true" />
-          Actions
+          {t('Actions')}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
@@ -183,7 +184,7 @@ export function ReservationActions({
                     }
                     disabled={isPending}
                   >
-                    Cancel
+                    {t('Cancel')}
                   </Button>
                   <Button
                     variant={config.variant}
@@ -205,7 +206,7 @@ export function ReservationActions({
             )
           }
         >
-          Edit Reservation
+          {t('Edit Reservation')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

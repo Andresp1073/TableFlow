@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { t } from '@/lib/i18n';
 
 interface TableFormProps {
   mode: 'create' | 'edit';
@@ -103,9 +104,9 @@ export function TableForm({
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FormField name="tableNumber" error={errors.tableNumber?.message}>
           <FormItem>
-            <FormLabel required>Table Number</FormLabel>
+            <FormLabel required>{t('Table Number')}</FormLabel>
             <FormControl>
-              <Input placeholder="T01" disabled={isLoading} {...register('tableNumber')} />
+              <Input placeholder={t('T01')} disabled={isLoading} {...register('tableNumber')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -113,9 +114,9 @@ export function TableForm({
 
         <FormField name="name" error={errors.name?.message}>
           <FormItem>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>{t('Name')}</FormLabel>
             <FormControl>
-              <Input placeholder="Window Table 1" disabled={isLoading} {...register('name')} />
+              <Input placeholder={t('Window Table 1')} disabled={isLoading} {...register('name')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -123,20 +124,20 @@ export function TableForm({
 
         <FormField name="shape" error={errors.shape?.message}>
           <FormItem>
-            <FormLabel>Shape</FormLabel>
+            <FormLabel>{t('Shape')}</FormLabel>
             <FormControl>
               <Select
                 value={selectedShape ?? 'rectangle'}
                 onValueChange={(v) => setValue('shape', v as 'square' | 'rectangle' | 'round' | 'oval')}
                 disabled={isLoading}
               >
-                <SelectTrigger aria-label="Table shape">
-                  <SelectValue placeholder="Select shape" />
+                <SelectTrigger aria-label={t('Table shape')}>
+                  <SelectValue placeholder={t('Select shape')} />
                 </SelectTrigger>
                 <SelectContent>
                   {TABLE_SHAPE_OPTIONS.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
+                      {t(opt.label)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -149,9 +150,9 @@ export function TableForm({
         <div className="grid grid-cols-2 gap-3">
           <FormField name="minimumCapacity" error={errors.minimumCapacity?.message}>
             <FormItem>
-              <FormLabel required>Min Capacity</FormLabel>
+              <FormLabel required>{t('Min Capacity')}</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="2" disabled={isLoading} {...register('minimumCapacity')} />
+                <Input type="number" placeholder={t('2')} disabled={isLoading} {...register('minimumCapacity')} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -159,9 +160,9 @@ export function TableForm({
 
           <FormField name="maximumCapacity" error={errors.maximumCapacity?.message}>
             <FormItem>
-              <FormLabel required>Max Capacity</FormLabel>
+              <FormLabel required>{t('Max Capacity')}</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="4" disabled={isLoading} {...register('maximumCapacity')} />
+                <Input type="number" placeholder={t('4')} disabled={isLoading} {...register('maximumCapacity')} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -171,9 +172,9 @@ export function TableForm({
         <div className="grid grid-cols-2 gap-3">
           <FormField name="width" error={errors.width?.message}>
             <FormItem>
-              <FormLabel>Width (px)</FormLabel>
+              <FormLabel>{t('Width (px)')}</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="60" disabled={isLoading} {...register('width')} />
+                <Input type="number" placeholder={t('60')} disabled={isLoading} {...register('width')} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -181,9 +182,9 @@ export function TableForm({
 
           <FormField name="height" error={errors.height?.message}>
             <FormItem>
-              <FormLabel>Height (px)</FormLabel>
+              <FormLabel>{t('Height (px)')}</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="60" disabled={isLoading} {...register('height')} />
+                <Input type="number" placeholder={t('60')} disabled={isLoading} {...register('height')} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -193,10 +194,10 @@ export function TableForm({
 
       <FormField name="description" error={errors.description?.message}>
         <FormItem>
-          <FormLabel>Description</FormLabel>
+            <FormLabel>{t('Description')}</FormLabel>
           <FormControl>
             <Textarea
-              placeholder="Describe this table..."
+              placeholder={t('Describe this table...')}
               disabled={isLoading}
               rows={2}
               {...register('description')}
@@ -214,7 +215,7 @@ export function TableForm({
             {...register('isReservable')}
           />
           <Label htmlFor="isReservable" className="text-sm font-normal cursor-pointer">
-            Reservable
+            {t('Reservable')}
           </Label>
         </div>
         <div className="flex items-center gap-2">
@@ -224,7 +225,7 @@ export function TableForm({
             {...register('isAccessible')}
           />
           <Label htmlFor="isAccessible" className="text-sm font-normal cursor-pointer">
-            Wheelchair Accessible
+            {t('Wheelchair Accessible')}
           </Label>
         </div>
         {mode === 'edit' && (
@@ -235,7 +236,7 @@ export function TableForm({
               {...register('isActive')}
             />
             <Label htmlFor="isActive" className="text-sm font-normal cursor-pointer">
-              Active
+              {t('Active')}
             </Label>
           </div>
         )}
@@ -243,7 +244,7 @@ export function TableForm({
 
       <div className="flex gap-3 justify-end">
         <Button type="submit" loading={isLoading}>
-          {isLoading ? 'Saving...' : mode === 'create' ? 'Create Table' : 'Save Changes'}
+          {isLoading ? t('Saving...') : mode === 'create' ? t('Create Table') : t('Save Changes')}
         </Button>
       </div>
     </form>

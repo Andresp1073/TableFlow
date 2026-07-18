@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

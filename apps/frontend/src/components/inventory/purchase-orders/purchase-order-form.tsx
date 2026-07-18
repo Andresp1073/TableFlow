@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -97,7 +98,7 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
             <div className="space-y-1.5">
               <Label>Supplier</Label>
               <Select value={supplierId} onValueChange={handleSupplierChange}>
-                <SelectTrigger><SelectValue placeholder="Select supplier" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder={t("Select supplier")} /></SelectTrigger>
                 <SelectContent>
                   {suppliers.map((s) => (
                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -113,7 +114,7 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
 
           <div className="space-y-1.5">
             <Label>Notes</Label>
-            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes" />
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t("Optional notes")} />
           </div>
 
           <div className="space-y-3">
@@ -126,7 +127,7 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
                 <div className="flex-1 space-y-1.5">
                   <Label className="text-xs">Product</Label>
                   <Select value={item.ingredientId} onValueChange={(v) => updateItem(i, 'ingredientId', v)}>
-                    <SelectTrigger><SelectValue placeholder="Select product" /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder={t("Select product")} /></SelectTrigger>
                     <SelectContent>
                       {products.filter((p) => p.isActive).map((p) => (
                         <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>

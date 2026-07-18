@@ -17,6 +17,7 @@ import { RecentActivityWidget } from '@/components/dashboard/widgets/recent-acti
 import { UpcomingReservationsWidget } from '@/components/dashboard/widgets/upcoming-reservations';
 import { QuickStatisticsWidget } from '@/components/dashboard/widgets/quick-statistics';
 import { PageWrapper } from '@/components/layout/page-wrapper';
+import { t } from '@/lib/i18n';
 
 export default function DashboardPage() {
   const { current, setCurrent, setRestaurants } = useRestaurant();
@@ -36,8 +37,8 @@ export default function DashboardPage() {
 
   return (
     <PageWrapper
-      title="Dashboard"
-      description="Overview of your restaurant operations"
+      title={t('Dashboard')}
+      description={t('Overview of your restaurant operations')}
     >
       <div className="space-y-4">
         <DashboardGrid>

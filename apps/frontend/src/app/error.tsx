@@ -1,6 +1,7 @@
 'use client';
 
 import { ErrorState } from '@/components/ui/error-state';
+import { t } from '@/lib/i18n';
 
 export default function GlobalError({
   error,
@@ -12,8 +13,8 @@ export default function GlobalError({
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <ErrorState
-        title="Something went wrong"
-        message={error.message ?? 'An unexpected error occurred. Please try again.'}
+        title={t('Something went wrong')}
+        message={error.message ?? t('An unexpected error occurred. Please try again.')}
         onRetry={reset}
       />
     </div>

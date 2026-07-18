@@ -7,6 +7,7 @@ import { useRestaurant } from '@/providers/restaurant-provider';
 import { DiningAreaForm } from '@/components/dining-areas/dining-area-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 
 export default function CreateDiningAreaPage() {
   const router = useRouter();
@@ -25,18 +26,18 @@ export default function CreateDiningAreaPage() {
 
   return (
     <PageWrapper
-      title="Create Dining Area"
-      description="Add a new dining area"
+      title={t('Create Dining Area')}
+      description={t('Add a new dining area')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push('/dining-areas')}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Dining Areas
+          {t('Back to Dining Areas')}
         </Button>
       }
     >
       <div className="max-w-2xl">
         {!restaurantId ? (
-          <p className="text-sm text-muted-foreground">Select a restaurant to create a dining area.</p>
+          <p className="text-sm text-muted-foreground">{t('Select a restaurant to create a dining area.')}</p>
         ) : (
           <DiningAreaForm
             mode="create"

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { History } from 'lucide-react';
 import type { RecentActivityItem } from '@/lib/dashboard-types';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface RecentActivityWidgetProps {
   data?: RecentActivityItem[];
@@ -21,10 +22,10 @@ function formatTime(iso: string): string {
     const now = new Date();
     const diffMs = now.getTime() - d.getTime();
     const diffMin = Math.floor(diffMs / 60000);
-    if (diffMin < 1) return 'Just now';
-    if (diffMin < 60) return `${diffMin}m ago`;
+    if (diffMin < 1) return t('Just now');
+    if (diffMin < 60) return t('{diffMin}m ago', { diffMin });
     const diffHrs = Math.floor(diffMin / 60);
-    if (diffHrs < 24) return `${diffHrs}h ago`;
+    if (diffHrs < 24) return t('{diffHrs}h ago', { diffHrs });
     return d.toLocaleDateString();
   } catch { return ''; }
 }
@@ -47,12 +48,12 @@ function getActionColor(action: string): string {
 function RecentActivityWidget({ data, isLoading, isError, error, onRefresh, onRetry }: RecentActivityWidgetProps) {
   return (
     <DashboardWidget
-      title="Recent Activity"
+      title={t('Recent Activity')}
       isLoading={isLoading}
       isError={isError}
       isEmpty={!data || data.length === 0}
       error={error}
-      emptyMessage="No recent activity"
+      emptyMessage={t('No recent activity')}
       onRefresh={onRefresh}
       onRetry={onRetry}
     >

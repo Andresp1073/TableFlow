@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -73,9 +74,9 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FormField name="name" error={errors.name?.message}>
           <FormItem>
-            <FormLabel required>Name</FormLabel>
+            <FormLabel required>{t('Name')}</FormLabel>
             <FormControl>
-              <Input placeholder="My Restaurant" disabled={isLoading} {...register('name')} />
+              <Input placeholder={t("My Restaurant")} disabled={isLoading} {...register('name')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -83,9 +84,9 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="slug" error={errors.slug?.message}>
           <FormItem>
-            <FormLabel required>Slug</FormLabel>
+            <FormLabel required>{t('Slug')}</FormLabel>
             <FormControl>
-              <Input placeholder="my-restaurant" disabled={isLoading} {...register('slug')} />
+              <Input placeholder={t("my-restaurant")} disabled={isLoading} {...register('slug')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -93,9 +94,9 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="legalName" error={errors.legalName?.message}>
           <FormItem>
-            <FormLabel>Legal Name</FormLabel>
+            <FormLabel>{t('Legal Name')}</FormLabel>
             <FormControl>
-              <Input placeholder="My Restaurant LLC" disabled={isLoading} {...register('legalName')} />
+              <Input placeholder={t("My Restaurant LLC")} disabled={isLoading} {...register('legalName')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -105,7 +106,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
           <FormItem>
             <FormLabel>Tax ID</FormLabel>
             <FormControl>
-              <Input placeholder="XX-XXXXXXX" disabled={isLoading} {...register('taxId')} />
+              <Input placeholder={t("XX-XXXXXXX")} disabled={isLoading} {...register('taxId')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -115,7 +116,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
           <FormItem>
             <FormLabel>Email</FormLabel>
             <FormControl>
-              <Input type="email" placeholder="contact@example.com" disabled={isLoading} {...register('email')} />
+              <Input type="email" placeholder={t("contact@example.com")} disabled={isLoading} {...register('email')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -125,7 +126,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
           <FormItem>
             <FormLabel>Phone</FormLabel>
             <FormControl>
-              <Input type="tel" placeholder="+1 555-123-4567" disabled={isLoading} {...register('phone')} />
+              <Input type="tel" placeholder={t("+1 555-123-4567")} disabled={isLoading} {...register('phone')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -135,7 +136,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
           <FormItem>
             <FormLabel>Website</FormLabel>
             <FormControl>
-              <Input placeholder="https://example.com" disabled={isLoading} {...register('website')} />
+              <Input placeholder={t("https://example.com")} disabled={isLoading} {...register('website')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -145,7 +146,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
           <FormItem>
             <FormLabel>Logo URL</FormLabel>
             <FormControl>
-              <Input placeholder="https://example.com/logo.png" disabled={isLoading} {...register('logoUrl')} />
+              <Input placeholder={t("https://example.com/logo.png")} disabled={isLoading} {...register('logoUrl')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -153,9 +154,9 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="timezone" error={errors.timezone?.message}>
           <FormItem>
-            <FormLabel required>Timezone</FormLabel>
+            <FormLabel required>{t('Timezone')}</FormLabel>
             <FormControl>
-              <Input placeholder="America/New_York" disabled={isLoading} {...register('timezone')} />
+              <Input placeholder={t("America/New_York")} disabled={isLoading} {...register('timezone')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -163,9 +164,9 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="currency" error={errors.currency?.message}>
           <FormItem>
-            <FormLabel required>Currency</FormLabel>
+            <FormLabel required>{t('Currency')}</FormLabel>
             <FormControl>
-              <Input placeholder="USD" disabled={isLoading} {...register('currency')} />
+              <Input placeholder={t("USD")} disabled={isLoading} {...register('currency')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -173,9 +174,9 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="language" error={errors.language?.message}>
           <FormItem>
-            <FormLabel required>Language</FormLabel>
+            <FormLabel required>{t('Language')}</FormLabel>
             <FormControl>
-              <Input placeholder="en" disabled={isLoading} {...register('language')} />
+              <Input placeholder={t("en")} disabled={isLoading} {...register('language')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -186,7 +187,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
         <FormItem>
           <FormLabel>Address</FormLabel>
           <FormControl>
-            <Input placeholder="123 Main St, City, State ZIP" disabled={isLoading} {...register('address')} />
+            <Input placeholder={t("123 Main St, City, State ZIP")} disabled={isLoading} {...register('address')} />
           </FormControl>
           <FormMessage />
         </FormItem>

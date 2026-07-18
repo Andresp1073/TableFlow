@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { t } from '@/lib/i18n';
 
 interface DiningAreaFormProps {
   mode: 'create' | 'edit';
@@ -60,9 +61,9 @@ export function DiningAreaForm({ mode, initialData, isLoading = false, error = n
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FormField name="name" error={errors.name?.message}>
           <FormItem>
-            <FormLabel required>Name</FormLabel>
+            <FormLabel required>{t('Name')}</FormLabel>
             <FormControl>
-              <Input placeholder="Main Hall" disabled={isLoading} {...register('name')} />
+              <Input placeholder={t('Main Hall')} disabled={isLoading} {...register('name')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -70,9 +71,9 @@ export function DiningAreaForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="code" error={errors.code?.message}>
           <FormItem>
-            <FormLabel required>Code</FormLabel>
+            <FormLabel required>{t('Code')}</FormLabel>
             <FormControl>
-              <Input placeholder="MAIN_HALL" disabled={isLoading} {...register('code')} />
+              <Input placeholder={t('MAIN_HALL')} disabled={isLoading} {...register('code')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -80,9 +81,9 @@ export function DiningAreaForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="displayOrder" error={errors.displayOrder?.message}>
           <FormItem>
-            <FormLabel>Display Order</FormLabel>
+            <FormLabel>{t('Display Order')}</FormLabel>
             <FormControl>
-              <Input type="number" placeholder="0" disabled={isLoading} {...register('displayOrder')} />
+              <Input type="number" placeholder={t('0')} disabled={isLoading} {...register('displayOrder')} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -96,7 +97,7 @@ export function DiningAreaForm({ mode, initialData, isLoading = false, error = n
               {...register('isReservable')}
             />
             <Label htmlFor="isReservable" className="text-sm font-normal cursor-pointer">
-              Reservable
+              {t('Reservable')}
             </Label>
           </div>
         </div>
@@ -104,10 +105,10 @@ export function DiningAreaForm({ mode, initialData, isLoading = false, error = n
 
       <FormField name="description" error={errors.description?.message}>
         <FormItem>
-          <FormLabel>Description</FormLabel>
+          <FormLabel>{t('Description')}</FormLabel>
           <FormControl>
             <Textarea
-              placeholder="Describe this dining area..."
+              placeholder={t('Describe this dining area...')}
               disabled={isLoading}
               rows={3}
               {...register('description')}
@@ -119,7 +120,7 @@ export function DiningAreaForm({ mode, initialData, isLoading = false, error = n
 
       <div className="flex gap-3 justify-end">
         <Button type="submit" loading={isLoading}>
-          {isLoading ? 'Saving...' : mode === 'create' ? 'Create Dining Area' : 'Save Changes'}
+          {isLoading ? t('Saving...') : mode === 'create' ? t('Create Dining Area') : t('Save Changes')}
         </Button>
       </div>
     </form>

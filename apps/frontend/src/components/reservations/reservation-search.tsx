@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 import { cn } from '@/lib/cn';
 
 interface ReservationSearchProps {
@@ -14,7 +15,7 @@ interface ReservationSearchProps {
 
 export function ReservationSearch({
   onSearch,
-  placeholder = 'Search reservations by number, guest name, or notes...',
+  placeholder = t('Search reservations by number, guest name, or notes...'),
   className,
 }: ReservationSearchProps) {
   const [value, setValue] = useState('');
@@ -43,7 +44,7 @@ export function ReservationSearch({
         }}
         placeholder={placeholder}
         className="pl-10 pr-10"
-        aria-label="Search reservations"
+        aria-label={t('Search reservations')}
       />
       {value && (
         <Button
@@ -52,7 +53,7 @@ export function ReservationSearch({
           size="icon-sm"
           className="absolute right-1 top-1/2 -translate-y-1/2"
           onClick={handleClear}
-          aria-label="Clear search"
+          aria-label={t('Clear search')}
         >
           <X className="h-4 w-4" />
         </Button>

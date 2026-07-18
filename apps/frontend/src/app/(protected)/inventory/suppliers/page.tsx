@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useSuppliers } from '@/hooks/use-inventory';
@@ -13,7 +14,7 @@ export default function SuppliersPage() {
 
   return (
     <PageWrapper>
-      <PageHeader title="Suppliers" description="Manage your product suppliers" createHref="/inventory/suppliers/new" createLabel="New Supplier" />
+      <PageHeader title={t("Suppliers")} description={t("Manage your product suppliers")} createHref="/inventory/suppliers/new" createLabel={t("New Supplier")} />
       <SupplierList data={data ?? []} loading={isLoading} error={error?.message ?? null} />
     </PageWrapper>
   );

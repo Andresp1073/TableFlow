@@ -1,5 +1,6 @@
 'use client';
 
+import { t } from '@/lib/i18n';
 import {
   LayoutDashboard,
   Building2,
@@ -20,15 +21,15 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" /> },
-  { id: 'restaurant', label: 'Restaurant Info', icon: <Building2 className="h-4 w-4" /> },
-  { id: 'business-hours', label: 'Business Hours', icon: <Clock className="h-4 w-4" /> },
-  { id: 'regional', label: 'Regional', icon: <Globe className="h-4 w-4" /> },
-  { id: 'tax', label: 'Tax', icon: <Percent className="h-4 w-4" /> },
-  { id: 'notifications', label: 'Notifications', icon: <Bell className="h-4 w-4" /> },
-  { id: 'appearance', label: 'Appearance', icon: <Palette className="h-4 w-4" /> },
-  { id: 'security', label: 'Security', icon: <Shield className="h-4 w-4" /> },
-  { id: 'about', label: 'About', icon: <Info className="h-4 w-4" /> },
+  { id: 'dashboard', label: t('Dashboard'), icon: <LayoutDashboard className="h-4 w-4" /> },
+  { id: 'restaurant', label: t('Restaurant Info'), icon: <Building2 className="h-4 w-4" /> },
+  { id: 'business-hours', label: t('Business Hours'), icon: <Clock className="h-4 w-4" /> },
+  { id: 'regional', label: t('Regional'), icon: <Globe className="h-4 w-4" /> },
+  { id: 'tax', label: t('Tax'), icon: <Percent className="h-4 w-4" /> },
+  { id: 'notifications', label: t('Notifications'), icon: <Bell className="h-4 w-4" /> },
+  { id: 'appearance', label: t('Appearance'), icon: <Palette className="h-4 w-4" /> },
+  { id: 'security', label: t('Security'), icon: <Shield className="h-4 w-4" /> },
+  { id: 'about', label: t('About'), icon: <Info className="h-4 w-4" /> },
 ];
 
 interface SettingsSidebarProps {
@@ -38,7 +39,7 @@ interface SettingsSidebarProps {
 
 export function SettingsSidebar({ activeSection, onSectionChange }: SettingsSidebarProps) {
   return (
-    <nav className="flex flex-col gap-1 w-full lg:w-56 shrink-0" aria-label="Settings navigation">
+    <nav className="flex flex-col gap-1 w-full lg:w-56 shrink-0" aria-label={t('Settings navigation')}>
       {NAV_ITEMS.map((item) => (
         <button
           key={item.id}

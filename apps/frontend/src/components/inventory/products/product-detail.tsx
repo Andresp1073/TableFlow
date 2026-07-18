@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -68,13 +69,13 @@ export function ProductDetailView({ data, isLoading, isError, onArchive, onResto
         <Card>
           <CardHeader><CardTitle className="text-base">Details</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label="Category" value={<Badge variant="secondary">{data.category}</Badge>} />
-            <DetailRow label="Unit" value={data.unit} />
-            <DetailRow label="Cost per Unit" value={formatCurrency(data.costPerUnit)} />
-            <DetailRow label="Current Stock" value={<span className={data.currentStock <= 10 ? 'text-destructive' : ''}>{data.currentStock} {data.unit}</span>} />
-            <DetailRow label="Status" value={<Badge variant={data.isActive ? 'success' : 'secondary'}>{data.isActive ? 'Active' : 'Archived'}</Badge>} />
-            <DetailRow label="Perishable" value={data.perishable ? <Badge variant="warning">Yes</Badge> : 'No'} />
-            <DetailRow label="Shelf Life" value={data.shelfLifeDays ? `${data.shelfLifeDays} days` : 'N/A'} />
+            <DetailRow label={t("Category")} value={<Badge variant="secondary">{data.category}</Badge>} />
+            <DetailRow label={t("Unit")} value={data.unit} />
+            <DetailRow label={t("Cost per Unit")} value={formatCurrency(data.costPerUnit)} />
+            <DetailRow label={t("Current Stock")} value={<span className={data.currentStock <= 10 ? 'text-destructive' : ''}>{data.currentStock} {data.unit}</span>} />
+            <DetailRow label={t("Status")} value={<Badge variant={data.isActive ? 'success' : 'secondary'}>{data.isActive ? 'Active' : 'Archived'}</Badge>} />
+            <DetailRow label={t("Perishable")} value={data.perishable ? <Badge variant="warning">Yes</Badge> : 'No'} />
+            <DetailRow label={t("Shelf Life")} value={data.shelfLifeDays ? `${data.shelfLifeDays} days` : 'N/A'} />
           </CardContent>
         </Card>
 

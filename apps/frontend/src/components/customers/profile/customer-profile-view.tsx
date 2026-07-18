@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -57,7 +58,7 @@ export function CustomerProfileView({ data, isLoading, isError, onArchive, onRes
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <Link href="/customers">
-            <Button variant="ghost" size="icon-sm" aria-label="Back to customers">
+            <Button variant="ghost" size="icon-sm" aria-label={t("Back to customers")}>
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
@@ -94,11 +95,11 @@ export function CustomerProfileView({ data, isLoading, isError, onArchive, onRes
             <CardTitle className="text-lg">Personal Information</CardTitle>
           </CardHeader>
           <CardContent>
-            <DetailRow label="Full Name" value={`${data.firstName} ${data.lastName}`} icon={<Users className="h-4 w-4" />} />
-            <DetailRow label="Email" value={data.email} icon={<Mail className="h-4 w-4" />} />
-            <DetailRow label="Phone" value={data.phone} icon={<Phone className="h-4 w-4" />} />
-            <DetailRow label="Birth Date" value={data.birthDate ? new Date(data.birthDate).toLocaleDateString() : null} icon={<Calendar className="h-4 w-4" />} />
-            <DetailRow label="Preferred Language" value={data.preferredLanguage} icon={<Star className="h-4 w-4" />} />
+            <DetailRow label={t("Full Name")} value={`${data.firstName} ${data.lastName}`} icon={<Users className="h-4 w-4" />} />
+            <DetailRow label={t("Email")} value={data.email} icon={<Mail className="h-4 w-4" />} />
+            <DetailRow label={t("Phone")} value={data.phone} icon={<Phone className="h-4 w-4" />} />
+            <DetailRow label={t("Birth Date")} value={data.birthDate ? new Date(data.birthDate).toLocaleDateString() : null} icon={<Calendar className="h-4 w-4" />} />
+            <DetailRow label={t("Preferred Language")} value={data.preferredLanguage} icon={<Star className="h-4 w-4" />} />
           </CardContent>
         </Card>
 
@@ -107,9 +108,9 @@ export function CustomerProfileView({ data, isLoading, isError, onArchive, onRes
             <CardTitle className="text-lg">Statistics</CardTitle>
           </CardHeader>
           <CardContent>
-            <DetailRow label="Total Visits" value={data.totalVisits} />
-            <DetailRow label="Total Spent" value={data.totalSpent > 0 ? `$${data.totalSpent.toLocaleString('en-US')}` : '$0'} />
-            <DetailRow label="Average Ticket" value={data.averageTicket > 0 ? `$${data.averageTicket.toFixed(2)}` : '—'} />
+            <DetailRow label={t("Total Visits")} value={data.totalVisits} />
+            <DetailRow label={t("Total Spent")} value={data.totalSpent > 0 ? `$${data.totalSpent.toLocaleString('en-US')}` : '$0'} />
+            <DetailRow label={t("Average Ticket")} value={data.averageTicket > 0 ? `$${data.averageTicket.toFixed(2)}` : '—'} />
           </CardContent>
         </Card>
       </div>

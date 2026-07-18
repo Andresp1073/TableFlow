@@ -8,6 +8,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import type { CreateUserDto, UpdateUserDto } from '@/lib/admin-types';
+import { t } from '@/lib/i18n';
 
 export default function NewUserPage() {
   const router = useRouter();
@@ -23,19 +24,19 @@ export default function NewUserPage() {
     }
   };
 
-  if (isLoading) return <LoadingState message="Loading roles..." />;
-  if (error) return <ErrorState message="Failed to load roles" />;
+  if (isLoading) return <LoadingState message={t('Loading roles...')} />;
+  if (error) return <ErrorState message={t('Failed to load roles')} />;
 
   return (
     <AdminPageLayout
-      title="Create User"
-      description="Add a new platform user"
+      title={t('Create User')}
+      description={t('Add a new platform user')}
     >
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Users', href: '/admin/users' },
-          { label: 'New' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Users'), href: '/admin/users' },
+          { label: t('New') },
         ]}
       />
       <UserForm

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -63,7 +64,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <AlertCard icon={<Ban className="h-4 w-4 text-destructive" />} title="Out of Stock" count={data.totalOutOfStock} emptyMessage="All products are in stock" variant="danger">
+        <AlertCard icon={<Ban className="h-4 w-4 text-destructive" />} title={t("Out of Stock")} count={data.totalOutOfStock} emptyMessage={t("All products are in stock")} variant="danger">
           <div className="space-y-1">
             {data.outOfStock.map((p) => (
               <div key={p.id} className="flex justify-between text-sm py-1">
@@ -74,7 +75,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           </div>
         </AlertCard>
 
-        <AlertCard icon={<AlertTriangle className="h-4 w-4 text-warning" />} title="Low Stock" count={data.totalLowStock} emptyMessage="All inventory levels are healthy" variant="warning">
+        <AlertCard icon={<AlertTriangle className="h-4 w-4 text-warning" />} title={t("Low Stock")} count={data.totalLowStock} emptyMessage={t("All inventory levels are healthy")} variant="warning">
           <div className="space-y-1">
             {data.lowStock.map((p) => (
               <div key={p.id} className="flex justify-between text-sm py-1">
@@ -85,7 +86,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           </div>
         </AlertCard>
 
-        <AlertCard icon={<Clock className="h-4 w-4 text-info" />} title="Expiring Soon (7 days)" count={data.totalExpiringSoon} emptyMessage="No products expiring soon" variant="info">
+        <AlertCard icon={<Clock className="h-4 w-4 text-info" />} title={t("Expiring Soon (7 days)")} count={data.totalExpiringSoon} emptyMessage={t("No products expiring soon")} variant="info">
           <div className="space-y-1">
             {data.expiringSoon.map((p) => (
               <div key={p.id} className="flex justify-between text-sm py-1">
@@ -96,7 +97,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           </div>
         </AlertCard>
 
-        <AlertCard icon={<Package className="h-4 w-4 text-secondary" />} title="Pending Receiving" count={data.totalPendingReceiving} emptyMessage="No pending receipts" variant="secondary">
+        <AlertCard icon={<Package className="h-4 w-4 text-secondary" />} title={t("Pending Receiving")} count={data.totalPendingReceiving} emptyMessage={t("No pending receipts")} variant="secondary">
           <div className="space-y-1">
             {data.pendingReceiving.map((po) => (
               <div key={po.id} className="flex justify-between text-sm py-1">

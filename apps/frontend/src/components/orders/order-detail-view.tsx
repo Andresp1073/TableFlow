@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -36,13 +37,13 @@ export function OrderDetailView({
   const [cancelReason] = useState('');
 
   if (isLoading) {
-    return <LoadingState message="Loading order..." />;
+    return <LoadingState message={t("Loading order...")} />;
   }
 
   if (isError) {
     return (
       <ErrorState
-        title="Failed to load order"
+        title={t("Failed to load order")}
         message={error?.message ?? 'An unexpected error occurred'}
         onRetry={onRetry}
       />
@@ -52,8 +53,8 @@ export function OrderDetailView({
   if (!order) {
     return (
       <ErrorState
-        title="Order not found"
-        message="The requested order could not be found."
+        title={t("Order not found")}
+        message={t("The requested order could not be found.")}
         onRetry={onRetry}
       />
     );
@@ -68,7 +69,7 @@ export function OrderDetailView({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon-sm" onClick={() => router.back()} aria-label="Go back">
+        <Button variant="ghost" size="icon-sm" onClick={() => router.back()} aria-label={t("Go back")}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">

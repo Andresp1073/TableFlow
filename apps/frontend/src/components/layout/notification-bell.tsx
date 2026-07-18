@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useNotifications } from '@/providers/notification-provider';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 export function NotificationBell() {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
@@ -19,7 +20,7 @@ export function NotificationBell() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-md" className="relative" aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} unread)` : ''}`}>
+        <Button variant="ghost" size="icon-md" className="relative" aria-label={t('Notifications') + (unreadCount > 0 ? ` (${unreadCount} ${t('unread')})` : '')}>
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
             <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-medium text-destructive-foreground">
@@ -30,20 +31,20 @@ export function NotificationBell() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
         <DropdownMenuLabel className="flex items-center justify-between">
-          <span>Notifications</span>
+          <span>{t('Notifications')}</span>
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
               className="text-xs text-primary hover:underline"
             >
-              Mark all as read
+              {t('Mark all as read')}
             </button>
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {notifications.length === 0 ? (
           <div className="px-2 py-4 text-center text-sm text-muted-foreground">
-            No notifications
+            {t('No notifications')}
           </div>
         ) : (
           notifications.slice(0, 10).map((notification) => (

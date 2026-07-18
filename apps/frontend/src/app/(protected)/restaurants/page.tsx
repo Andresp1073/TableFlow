@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
@@ -49,7 +50,7 @@ export default function RestaurantsPage() {
     () => [
       {
         accessorKey: 'name',
-        header: 'Name',
+        header: t('Name'),
         cell: ({ row }) => (
           <Link
             href={`/restaurants/${row.original.id}`}
@@ -61,21 +62,21 @@ export default function RestaurantsPage() {
       },
       {
         accessorKey: 'slug',
-        header: 'Slug',
+        header: t('Slug'),
       },
       {
         accessorKey: 'email',
-        header: 'Email',
+        header: t('Email'),
         cell: ({ getValue }) => getValue<string>() || '—',
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: t('Status'),
         cell: ({ getValue }) => <RestaurantStatusBadge status={getValue<RestaurantStatus>()} />,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created',
+        header: t('Created'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
       {
@@ -106,8 +107,8 @@ export default function RestaurantsPage() {
 
   return (
     <PageWrapper
-      title="Restaurants"
-      description="Manage all restaurants in your organization"
+      title={t("Restaurants")}
+      description={t("Manage all restaurants in your organization")}
       actions={
         <Link href="/restaurants/create">
           <Button>
@@ -122,11 +123,11 @@ export default function RestaurantsPage() {
           <div className="relative max-w-xs w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search restaurants..."
+              placeholder={t("Search restaurants...")}
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               className="pl-8"
-              aria-label="Search restaurants"
+              aria-label={t("Search restaurants")}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -134,7 +135,7 @@ export default function RestaurantsPage() {
               value={statusFilter}
               onChange={(e) => { setStatusFilter(e.target.value as RestaurantStatus | ''); setPage(1); }}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              aria-label="Filter by status"
+              aria-label={t("Filter by status")}
             >
               <option value="">All Statuses</option>
               {RESTAURANT_STATUS_OPTIONS.map((opt) => (

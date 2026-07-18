@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
@@ -19,8 +20,8 @@ export default function CreateRestaurantPage() {
 
   return (
     <PageWrapper
-      title="Create Restaurant"
-      description="Add a new restaurant to your organization"
+      title={t("Create Restaurant")}
+      description={t("Add a new restaurant to your organization")}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push('/restaurants')}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />

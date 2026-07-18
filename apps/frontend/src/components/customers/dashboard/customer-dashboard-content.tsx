@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -74,25 +75,25 @@ export function CustomerDashboardContent({ data, isLoading, isError, error, onRe
           <p className="text-sm text-muted-foreground">Customer relationship and loyalty overview</p>
         </div>
         {onRefresh && (
-          <Button variant="outline" size="icon-sm" onClick={onRefresh} aria-label="Refresh dashboard">
+          <Button variant="outline" size="icon-sm" onClick={onRefresh} aria-label={t("Refresh dashboard")}>
             <RefreshCw className="h-4 w-4" />
           </Button>
         )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<Users className="h-5 w-5" />} label="Total Customers" value={data.totalCustomers} href="/customers" />
-        <StatCard icon={<UserPlus className="h-5 w-5" />} label="New (30 days)" value={data.newCustomers} />
-        <StatCard icon={<UserCheck className="h-5 w-5" />} label="Active" value={data.activeCustomers} />
-        <StatCard icon={<Award className="h-5 w-5" />} label="VIP" value={data.vipCustomers} />
-        <StatCard icon={<Cake className="h-5 w-5" />} label="Birthdays This Month" value={data.birthdayCount} />
-        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Avg Visits/Customer" value={data.averageVisitsPerCustomer} />
-        <StatCard icon={<Calendar className="h-5 w-5" />} label="Total Visits" value={data.totalVisits} />
-        <StatCard icon={<UserPlus className="h-5 w-5" />} label="Growth Rate" value={`${data.customerGrowth}%`} />
+        <StatCard icon={<Users className="h-5 w-5" />} label={t("Total Customers")} value={data.totalCustomers} href="/customers" />
+        <StatCard icon={<UserPlus className="h-5 w-5" />} label={t("New (30 days)")} value={data.newCustomers} />
+        <StatCard icon={<UserCheck className="h-5 w-5" />} label={t("Active")} value={data.activeCustomers} />
+        <StatCard icon={<Award className="h-5 w-5" />} label={t("VIP")} value={data.vipCustomers} />
+        <StatCard icon={<Cake className="h-5 w-5" />} label={t("Birthdays This Month")} value={data.birthdayCount} />
+        <StatCard icon={<TrendingUp className="h-5 w-5" />} label={t("Avg Visits/Customer")} value={data.averageVisitsPerCustomer} />
+        <StatCard icon={<Calendar className="h-5 w-5" />} label={t("Total Visits")} value={data.totalVisits} />
+        <StatCard icon={<UserPlus className="h-5 w-5" />} label={t("Growth Rate")} value={`${data.customerGrowth}%`} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardWidget title="Recent Registrations">
+        <DashboardWidget title={t("Recent Registrations")}>
           <div className="space-y-3">
             {data.recentRegistrations.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No recent registrations</p>
@@ -110,7 +111,7 @@ export function CustomerDashboardContent({ data, isLoading, isError, error, onRe
           </div>
         </DashboardWidget>
 
-        <DashboardWidget title="Birthdays This Month">
+        <DashboardWidget title={t("Birthdays This Month")}>
           <div className="space-y-3">
             {data.birthdays.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No birthdays this month</p>

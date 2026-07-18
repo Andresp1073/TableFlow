@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState, useMemo } from 'react';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
@@ -35,29 +36,29 @@ export default function PermissionsViewerPage() {
       .filter((g) => g.permissions.length > 0);
   }, [groups, search]);
 
-  if (isLoading) return <LoadingState message="Loading permissions..." />;
-  if (error) return <ErrorState message="Failed to load permissions" onRetry={() => refetch()} />;
+  if (isLoading) return <LoadingState message={t("Loading permissions...")} />;
+  if (error) return <ErrorState message={t("Failed to load permissions")} onRetry={() => refetch()} />;
 
   return (
     <AdminPageLayout
-      title="Permissions Viewer"
-      description="Browse all platform permissions"
+      title={t("Permissions Viewer")}
+      description={t("Browse all platform permissions")}
     >
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Permissions' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Permissions') },
         ]}
       />
 
       <div className="relative max-w-sm mb-6">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search permissions..."
+          placeholder={t("Search permissions...")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
-          aria-label="Search permissions"
+          aria-label={t("Search permissions")}
         />
       </div>
 

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState, useCallback } from 'react';
 import type { KitchenTicket, KitchenStationInfo, KitchenStats } from '@/lib/order-types';
@@ -51,7 +52,7 @@ export function KdsDashboard({
         <KdsHeader title={title} />
         <div className="flex items-center justify-center min-h-[60vh]">
           <ErrorState
-            title="Failed to load orders"
+            title={t("Failed to load orders")}
             message={error?.message ?? 'Unable to connect to the kitchen server.'}
             onRetry={onRetry}
           />
@@ -65,7 +66,7 @@ export function KdsDashboard({
       <KdsLayout>
         <KdsHeader title={title} />
         <div className="flex items-center justify-center min-h-[60vh]">
-          <LoadingState message="Loading orders..." size="lg" />
+          <LoadingState message={t("Loading orders...")} size="lg" />
         </div>
       </KdsLayout>
     );
@@ -97,12 +98,12 @@ export function KdsDashboard({
         )}
       </KdsHeader>
 
-      <main className="p-4" role="main" aria-label="Kitchen orders">
+      <main className="p-4" role="main" aria-label={t("Kitchen orders")}>
         {filteredTickets.length === 0 ? (
           <div className="flex items-center justify-center min-h-[60vh]">
             <EmptyState
               icon={<ChefHat className="h-12 w-12" />}
-              title="No active orders"
+              title={t("No active orders")}
               description={
                 selectedStationId
                   ? 'This station has no orders. All caught up!'

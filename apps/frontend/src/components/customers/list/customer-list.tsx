@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
@@ -26,7 +27,7 @@ export function CustomerList({ data, loading, error, onArchive, onRestore }: Cus
   const columns: ColumnDef<Customer>[] = [
     {
       accessorKey: 'firstName',
-      header: 'Name',
+      header: t('Name'),
       cell: ({ row }) => (
         <button
           onClick={() => router.push(`/customers/${row.original.id}`)}
@@ -38,17 +39,17 @@ export function CustomerList({ data, loading, error, onArchive, onRestore }: Cus
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: t('Email'),
       cell: ({ row }) => <span className="text-sm">{row.original.email ?? '—'}</span>,
     },
     {
       accessorKey: 'phone',
-      header: 'Phone',
+      header: t('Phone'),
       cell: ({ row }) => <span className="text-sm">{row.original.phone ?? '—'}</span>,
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: t('Status'),
       cell: ({ row }) => (
         <Badge variant={getCustomerStatusColor(row.original.status as CustomerStatus)}>
           {row.original.status.charAt(0).toUpperCase() + row.original.status.slice(1)}
@@ -62,7 +63,7 @@ export function CustomerList({ data, loading, error, onArchive, onRestore }: Cus
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label="Actions">
+              <Button variant="ghost" size="icon-sm" aria-label={t("Actions")}>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -94,7 +95,7 @@ export function CustomerList({ data, loading, error, onArchive, onRestore }: Cus
       loading={loading}
       error={error}
       searchable
-      emptyMessage="No customers found."
+      emptyMessage={t("No customers found.")}
     />
   );
 }

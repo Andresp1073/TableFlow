@@ -16,6 +16,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { ConfirmActionDialog } from '@/components/restaurants/confirm-action-dialog';
+import { t } from '@/lib/i18n';
 import {
   Dialog,
   DialogContent,
@@ -115,7 +116,7 @@ export function TableActions({
           onClick={() => router.push(`/restaurants/${restaurantId}/tables/${table.id}/edit`)}
         >
           <Edit className="h-3.5 w-3.5 mr-1.5" />
-          Edit
+          {t('Edit')}
         </Button>
 
         {!isArchived && availableStatusOptions.length > 0 && (
@@ -125,7 +126,7 @@ export function TableActions({
             onClick={() => setShowStatusDialog(true)}
           >
             <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
-            Change Status
+            {t('Change Status')}
           </Button>
         )}
 
@@ -136,13 +137,13 @@ export function TableActions({
             onClick={onViewOnFloorPlan}
           >
             <Eye className="h-3.5 w-3.5 mr-1.5" />
-            View on Floor Plan
+            {t('View on Floor Plan')}
           </Button>
         )}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon-sm" aria-label="More actions">
+            <Button variant="ghost" size="icon-sm" aria-label={t('More actions')}>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -150,12 +151,12 @@ export function TableActions({
             {!isArchived ? (
               <DropdownMenuItem onClick={() => setShowArchiveDialog(true)}>
                 <Archive className="h-4 w-4 mr-2" />
-                Archive
+                {t('Archive')}
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem disabled>
                 <RotateCcw className="h-4 w-4 mr-2" />
-                Restore
+                {t('Restore')}
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
@@ -163,7 +164,7 @@ export function TableActions({
               onClick={() => router.push(`/restaurants/${restaurantId}/tables/${table.id}/edit`)}
             >
               <Edit className="h-4 w-4 mr-2" />
-              Edit Details
+              {t('Edit Details')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -172,9 +173,9 @@ export function TableActions({
       <ConfirmActionDialog
         open={showArchiveDialog}
         onOpenChange={setShowArchiveDialog}
-        title="Archive Table"
-        description={`Are you sure you want to archive Table ${table.tableNumber}${table.name ? ` (${table.name})` : ''}? It will be removed from the floor plan.`}
-        confirmLabel="Archive"
+        title={t('Archive Table')}
+        description={t('Are you sure you want to archive Table {tableNumber}{suffix}? It will be removed from the floor plan.', { tableNumber: table.tableNumber, suffix: table.name ? ` (${table.name})` : '' })}
+        confirmLabel={t('Archive')}
         confirmVariant="danger"
         loading={archiveMutation.isPending}
         onConfirm={handleArchive}
@@ -183,17 +184,16 @@ export function TableActions({
       <Dialog open={showStatusDialog} onOpenChange={setShowStatusDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Change Table Status</DialogTitle>
+            <DialogTitle>{t('Change Table Status')}</DialogTitle>
             <DialogDescription>
-              Change the status of Table {table.tableNumber} from{' '}
-              {TABLE_STATUS_LABELS[table.status]} to:
+              {t('Change the status of Table {tableNumber} from {currentStatus} to:', { tableNumber: table.tableNumber, currentStatus: TABLE_STATUS_LABELS[table.status] })}
             </DialogDescription>
           </DialogHeader>
 
           <div className="py-4">
             <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-              <SelectTrigger aria-label="New status">
-                <SelectValue placeholder="Select new status" />
+              <SelectTrigger aria-label={t('New status')}>
+                <SelectValue placeholder={t('Select new status')} />
               </SelectTrigger>
               <SelectContent>
                 {availableStatusOptions.map((opt) => (
@@ -207,10 +207,10 @@ export function TableActions({
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowStatusDialog(false)} disabled={statusMutation.isPending}>
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button onClick={handleStatusChange} loading={statusMutation.isPending} disabled={!selectedStatus}>
-              {statusMutation.isPending ? 'Changing...' : 'Change Status'}
+              {statusMutation.isPending ? t('Changing...') : t('Change Status')}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
@@ -25,7 +26,7 @@ export function PurchaseOrderList({ data, loading, error, onSubmit, onApprove, o
   const columns: ColumnDef<PurchaseOrder>[] = [
     {
       accessorKey: 'id',
-      header: 'Order #',
+      header: t('Order #'),
       cell: ({ row }) => (
         <button
           onClick={() => router.push(`/inventory/purchase-orders/${row.original.id}`)}
@@ -37,7 +38,7 @@ export function PurchaseOrderList({ data, loading, error, onSubmit, onApprove, o
     },
     {
       accessorKey: 'supplierName',
-      header: 'Supplier',
+      header: t('Supplier'),
       cell: ({ row }) => (
         <button onClick={() => router.push(`/inventory/purchase-orders/${row.original.id}`)} className="font-medium hover:underline text-left">
           {row.original.supplierName}
@@ -46,26 +47,26 @@ export function PurchaseOrderList({ data, loading, error, onSubmit, onApprove, o
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: t('Status'),
       cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
     {
       accessorKey: 'itemCount',
-      header: 'Items',
+      header: t('Items'),
     },
     {
       accessorKey: 'totalAmount',
-      header: 'Total',
+      header: t('Total'),
       cell: ({ row }) => formatCurrency(row.original.totalAmount),
     },
     {
       accessorKey: 'receivedCount',
-      header: 'Received',
+      header: t('Received'),
       cell: ({ row }) => `${row.original.receivedCount}/${row.original.itemCount}`,
     },
     {
       accessorKey: 'expectedDeliveryAt',
-      header: 'Expected Delivery',
+      header: t('Expected Delivery'),
       cell: ({ row }) => row.original.expectedDeliveryAt ? new Date(row.original.expectedDeliveryAt).toLocaleDateString() : '—',
     },
     {
@@ -105,7 +106,7 @@ export function PurchaseOrderList({ data, loading, error, onSubmit, onApprove, o
       loading={loading}
       error={error}
       searchable
-      emptyMessage="No purchase orders found."
+      emptyMessage={t("No purchase orders found.")}
     />
   );
 }

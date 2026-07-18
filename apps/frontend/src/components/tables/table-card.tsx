@@ -4,6 +4,7 @@ import { useCallback, useRef } from 'react';
 import type { RestaurantTable, TableShape } from '@/lib/table-types';
 import { TABLE_STATUS_COLORS, TABLE_STATUS_LABELS } from '@/lib/table-types';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface TableCardProps {
   table: RestaurantTable;
@@ -149,7 +150,7 @@ export function TableCard({
       }}
       role="button"
       tabIndex={0}
-      aria-label={`Table ${table.tableNumber}, ${TABLE_STATUS_LABELS[table.status]}, capacity ${capacityDisplay}`}
+      aria-label={t('Table {tableNumber}, {status}, capacity {capacity}', { tableNumber: table.tableNumber, status: TABLE_STATUS_LABELS[table.status], capacity: capacityDisplay })}
       data-selected={isSelected ? 'true' : 'false'}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {

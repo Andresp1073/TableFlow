@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -17,10 +18,10 @@ export default function NewCustomerPage() {
   const handleSubmit = (data: CreateCustomerInput) => {
     createCustomer.mutate({ restaurantId, data }, {
       onSuccess: (result) => {
-        toast.success('Customer created');
+        toast.success(t("Customer created"));
         router.push(`/customers/${result.id}`);
       },
-      onError: () => toast.error('Failed to create customer'),
+      onError: () => toast.error(t("Failed to create customer")),
     });
   };
 

@@ -4,6 +4,7 @@ import { DashboardWidget } from '@/components/dashboard/dashboard-widget';
 import { ChefHat, Clock, CookingPot, UtensilsCrossed, ListChecks } from 'lucide-react';
 import type { KitchenStatusData } from '@/lib/dashboard-types';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface KitchenStatusWidgetProps {
   data?: KitchenStatusData;
@@ -15,21 +16,21 @@ interface KitchenStatusWidgetProps {
 }
 
 const STATUS_ITEMS = [
-  { key: 'pending' as const, label: 'Pending', icon: Clock, color: 'text-warning' },
-  { key: 'preparing' as const, label: 'Preparing', icon: CookingPot, color: 'text-primary' },
-  { key: 'ready' as const, label: 'Ready', icon: UtensilsCrossed, color: 'text-success' },
-  { key: 'completed' as const, label: 'Completed', icon: ListChecks, color: 'text-muted-foreground' },
+  { key: 'pending' as const, label: t('Pending'), icon: Clock, color: 'text-warning' },
+  { key: 'preparing' as const, label: t('Preparing'), icon: CookingPot, color: 'text-primary' },
+  { key: 'ready' as const, label: t('Ready'), icon: UtensilsCrossed, color: 'text-success' },
+  { key: 'completed' as const, label: t('Completed'), icon: ListChecks, color: 'text-muted-foreground' },
 ];
 
 function KitchenStatusWidget({ data, isLoading, isError, error, onRefresh, onRetry }: KitchenStatusWidgetProps) {
   return (
     <DashboardWidget
-      title="Kitchen Status"
+      title={t('Kitchen Status')}
       isLoading={isLoading}
       isError={isError}
       isEmpty={!data || data.totalOrders === 0}
       error={error}
-      emptyMessage="Kitchen tracking coming soon"
+      emptyMessage={t('Kitchen tracking coming soon')}
       onRefresh={onRefresh}
       onRetry={onRetry}
     >
@@ -38,7 +39,7 @@ function KitchenStatusWidget({ data, isLoading, isError, error, onRefresh, onRet
           <div className="flex items-baseline gap-2">
             <ChefHat className="h-5 w-5 text-muted-foreground" />
             <span className="text-3xl font-bold">{data.totalOrders}</span>
-            <span className="text-xs text-muted-foreground">total orders</span>
+            <span className="text-xs text-muted-foreground">{t('total orders')}</span>
           </div>
           <div className="space-y-1.5">
             {STATUS_ITEMS.map(({ key, label, icon: Icon, color }) => (

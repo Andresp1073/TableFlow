@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -52,11 +53,11 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting }: P
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="name">Name *</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Product name" />
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder={t("Product name")} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="sku">SKU</Label>
-              <Input id="sku" value={sku} onChange={(e) => setSku(e.target.value)} placeholder="Optional SKU" />
+              <Input id="sku" value={sku} onChange={(e) => setSku(e.target.value)} placeholder={t("Optional SKU")} />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="category">Category</Label>
@@ -86,7 +87,7 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting }: P
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="shelfLife">Shelf Life (days)</Label>
-              <Input id="shelfLife" type="number" min="1" value={shelfLifeDays ?? ''} onChange={(e) => setShelfLifeDays(e.target.value ? Number(e.target.value) : undefined)} placeholder="Optional" />
+              <Input id="shelfLife" type="number" min="1" value={shelfLifeDays ?? ''} onChange={(e) => setShelfLifeDays(e.target.value ? Number(e.target.value) : undefined)} placeholder={t("Optional")} />
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -95,7 +96,7 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting }: P
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="storage">Storage Instructions</Label>
-            <Textarea id="storage" value={storageInstructions} onChange={(e) => setStorageInstructions(e.target.value)} placeholder="Optional storage notes" />
+            <Textarea id="storage" value={storageInstructions} onChange={(e) => setStorageInstructions(e.target.value)} placeholder={t("Optional storage notes")} />
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>

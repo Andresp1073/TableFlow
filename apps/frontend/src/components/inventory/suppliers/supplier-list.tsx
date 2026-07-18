@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
@@ -18,7 +19,7 @@ export function SupplierList({ data, loading, error }: SupplierListProps) {
   const columns: ColumnDef<Supplier>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: t('Name'),
       cell: ({ row }) => (
         <button
           onClick={() => router.push(`/inventory/suppliers/${row.original.id}`)}
@@ -30,22 +31,22 @@ export function SupplierList({ data, loading, error }: SupplierListProps) {
     },
     {
       accessorKey: 'contactName',
-      header: 'Contact',
+      header: t('Contact'),
       cell: ({ row }) => row.original.contactName ?? '—',
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: t('Email'),
       cell: ({ row }) => row.original.email ?? '—',
     },
     {
       accessorKey: 'phone',
-      header: 'Phone',
+      header: t('Phone'),
       cell: ({ row }) => row.original.phone ?? '—',
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: t('Status'),
       cell: ({ row }) => (
         <Badge variant={row.original.status === 'Active' ? 'success' : row.original.status === 'Inactive' ? 'secondary' : 'danger'}>
           {row.original.status}
@@ -54,12 +55,12 @@ export function SupplierList({ data, loading, error }: SupplierListProps) {
     },
     {
       accessorKey: 'leadTimeDays',
-      header: 'Lead Time',
+      header: t('Lead Time'),
       cell: ({ row }) => `${row.original.leadTimeDays} days`,
     },
     {
       accessorKey: 'productCount',
-      header: 'Products',
+      header: t('Products'),
     },
   ];
 
@@ -70,7 +71,7 @@ export function SupplierList({ data, loading, error }: SupplierListProps) {
       loading={loading}
       error={error}
       searchable
-      emptyMessage="No suppliers found."
+      emptyMessage={t("No suppliers found.")}
     />
   );
 }

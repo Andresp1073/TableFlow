@@ -6,6 +6,7 @@ import { useReservation, useUpdateReservation } from '@/hooks/use-reservations';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { ReservationForm } from '@/components/reservations/reservation-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
+import { t } from '@/lib/i18n';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -31,8 +32,8 @@ export default function EditReservationPage() {
 
   return (
     <PageWrapper
-      title={reservation ? `Edit: ${reservation.reservationNumber}` : 'Edit Reservation'}
-      description="Update reservation information"
+      title={reservation ? t('Edit: {reservationNumber}', { reservationNumber: reservation.reservationNumber }) : t('Edit Reservation')}
+      description={t('Update reservation information')}
       actions={
         <Button
           variant="outline"
@@ -40,7 +41,7 @@ export default function EditReservationPage() {
           onClick={() => router.push(`/reservations/${reservationId}`)}
         >
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Details
+          {t('Back to Details')}
         </Button>
       }
     >
@@ -54,7 +55,7 @@ export default function EditReservationPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load reservation: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load reservation:')} {(error as Error)?.message || t('An unexpected error occurred')}
           </AlertDescription>
         </Alert>
       ) : reservation ? (

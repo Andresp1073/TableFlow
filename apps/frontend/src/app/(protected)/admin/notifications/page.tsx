@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
@@ -6,37 +7,37 @@ import { Card } from '@/components/ui/card';
 import { Bell, Mail, MessageSquare, Smartphone } from 'lucide-react';
 
 const channels = [
-  { name: 'Email', icon: Mail, description: 'Configure SMTP settings and email templates', enabled: true },
-  { name: 'SMS', icon: Smartphone, description: 'Configure SMS provider and phone notifications', enabled: false },
-  { name: 'Push', icon: Bell, description: 'Configure push notification channels', enabled: false },
-  { name: 'In-App', icon: MessageSquare, description: 'Configure in-app notification display', enabled: true },
+  { name: t('Email'), icon: Mail, description: t('Configure SMTP settings and email templates'), enabled: true },
+  { name: t('SMS'), icon: Smartphone, description: t('Configure SMS provider and phone notifications'), enabled: false },
+  { name: t('Push'), icon: Bell, description: t('Configure push notification channels'), enabled: false },
+  { name: t('In-App'), icon: MessageSquare, description: t('Configure in-app notification display'), enabled: true },
 ];
 
 const templates = [
-  { name: 'Reservation Confirmation', channel: 'Email', status: 'Active' },
-  { name: 'Reservation Reminder', channel: 'Email', status: 'Active' },
-  { name: 'Reservation Cancellation', channel: 'Email', status: 'Active' },
-  { name: 'Password Reset', channel: 'Email', status: 'Active' },
-  { name: 'Account Verification', channel: 'Email', status: 'Active' },
-  { name: 'Welcome Email', channel: 'Email', status: 'Inactive' },
+  { name: t('Reservation Confirmation'), channel: 'Email', status: t('Active') },
+  { name: t('Reservation Reminder'), channel: 'Email', status: t('Active') },
+  { name: t('Reservation Cancellation'), channel: 'Email', status: t('Active') },
+  { name: t('Password Reset'), channel: 'Email', status: t('Active') },
+  { name: t('Account Verification'), channel: 'Email', status: t('Active') },
+  { name: t('Welcome Email'), channel: 'Email', status: t('Inactive') },
 ];
 
 export default function AdminNotificationsPage() {
   return (
     <AdminPageLayout
-      title="Notifications"
-      description="Manage notification channels and templates"
+      title={t("Notifications")}
+      description={t("Manage notification channels and templates")}
     >
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Notifications' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Notifications') },
         ]}
       />
 
       <div className="space-y-6">
         <div>
-          <h2 className="text-lg font-semibold mb-3">Channels</h2>
+          <h2 className="text-lg font-semibold mb-3">{t("Channels")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {channels.map((channel) => {
               const Icon = channel.icon;
@@ -64,14 +65,14 @@ export default function AdminNotificationsPage() {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-3">Templates</h2>
+          <h2 className="text-lg font-semibold mb-3">{t("Templates")}</h2>
           <div className="rounded-lg border">
             <table className="w-full">
               <thead>
                 <tr className="border-b bg-muted/50">
-                  <th className="text-left p-3 text-sm font-medium">Template Name</th>
-                  <th className="text-left p-3 text-sm font-medium">Channel</th>
-                  <th className="text-left p-3 text-sm font-medium">Status</th>
+                  <th className="text-left p-3 text-sm font-medium">{t("Template Name")}</th>
+                  <th className="text-left p-3 text-sm font-medium">{t("Channel")}</th>
+                  <th className="text-left p-3 text-sm font-medium">{t("Status")}</th>
                 </tr>
               </thead>
               <tbody>

@@ -7,6 +7,7 @@ import { RESERVATION_SOURCE_OPTIONS } from '@/lib/reservation-types';
 import { ReservationStatusBadge } from './reservation-status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { t } from '@/lib/i18n';
 import { cn } from '@/lib/cn';
 
 interface ReservationDetailViewProps {
@@ -53,7 +54,7 @@ export function ReservationDetailView({
       <Card className={cn('border-destructive/50', className)}>
         <CardContent className="pt-6">
           <div className="flex flex-col items-center justify-center py-8 text-center" role="alert">
-            <p className="text-sm text-destructive font-medium">Error loading reservation</p>
+            <p className="text-sm text-destructive font-medium">{t('Error loading reservation')}</p>
             <p className="text-xs text-muted-foreground mt-1">{error}</p>
           </div>
         </CardContent>
@@ -97,35 +98,35 @@ export function ReservationDetailView({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <DetailRow
             icon={<Calendar className="h-4 w-4" />}
-            label="Date"
+            label={t('Date')}
             value={formattedDate}
           />
           <DetailRow
             icon={<Clock className="h-4 w-4" />}
-            label="Time"
+            label={t('Time')}
             value={`${formattedStartTime} - ${formattedEndTime}`}
           />
           <DetailRow
             icon={<Users className="h-4 w-4" />}
-            label="Party Size"
-            value={`${reservation.partySize} ${reservation.partySize === 1 ? 'guest' : 'guests'}`}
+            label={t('Party Size')}
+            value={reservation.partySize === 1 ? t('{count} guest', { count: reservation.partySize }) : t('{count} guests', { count: reservation.partySize })}
           />
           <DetailRow
             icon={<Tag className="h-4 w-4" />}
-            label="Source"
+            label={t('Source')}
             value={getSourceLabel(reservation.source)}
           />
           {reservation.tableId && (
             <DetailRow
               icon={<span className="text-xs font-mono">T</span>}
-              label="Assigned Table"
+              label={t('Assigned Table')}
               value={reservation.tableId}
             />
           )}
           {reservation.customerId && (
             <DetailRow
               icon={<User className="h-4 w-4" />}
-              label="Customer ID"
+              label={t('Customer ID')}
               value={reservation.customerId}
             />
           )}
@@ -133,7 +134,7 @@ export function ReservationDetailView({
             <div className="sm:col-span-2">
               <DetailRow
                 icon={<MessageSquare className="h-4 w-4" />}
-                label="Special Requests"
+                label={t('Special Requests')}
                 value={reservation.specialRequests}
               />
             </div>
@@ -142,7 +143,7 @@ export function ReservationDetailView({
             <div className="sm:col-span-2">
               <DetailRow
                 icon={<FileText className="h-4 w-4" />}
-                label="Notes"
+                label={t('Notes')}
                 value={reservation.notes}
               />
             </div>

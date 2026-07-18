@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import Link from 'next/link';
 import { ShieldX } from 'lucide-react';
 import { Button } from '@/components/ui/button';

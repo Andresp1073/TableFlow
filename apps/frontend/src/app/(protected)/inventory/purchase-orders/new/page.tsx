@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -18,17 +19,17 @@ export default function NewPurchaseOrderPage() {
   const { data: suppliers, isLoading: suppliersLoading, isError: suppliersError, refetch: refetchSuppliers } = useSuppliers(restaurantId);
   const createPO = useCreatePurchaseOrder();
 
-  if (productsLoading || suppliersLoading) return <ContentArea><LoadingState message="Loading form data..." /></ContentArea>;
-  if (productsError) return <ContentArea><ErrorState message="Failed to load products" onRetry={() => refetchProducts()} /></ContentArea>;
-  if (suppliersError) return <ContentArea><ErrorState message="Failed to load suppliers" onRetry={() => refetchSuppliers()} /></ContentArea>;
+  if (productsLoading || suppliersLoading) return <ContentArea><LoadingState message={t("Loading form data...")} /></ContentArea>;
+  if (productsError) return <ContentArea><ErrorState message={t("Failed to load products")} onRetry={() => refetchProducts()} /></ContentArea>;
+  if (suppliersError) return <ContentArea><ErrorState message={t("Failed to load suppliers")} onRetry={() => refetchSuppliers()} /></ContentArea>;
 
   const handleSubmit = (data: { supplierId: string; supplierName: string; items: { ingredientId: string; ingredientName: string; quantity: number; unit: string; unitCost: number }[]; notes?: string; createdBy: string; expectedDeliveryAt?: string }) => {
     createPO.mutate({ restaurantId, data }, {
       onSuccess: () => {
-        toast.success('Purchase order created');
+        toast.success(t("Purchase order created"));
         router.push('/inventory/purchase-orders');
       },
-      onError: () => toast.error('Failed to create purchase order'),
+      onError: () => toast.error(t("Failed to create purchase order")),
     });
   };
 

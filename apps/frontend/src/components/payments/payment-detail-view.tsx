@@ -5,6 +5,7 @@ import {
   METHOD_TYPE_LABELS,
   formatCurrency,
 } from '@/lib/payment-types';
+import { t } from '@/lib/i18n';
 import { PaymentStatusBadge } from '@/components/payments/payment-status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -49,7 +50,7 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold">
-            Payment Transaction
+            {t('Payment Transaction')}
           </h2>
           <div className="flex items-center gap-2 mt-1">
             <span
@@ -70,15 +71,15 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
-              Payment Information
+              {t('Payment Information')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<DollarSign className="h-4 w-4" />} label="Amount" value={formatCurrency(payment.amount)} />
-            <DetailRow icon={<CheckCircle2 className="h-4 w-4" />} label="Captured Amount" value={payment.capturedAmount != null ? formatCurrency(payment.capturedAmount) : '—'} />
-            <DetailRow icon={<RefreshCw className="h-4 w-4" />} label="Refunded Amount" value={payment.refundedAmount > 0 ? formatCurrency(payment.refundedAmount) : '$0.00'} />
-            <DetailRow icon={<Receipt className="h-4 w-4" />} label="Method" value={methodLabel} />
-            <DetailRow icon={<CreditCard className="h-4 w-4" />} label="Provider" value={payment.providerId} />
+            <DetailRow icon={<DollarSign className="h-4 w-4" />} label={t('Amount')} value={formatCurrency(payment.amount)} />
+            <DetailRow icon={<CheckCircle2 className="h-4 w-4" />} label={t('Captured Amount')} value={payment.capturedAmount != null ? formatCurrency(payment.capturedAmount) : '—'} />
+            <DetailRow icon={<RefreshCw className="h-4 w-4" />} label={t('Refunded Amount')} value={payment.refundedAmount > 0 ? formatCurrency(payment.refundedAmount) : '$0.00'} />
+            <DetailRow icon={<Receipt className="h-4 w-4" />} label={t('Method')} value={methodLabel} />
+            <DetailRow icon={<CreditCard className="h-4 w-4" />} label={t('Provider')} value={payment.providerId} />
           </CardContent>
         </Card>
 
@@ -86,15 +87,15 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Fingerprint className="h-4 w-4" />
-              Transaction Details
+              {t('Transaction Details')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Hash className="h-4 w-4" />} label="Transaction ID" value={payment.id} />
-            <DetailRow icon={<FileText className="h-4 w-4" />} label="Intent ID" value={payment.intentId} />
-            <DetailRow icon={<Fingerprint className="h-4 w-4" />} label="Provider Reference" value={payment.providerReference} />
-            <DetailRow icon={<Ban className="h-4 w-4" />} label="Authorization Code" value={payment.authorizationCode} />
-            <DetailRow icon={<Building2 className="h-4 w-4" />} label="Currency" value={payment.currency} />
+            <DetailRow icon={<Hash className="h-4 w-4" />} label={t('Transaction ID')} value={payment.id} />
+            <DetailRow icon={<FileText className="h-4 w-4" />} label={t('Intent ID')} value={payment.intentId} />
+            <DetailRow icon={<Fingerprint className="h-4 w-4" />} label={t('Provider Reference')} value={payment.providerReference} />
+            <DetailRow icon={<Ban className="h-4 w-4" />} label={t('Authorization Code')} value={payment.authorizationCode} />
+            <DetailRow icon={<Building2 className="h-4 w-4" />} label={t('Currency')} value={payment.currency} />
           </CardContent>
         </Card>
 
@@ -102,17 +103,17 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              Timeline
+              {t('Timeline')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Created" value={new Date(payment.createdAt).toLocaleString()} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Updated" value={new Date(payment.updatedAt).toLocaleString()} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t('Created')} value={new Date(payment.createdAt).toLocaleString()} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t('Updated')} value={new Date(payment.updatedAt).toLocaleString()} />
             {payment.authorizedAt && (
-              <DetailRow icon={<CheckCircle2 className="h-4 w-4" />} label="Authorized At" value={new Date(payment.authorizedAt).toLocaleString()} />
+              <DetailRow icon={<CheckCircle2 className="h-4 w-4" />} label={t('Authorized At')} value={new Date(payment.authorizedAt).toLocaleString()} />
             )}
             {payment.capturedAt && (
-              <DetailRow icon={<CheckCircle2 className="h-4 w-4" />} label="Captured At" value={new Date(payment.capturedAt).toLocaleString()} />
+              <DetailRow icon={<CheckCircle2 className="h-4 w-4" />} label={t('Captured At')} value={new Date(payment.capturedAt).toLocaleString()} />
             )}
           </CardContent>
         </Card>
@@ -122,11 +123,11 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <AlertCircle className="h-4 w-4" />
-                Error Information
+                {t('Error Information')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <DetailRow icon={<AlertCircle className="h-4 w-4" />} label="Error" value={payment.errorMessage} />
+              <DetailRow icon={<AlertCircle className="h-4 w-4" />} label={t('Error')} value={payment.errorMessage} />
             </CardContent>
           </Card>
         )}
@@ -136,7 +137,7 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <RefreshCw className="h-4 w-4" />
-                Refund History ({payment.refunds.length})
+                {t('Refund History ({count})', { count: payment.refunds.length })}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -145,7 +146,7 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
                   <div key={refund.id} className="flex items-center justify-between border-b pb-2 last:border-0">
                     <div>
                       <p className="text-sm font-medium">{formatCurrency(refund.amount)}</p>
-                      <p className="text-xs text-muted-foreground">{refund.type === 'full' ? 'Full Refund' : 'Partial Refund'}</p>
+                      <p className="text-xs text-muted-foreground">{refund.type === 'full' ? t('Full Refund') : t('Partial Refund')}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground">{new Date(refund.createdAt).toLocaleDateString()}</p>

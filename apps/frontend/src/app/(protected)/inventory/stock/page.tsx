@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useStockSummary } from '@/hooks/use-inventory';
@@ -13,7 +14,7 @@ export default function StockPage() {
 
   return (
     <PageWrapper>
-      <PageHeader title="Stock" description="Current inventory stock levels across all products" />
+      <PageHeader title={t("Stock")} description={t("Current inventory stock levels across all products")} />
       <StockTable data={data ?? []} loading={isLoading} error={error?.message ?? null} />
     </PageWrapper>
   );

@@ -23,6 +23,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield, Ban, CheckCircle, Key } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 export default function UserDetailPage() {
   const params = useParams();
@@ -39,9 +40,9 @@ export default function UserDetailPage() {
   const activateMutation = useActivateUser();
   const resetPasswordMutation = useResetUserPassword();
 
-  if (isLoading) return <LoadingState message="Loading user..." />;
-  if (error) return <ErrorState message="Failed to load user" onRetry={() => refetch()} />;
-  if (!user) return <ErrorState message="User not found" />;
+  if (isLoading) return <LoadingState message={t('Loading user...')} />;
+  if (error) return <ErrorState message={t('Failed to load user')} onRetry={() => refetch()} />;
+  if (!user) return <ErrorState message={t('User not found')} />;
 
   const handleOpenRoles = () => {
     setSelectedRoles(user.userRoles.map((ur) => ur.roleId));
@@ -64,36 +65,36 @@ export default function UserDetailPage() {
     <AdminPageLayout title={`${user.firstName} ${user.lastName}`} description={user.email}>
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Users', href: '/admin/users' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Users'), href: '/admin/users' },
           { label: `${user.firstName} ${user.lastName}` },
         ]}
       />
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="p-6 space-y-4">
-          <h2 className="text-lg font-semibold">Account Details</h2>
+          <h2 className="text-lg font-semibold">{t('Account Details')}</h2>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Status</span>
+              <span className="text-muted-foreground">{t('Status')}</span>
               <UserStatusBadge user={user} />
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Verified</span>
+              <span className="text-muted-foreground">{t('Verified')}</span>
               <Badge variant={user.isVerified ? 'default' : 'secondary'}>
-                {user.isVerified ? 'Verified' : 'Unverified'}
+                {user.isVerified ? t('Verified') : t('Unverified')}
               </Badge>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Phone</span>
+              <span className="text-muted-foreground">{t('Phone')}</span>
               <span>{user.phone ?? '-'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Last Login</span>
-              <span>{user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : 'Never'}</span>
+              <span className="text-muted-foreground">{t('Last Login')}</span>
+              <span>{user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleString() : t('Never')}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Failed Attempts</span>
+              <span className="text-muted-foreground">{t('Failed Attempts')}</span>
               <span>{user.failedLoginAttempts}</span>
             </div>
             {user.lockReason && (

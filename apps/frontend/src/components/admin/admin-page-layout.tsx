@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { ReactNode } from 'react';
 import Link from 'next/link';
@@ -7,14 +8,14 @@ import { Shield, Users, Key, ShieldCheck, Building2, FileSearch, Bell, Settings 
 import { cn } from '@/lib/cn';
 
 const adminNavItems = [
-  { label: 'Dashboard', href: '/admin', icon: Shield },
-  { label: 'Users', href: '/admin/users', icon: Users },
-  { label: 'Roles', href: '/admin/roles', icon: Key },
-  { label: 'Permissions', href: '/admin/permissions', icon: ShieldCheck },
-  { label: 'Restaurants', href: '/admin/restaurants', icon: Building2 },
-  { label: 'Audit', href: '/admin/audit', icon: FileSearch },
-  { label: 'Notifications', href: '/admin/notifications', icon: Bell },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
+  { label: t('Dashboard'), href: '/admin', icon: Shield },
+  { label: t('Users'), href: '/admin/users', icon: Users },
+  { label: t('Roles'), href: '/admin/roles', icon: Key },
+  { label: t('Permissions'), href: '/admin/permissions', icon: ShieldCheck },
+  { label: t('Restaurants'), href: '/admin/restaurants', icon: Building2 },
+  { label: t('Audit'), href: '/admin/audit', icon: FileSearch },
+  { label: t('Notifications'), href: '/admin/notifications', icon: Bell },
+  { label: t('Settings'), href: '/admin/settings', icon: Settings },
 ];
 
 interface AdminPageLayoutProps {
@@ -43,14 +44,14 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 border-r bg-card shrink-0 hidden lg:block" aria-label="Admin navigation">
+    <aside className="w-56 border-r bg-card shrink-0 hidden lg:block" aria-label={t("Admin navigation")}>
       <div className="p-4 border-b">
         <Link href="/admin" className="flex items-center gap-2 font-semibold text-sm">
           <Shield className="h-4 w-4" />
           Admin Panel
         </Link>
       </div>
-      <nav className="p-2 space-y-1" aria-label="Admin sections">
+      <nav className="p-2 space-y-1" aria-label={t("Admin sections")}>
         {adminNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');

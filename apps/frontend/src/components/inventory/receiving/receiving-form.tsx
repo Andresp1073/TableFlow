@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -92,7 +93,7 @@ export function ReceivingForm({ products, initialOrderId, onSubmit, onCancel, is
 
           <div className="space-y-1.5">
             <Label>Notes</Label>
-            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Receiving notes (optional)" />
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t("Receiving notes (optional)")} />
           </div>
 
           <div className="space-y-3">
@@ -106,7 +107,7 @@ export function ReceivingForm({ products, initialOrderId, onSubmit, onCancel, is
                   <div className="space-y-1">
                     <Label className="text-xs">Product</Label>
                     <Select value={item.ingredientId} onValueChange={(v) => updateItem(i, 'ingredientId', v)}>
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectTrigger><SelectValue placeholder={t("Select")} /></SelectTrigger>
                       <SelectContent>
                         {products.filter((p) => p.isActive).map((p) => (
                           <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
@@ -124,11 +125,11 @@ export function ReceivingForm({ products, initialOrderId, onSubmit, onCancel, is
                   </div>
                   <div className="space-y-1">
                     <Label className="text-xs">Batch Code</Label>
-                    <Input value={item.batchCode} onChange={(e) => updateItem(i, 'batchCode', e.target.value)} placeholder="Optional" />
+                    <Input value={item.batchCode} onChange={(e) => updateItem(i, 'batchCode', e.target.value)} placeholder={t("Optional")} />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-xs">Location</Label>
-                    <Input value={item.location} onChange={(e) => updateItem(i, 'location', e.target.value)} placeholder="e.g. Fridge A" />
+                    <Input value={item.location} onChange={(e) => updateItem(i, 'location', e.target.value)} placeholder={t("e.g. Fridge A")} />
                   </div>
                   <div className="space-y-1">
                     <Label className="text-xs">Expiry Date</Label>

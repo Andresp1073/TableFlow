@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState, useEffect } from 'react';
 import { Clock, AlertTriangle } from 'lucide-react';

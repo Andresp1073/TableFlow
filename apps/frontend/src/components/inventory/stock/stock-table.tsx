@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
@@ -16,16 +17,16 @@ export function StockTable({ data, loading, error }: StockTableProps) {
   const columns: ColumnDef<StockSummary>[] = [
     {
       accessorKey: 'name',
-      header: 'Product',
+      header: t('Product'),
     },
     {
       accessorKey: 'category',
-      header: 'Category',
+      header: t('Category'),
       cell: ({ row }) => <Badge variant="secondary">{row.original.category}</Badge>,
     },
     {
       accessorKey: 'currentStock',
-      header: 'Current',
+      header: t('Current'),
       cell: ({ row }) => (
         <span className={row.original.isLowStock ? 'text-destructive font-medium' : ''}>
           {row.original.currentStock}
@@ -34,11 +35,11 @@ export function StockTable({ data, loading, error }: StockTableProps) {
     },
     {
       accessorKey: 'reservedStock',
-      header: 'Reserved',
+      header: t('Reserved'),
     },
     {
       accessorKey: 'availableStock',
-      header: 'Available',
+      header: t('Available'),
       cell: ({ row }) => (
         <span className={row.original.availableStock <= 0 ? 'text-destructive font-medium' : 'text-success font-medium'}>
           {row.original.availableStock}
@@ -47,17 +48,17 @@ export function StockTable({ data, loading, error }: StockTableProps) {
     },
     {
       accessorKey: 'minimumStock',
-      header: 'Min',
+      header: t('Min'),
       cell: ({ row }) => <span className="text-muted-foreground">{row.original.minimumStock}</span>,
     },
     {
       accessorKey: 'maximumStock',
-      header: 'Max',
+      header: t('Max'),
       cell: ({ row }) => <span className="text-muted-foreground">{row.original.maximumStock}</span>,
     },
     {
       id: 'status',
-      header: 'Status',
+      header: t('Status'),
       cell: ({ row }) => {
         if (row.original.isLowStock) return <Badge variant="danger">Low Stock</Badge>;
         if (row.original.isOverstock) return <Badge variant="warning">Overstock</Badge>;
@@ -66,7 +67,7 @@ export function StockTable({ data, loading, error }: StockTableProps) {
     },
     {
       accessorKey: 'totalValue',
-      header: 'Total Value',
+      header: t('Total Value'),
       cell: ({ row }) => formatCurrency(row.original.totalValue),
     },
   ];
@@ -78,7 +79,7 @@ export function StockTable({ data, loading, error }: StockTableProps) {
       loading={loading}
       error={error}
       searchable
-      emptyMessage="No stock data available."
+      emptyMessage={t("No stock data available.")}
     />
   );
 }

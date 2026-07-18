@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { ShoppingCart, Clock, ChefHat, CheckCircle2, DollarSign } from 'lucide-react';
 import { ErrorState } from '@/components/ui/error-state';
@@ -34,7 +35,7 @@ export function OrderDashboardContent({
   if (isError) {
     return (
       <ErrorState
-        title="Failed to load order dashboard"
+        title={t("Failed to load order dashboard")}
         message={error?.message ?? 'An unexpected error occurred'}
         onRetry={onRetry}
       />
@@ -54,37 +55,37 @@ export function OrderDashboardContent({
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard
-        title="Active Orders"
+        title={t("Active Orders")}
         value={dashboard.active}
         icon={<ChefHat className="h-4 w-4" />}
         description={`${dashboard.submitted} submitted, ${dashboard.inProgress} in progress`}
       />
       <StatCard
-        title="Submitted"
+        title={t("Submitted")}
         value={dashboard.submitted}
         icon={<Clock className="h-4 w-4" />}
-        description="Awaiting preparation"
+        description={t("Awaiting preparation")}
       />
       <StatCard
-        title="In Progress"
+        title={t("In Progress")}
         value={dashboard.inProgress}
         icon={<ShoppingCart className="h-4 w-4" />}
-        description="Being prepared"
+        description={t("Being prepared")}
       />
       <StatCard
-        title="Ready"
+        title={t("Ready")}
         value={dashboard.ready}
         icon={<CheckCircle2 className="h-4 w-4" />}
-        description="Ready for pickup"
+        description={t("Ready for pickup")}
       />
       <StatCard
-        title="Completed Today"
+        title={t("Completed Today")}
         value={dashboard.completed}
         icon={<CheckCircle2 className="h-4 w-4" />}
         description={`${dashboard.cancelled} cancelled`}
       />
       <StatCard
-        title="Today's Revenue"
+        title={t("Today's Revenue")}
         value={formatCurrency(dashboard.todayRevenue)}
         icon={<DollarSign className="h-4 w-4" />}
         description={`${dashboard.total} total orders`}

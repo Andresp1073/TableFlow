@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
@@ -13,13 +14,13 @@ import { Globe, Palette, Bell, Shield, DollarSign } from 'lucide-react';
 export default function AdminSettingsPage() {
   return (
     <AdminPageLayout
-      title="System Preferences"
-      description="Configure platform-wide settings"
+      title={t("System Preferences")}
+      description={t("Configure platform-wide settings")}
     >
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Settings' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Settings') },
         ]}
       />
 
@@ -27,13 +28,13 @@ export default function AdminSettingsPage() {
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <Globe className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Localization</h2>
+            <h2 className="text-lg font-semibold">{t("Localization")}</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
             <div className="space-y-2">
               <Label>Default Locale</Label>
               <Select defaultValue="en-US">
-                <SelectTrigger aria-label="Default Locale">
+                <SelectTrigger aria-label={t("Default Locale")}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -45,9 +46,9 @@ export default function AdminSettingsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Timezone</Label>
+              <Label>{t('Timezone')}</Label>
               <Select defaultValue="UTC">
-                <SelectTrigger aria-label="Timezone">
+                <SelectTrigger aria-label={t("Timezone")}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -60,9 +61,9 @@ export default function AdminSettingsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Date Format</Label>
+              <Label>{t('Date Format')}</Label>
               <Select defaultValue="MM/DD/YYYY">
-                <SelectTrigger aria-label="Date Format">
+                <SelectTrigger aria-label={t("Date Format")}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -73,9 +74,9 @@ export default function AdminSettingsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Time Format</Label>
+              <Label>{t('Time Format')}</Label>
               <Select defaultValue="12h">
-                <SelectTrigger aria-label="Time Format">
+                <SelectTrigger aria-label={t("Time Format")}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -90,19 +91,19 @@ export default function AdminSettingsPage() {
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <Palette className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Appearance</h2>
+            <h2 className="text-lg font-semibold">{t("Appearance")}</h2>
           </div>
           <div className="space-y-4 max-w-lg">
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="darkMode">Dark Mode</Label>
+                <Label htmlFor="darkMode">{t("Dark Mode")}</Label>
                 <p className="text-sm text-muted-foreground">Enable dark mode across the platform</p>
               </div>
               <Switch id="darkMode" defaultChecked />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="compactMode">Compact Mode</Label>
+                <Label htmlFor="compactMode">{t("Compact Mode")}</Label>
                 <p className="text-sm text-muted-foreground">Use compact layout for data-dense views</p>
               </div>
               <Switch id="compactMode" />
@@ -113,7 +114,7 @@ export default function AdminSettingsPage() {
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <Shield className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Security</h2>
+            <h2 className="text-lg font-semibold">{t("Security")}</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
             <div className="space-y-2">
@@ -142,7 +143,7 @@ export default function AdminSettingsPage() {
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <Bell className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Notifications</h2>
+            <h2 className="text-lg font-semibold">{t("Notifications")}</h2>
           </div>
           <div className="space-y-4 max-w-lg">
             <div className="flex items-center justify-between">
@@ -165,13 +166,13 @@ export default function AdminSettingsPage() {
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <DollarSign className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Billing & Currency</h2>
+            <h2 className="text-lg font-semibold">{t("Billing & Currency")}</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
             <div className="space-y-2">
               <Label>Default Currency</Label>
               <Select defaultValue="USD">
-                <SelectTrigger aria-label="Default Currency">
+                <SelectTrigger aria-label={t("Default Currency")}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -190,7 +191,7 @@ export default function AdminSettingsPage() {
         </Card>
 
         <div className="flex justify-end">
-          <Button>Save Settings</Button>
+          <Button>{t("Save Settings")}</Button>
         </div>
       </div>
     </AdminPageLayout>

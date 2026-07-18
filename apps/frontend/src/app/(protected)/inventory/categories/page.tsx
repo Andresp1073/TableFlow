@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useCategories } from '@/hooks/use-inventory';
@@ -13,7 +14,7 @@ export default function CategoriesPage() {
 
   return (
     <PageWrapper>
-      <PageHeader title="Categories" description="Product categories for inventory organization" />
+      <PageHeader title={t("Categories")} description={t("Product categories for inventory organization")} />
       <CategoryList data={data} isLoading={isLoading} isError={isError} />
     </PageWrapper>
   );

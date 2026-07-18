@@ -11,6 +11,7 @@ import type { ReservationSummary, ReservationStatus, CalendarViewType } from '@/
 import { RESERVATION_STATUS_LABELS } from '@/lib/reservation-types';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { t } from '@/lib/i18n';
 import { cn } from '@/lib/cn';
 
 const STATUS_EVENT_COLORS: Record<ReservationStatus, string> = {
@@ -137,7 +138,7 @@ export function ReservationCalendar({
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center" role="alert">
-        <p className="text-sm text-destructive font-medium">Error loading calendar</p>
+        <p className="text-sm text-destructive font-medium">{t('Error loading calendar')}</p>
         <p className="text-xs text-muted-foreground mt-1">{error}</p>
       </div>
     );
@@ -161,16 +162,16 @@ export function ReservationCalendar({
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handleNavToday}>
-            Today
+            {t('Today')}
           </Button>
-          <Button variant="outline" size="icon-sm" onClick={handleNavPrev} aria-label="Previous">
+          <Button variant="outline" size="icon-sm" onClick={handleNavPrev} aria-label={t('Previous')}>
             &lt;
           </Button>
-          <Button variant="outline" size="icon-sm" onClick={handleNavNext} aria-label="Next">
+          <Button variant="outline" size="icon-sm" onClick={handleNavNext} aria-label={t('Next')}>
             &gt;
           </Button>
         </div>
-        <div className="flex items-center gap-1" role="tablist" aria-label="Calendar view">
+        <div className="flex items-center gap-1" role="tablist" aria-label={t('Calendar view')}>
           {(['day', 'week', 'month', 'timeline', 'agenda'] as CalendarViewType[]).map((v) => (
             <Button
               key={v}
@@ -179,7 +180,7 @@ export function ReservationCalendar({
               onClick={() => handleViewChange(v)}
               role="tab"
               aria-selected={view === v}
-              aria-label={`${v} view`}
+              aria-label={t('{view} view', { view: v })}
             >
               {v.charAt(0).toUpperCase() + v.slice(1)}
             </Button>
@@ -187,7 +188,7 @@ export function ReservationCalendar({
         </div>
       </div>
 
-      <div className="rounded-lg border overflow-hidden" aria-label="Reservation calendar">
+      <div className="rounded-lg border overflow-hidden" aria-label={t('Reservation calendar')}>
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
@@ -214,7 +215,7 @@ export function ReservationCalendar({
         />
       </div>
 
-      <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap" aria-label="Status legend">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap" aria-label={t('Status legend')}>
         {(Object.entries(RESERVATION_STATUS_LABELS) as [ReservationStatus, string][]).map(
           ([status, label]) => (
             <span key={status} className="inline-flex items-center gap-1.5">

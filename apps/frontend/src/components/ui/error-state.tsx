@@ -1,6 +1,7 @@
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 
 interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -9,8 +10,8 @@ interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function ErrorState({
-  title = 'Something went wrong',
-  message = 'An unexpected error occurred. Please try again.',
+  title = t('Something went wrong'),
+  message = t('An unexpected error occurred. Please try again.'),
   onRetry,
   className,
   ...props
@@ -27,7 +28,7 @@ function ErrorState({
       {onRetry && (
         <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
           <RefreshCw className="mr-2 h-3.5 w-3.5" />
-          Try again
+          {t('Try again')}
         </Button>
       )}
     </div>

@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Pagination } from '@/components/ui/pagination';
 import { usePagination } from '@/hooks/use-pagination';
 import { Skeleton } from '@/components/ui/skeleton';
+import { t } from '@/lib/i18n';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,7 +43,7 @@ function DataTable<TData extends { id?: string | number }, TValue>({
   searchKey: _searchKey,
   pageSize = 20,
   onRowClick,
-  emptyMessage = 'No results found.',
+  emptyMessage = t('No results found.'),
   className,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -82,7 +83,7 @@ function DataTable<TData extends { id?: string | number }, TValue>({
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center" role="alert">
-        <p className="text-sm text-destructive font-medium">Error loading data</p>
+        <p className="text-sm text-destructive font-medium">{t('Error loading data')}</p>
         <p className="text-xs text-muted-foreground mt-1">{error}</p>
       </div>
     );
@@ -93,11 +94,11 @@ function DataTable<TData extends { id?: string | number }, TValue>({
       {searchable && (
         <div className="flex items-center justify-between">
           <Input
-            placeholder="Search..."
+            placeholder={t('Search...')}
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="max-w-xs"
-            aria-label="Search table"
+            aria-label={t('Search table')}
           />
         </div>
       )}

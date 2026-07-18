@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useInventoryDashboard } from '@/hooks/use-inventory';
@@ -11,7 +12,7 @@ export default function InventoryDashboardPage() {
   const { data, isLoading, isError, error, refetch } = useInventoryDashboard(restaurantId);
 
   return (
-    <PageWrapper title="Inventory" description="Manage inventory stock, suppliers, and orders.">
+    <PageWrapper title={t("Inventory")} description={t("Manage inventory stock, suppliers, and orders.")}>
       <InventoryDashboardContent
         data={data}
         isLoading={isLoading}

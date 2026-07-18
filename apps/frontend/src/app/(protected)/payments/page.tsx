@@ -16,6 +16,7 @@ import { usePaymentDashboard, usePayments } from '@/hooks/use-payments';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import type { PaymentTransaction, PaymentTransactionStatus } from '@/lib/payment-types';
 import { TRANSACTION_STATUS_OPTIONS, METHOD_TYPE_OPTIONS, formatCurrency } from '@/lib/payment-types';
+import { t } from '@/lib/i18n';
 import { PaymentStatusBadge } from '@/components/payments/payment-status-badge';
 import { PaymentMethodBadge } from '@/components/payments/payment-method-badge';
 import { PaymentDashboardSkeleton } from '@/components/payments/payment-detail-skeleton';
@@ -51,7 +52,7 @@ export default function PaymentsPage() {
     () => [
       {
         accessorKey: 'id',
-        header: 'Transaction ID',
+        header: t('Transaction ID'),
         cell: ({ row }) => (
           <Link
             href={`/payments/${row.original.id}`}
@@ -63,26 +64,26 @@ export default function PaymentsPage() {
       },
       {
         accessorKey: 'amount',
-        header: 'Amount',
+        header: t('Amount'),
         cell: ({ getValue }) => formatCurrency(getValue<number>()),
       },
       {
         accessorKey: 'methodType',
-        header: 'Method',
+        header: t('Method'),
         cell: ({ getValue }) => <PaymentMethodBadge method={getValue<string>()} />,
       },
       {
         accessorKey: 'providerId',
-        header: 'Provider',
+        header: t('Provider'),
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: t('Status'),
         cell: ({ getValue }) => <PaymentStatusBadge status={getValue<PaymentTransactionStatus>()} />,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Date',
+        header: t('Date'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
     ],
@@ -109,8 +110,8 @@ export default function PaymentsPage() {
 
   return (
     <PageWrapper
-      title="Payments"
-      description="Manage payment processing, transactions, and refunds"
+      title={t('Payments')}
+      description={t('Manage payment processing, transactions, and refunds')}
     >
       <div className="space-y-6">
         {/* Dashboard Stats */}
@@ -121,42 +122,42 @@ export default function PaymentsPage() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Today&apos;s Revenue</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{t("Today's Revenue")}</CardTitle>
                   <DollarSign className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <p className="text-2xl font-bold">{formatCurrency(dashboard.todayRevenue)}</p>
-                  <p className="text-xs text-muted-foreground">{dashboard.todayCount} transactions today</p>
+                  <p className="text-xs text-muted-foreground">{t('{count} transactions today', { count: dashboard.todayCount })}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Pending</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{t('Pending')}</CardTitle>
                   <RefreshCw className="h-4 w-4 text-yellow-500" />
                 </CardHeader>
                 <CardContent>
                   <p className="text-2xl font-bold text-yellow-500">{dashboard.pending}</p>
-                  <p className="text-xs text-muted-foreground">Awaiting completion</p>
+                  <p className="text-xs text-muted-foreground">{t('Awaiting completion')}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Completed</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{t('Completed')}</CardTitle>
                   <CreditCard className="h-4 w-4 text-green-500" />
                 </CardHeader>
                 <CardContent>
                   <p className="text-2xl font-bold text-green-500">{dashboard.completed}</p>
-                  <p className="text-xs text-muted-foreground">Successfully processed</p>
+                  <p className="text-xs text-muted-foreground">{t('Successfully processed')}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Issues</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{t('Issues')}</CardTitle>
                   <XCircle className="h-4 w-4 text-destructive" />
                 </CardHeader>
                 <CardContent>
                   <p className="text-2xl font-bold text-destructive">{dashboard.failed + dashboard.refunded}</p>
-                  <p className="text-xs text-muted-foreground">{dashboard.failed} failed, {dashboard.refunded} refunded</p>
+                  <p className="text-xs text-muted-foreground">{t('{failed} failed, {refunded} refunded', { failed: dashboard.failed, refunded: dashboard.refunded })}</p>
                 </CardContent>
               </Card>
             </div>
@@ -165,7 +166,7 @@ export default function PaymentsPage() {
             {revenueMethods.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Revenue by Payment Method</CardTitle>
+                  <CardTitle className="text-base">{t('Revenue by Payment Method')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -195,17 +196,17 @@ export default function PaymentsPage() {
 
         {/* Transactions List */}
         <div>
-          <h3 className="text-lg font-semibold mb-4">Transaction History</h3>
+          <h3 className="text-lg font-semibold mb-4">{t('Transaction History')}</h3>
           <div className="space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="relative max-w-xs w-full">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search transactions..."
+                  placeholder={t('Search transactions...')}
                   value={search}
                   onChange={(e) => { setSearch(e.target.value); setPage(1); }}
                   className="pl-8"
-                  aria-label="Search transactions"
+                  aria-label={t('Search transactions')}
                 />
               </div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -213,28 +214,28 @@ export default function PaymentsPage() {
                   value={statusFilter}
                   onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
                   className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-                  aria-label="Filter by status"
+                  aria-label={t('Filter by status')}
                 >
                   {TRANSACTION_STATUS_OPTIONS.map((opt) => (
-                    <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                    <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
                   ))}
                 </select>
                 <select
                   value={methodFilter}
                   onChange={(e) => { setMethodFilter(e.target.value); setPage(1); }}
                   className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-                  aria-label="Filter by method"
+                  aria-label={t('Filter by method')}
                 >
                   {METHOD_TYPE_OPTIONS.map((opt) => (
-                    <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                    <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
                   ))}
                 </select>
               </div>
             </div>
 
             <div className="overflow-x-auto rounded-lg border">
-              <table className="w-full caption-bottom text-sm" aria-label="Payments list">
-                <caption className="sr-only">List of payment transactions with search and filter options</caption>
+              <table className="w-full caption-bottom text-sm" aria-label={t('Payments list')}>
+                <caption className="sr-only">{t('List of payment transactions with search and filter options')}</caption>
                 <thead className="border-b bg-muted/50">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
@@ -288,8 +289,8 @@ export default function PaymentsPage() {
                     <tr>
                       <td colSpan={columns.length} className="h-32 text-center">
                         <div className="flex flex-col items-center justify-center text-muted-foreground">
-                          <p className="text-sm font-medium text-destructive">Error loading payments</p>
-                          <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                          <p className="text-sm font-medium text-destructive">{t('Error loading payments')}</p>
+                          <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                         </div>
                       </td>
                     </tr>
@@ -297,7 +298,7 @@ export default function PaymentsPage() {
                     <tr>
                       <td colSpan={columns.length} className="h-32 text-center">
                         <div className="flex flex-col items-center justify-center text-muted-foreground">
-                          <p className="text-sm">Select a restaurant to view payments</p>
+                          <p className="text-sm">{t('Select a restaurant to view payments')}</p>
                         </div>
                       </td>
                     </tr>
@@ -305,11 +306,11 @@ export default function PaymentsPage() {
                     <tr>
                       <td colSpan={columns.length} className="h-32 text-center">
                         <div className="flex flex-col items-center justify-center text-muted-foreground">
-                          <p className="text-sm">No transactions found</p>
+                          <p className="text-sm">{t('No transactions found')}</p>
                           {search || statusFilter || methodFilter ? (
-                            <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                            <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                           ) : (
-                            <p className="text-xs mt-1">Payments appear here after processing orders through POS checkout</p>
+                            <p className="text-xs mt-1">{t('Payments appear here after processing orders through POS checkout')}</p>
                           )}
                         </div>
                       </td>
@@ -337,8 +338,8 @@ export default function PaymentsPage() {
             {listData?.pagination && listData.pagination.totalPages > 1 && (
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
-                  {listData.pagination.total} transaction{listData.pagination.total !== 1 ? 's' : ''}
-                  {search && ` matching "${search}"`}
+                  {listData.pagination.total} {listData.pagination.total !== 1 ? t('transactions') : t('transaction')}
+                  {search && ` ${t('matching')} "${search}"`}
                 </p>
                 <div className="flex items-center gap-2">
                   <Button
@@ -347,10 +348,10 @@ export default function PaymentsPage() {
                     disabled={page <= 1}
                     onClick={() => setPage((p) => p - 1)}
                   >
-                    Previous
+                    {t('Previous')}
                   </Button>
                   <span className="text-sm text-muted-foreground">
-                    Page {listData.pagination.page} of {listData.pagination.totalPages}
+                    {t('Page {currentPage} of {totalPages}', { currentPage: listData.pagination.page, totalPages: listData.pagination.totalPages })}
                   </span>
                   <Button
                     variant="outline"
@@ -358,7 +359,7 @@ export default function PaymentsPage() {
                     disabled={page >= listData.pagination.totalPages}
                     onClick={() => setPage((p) => p + 1)}
                   >
-                    Next
+                    {t('Next')}
                   </Button>
                 </div>
               </div>
@@ -366,8 +367,8 @@ export default function PaymentsPage() {
 
             {!listLoading && (listData?.transactions?.length ?? 0) > 0 && !listData?.pagination && (
               <p className="text-sm text-muted-foreground">
-                {listData?.transactions.length} transaction{listData?.transactions.length !== 1 ? 's' : ''}
-                {search && ` matching "${search}"`}
+                {listData?.transactions.length} {listData?.transactions.length !== 1 ? t('transactions') : t('transaction')}
+                {search && ` ${t('matching')} "${search}"`}
               </p>
             )}
           </div>

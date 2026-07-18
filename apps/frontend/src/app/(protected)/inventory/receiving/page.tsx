@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -21,26 +22,26 @@ export default function ReceivingPage() {
   const { data: products, isLoading, isError, refetch } = useProducts(restaurantId);
   const receiveStock = useReceiveStock();
 
-  if (isLoading) return <ContentArea><LoadingState message="Loading products..." /></ContentArea>;
-  if (isError) return <ContentArea><ErrorState message="Failed to load products" onRetry={() => refetch()} /></ContentArea>;
+  if (isLoading) return <ContentArea><LoadingState message={t("Loading products...")} /></ContentArea>;
+  if (isError) return <ContentArea><ErrorState message={t("Failed to load products")} onRetry={() => refetch()} /></ContentArea>;
 
   const handleSubmit = (items: ReceiveStockItem[], notes?: string) => {
     receiveStock.mutate({ restaurantId, items, notes }, {
       onSuccess: (result) => {
-        toast.success(`Received ${result.received} items`);
+        toast.success(t("Received ${result.received} items"));
         if (initialOrderId) {
           router.push(`/inventory/purchase-orders/${initialOrderId}`);
         } else {
           router.push('/inventory/stock');
         }
       },
-      onError: () => toast.error('Failed to receive stock'),
+      onError: () => toast.error(t("Failed to receive stock")),
     });
   };
 
   return (
     <ContentArea>
-      <PageHeader title={initialOrderId ? 'Receive Purchase Order' : 'Receive Stock'} description="Record incoming stock items" />
+      <PageHeader title={initialOrderId ? 'Receive Purchase Order' : 'Receive Stock'} description={t("Record incoming stock items")} />
       <ReceivingForm
         products={products ?? []}
         initialOrderId={initialOrderId}

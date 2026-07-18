@@ -10,6 +10,7 @@ import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { t } from '@/lib/i18n';
 
 export default function TableDetailPage() {
   const params = useParams();
@@ -28,7 +29,7 @@ export default function TableDetailPage() {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push('/tables')}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back to Tables
+            {t('Back to Tables')}
           </Button>
         </div>
       }
@@ -51,7 +52,7 @@ export default function TableDetailPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load table: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load table: {error}', { error: (error as Error)?.message || t('An unexpected error occurred') })}
           </AlertDescription>
         </Alert>
       ) : table ? (

@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { t } from '@/lib/i18n';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useSettings, useUpdateSettings } from '@/hooks/use-settings';
 import { Button } from '@/components/ui/button';
@@ -59,9 +60,9 @@ export function SettingsBusiness() {
           reservationCancellationHours: Number(data['reservationCancellationHours']),
         },
       });
-      toast.success('Business settings updated successfully');
+      toast.success(t('Business settings updated successfully'));
     } catch {
-      toast.error('Failed to update business settings');
+      toast.error(t('Failed to update business settings'));
     }
   };
 
@@ -69,7 +70,7 @@ export function SettingsBusiness() {
     return (
       <Alert variant="warning">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Select a restaurant to configure business settings.</AlertDescription>
+        <AlertDescription>{t('Select a restaurant to configure business settings.')}</AlertDescription>
       </Alert>
     );
   }
@@ -81,7 +82,7 @@ export function SettingsBusiness() {
       <Alert variant="error">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Failed to load settings: {(error as Error)?.message || 'Unexpected error'}
+          {t('Failed to load settings:')} {(error as Error)?.message || t('Unexpected error')}
         </AlertDescription>
       </Alert>
     );
@@ -91,15 +92,15 @@ export function SettingsBusiness() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <CardTitle>Business Settings</CardTitle>
+          <CardTitle>{t('Business Settings')}</CardTitle>
           <CardDescription>
-            Configure reservation defaults, walk-in policy, and other business rules.
+            {t('Configure reservation defaults, walk-in policy, and other business rules.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="defaultReservationDuration">
-              Default Reservation Duration (minutes)
+              {t('Default Reservation Duration (minutes)')}
             </Label>
             <Input
               id="defaultReservationDuration"
@@ -108,7 +109,7 @@ export function SettingsBusiness() {
               max="480"
               step="15"
               {...register('defaultReservationDuration', { valueAsNumber: true })}
-              aria-label="Default reservation duration in minutes"
+              aria-label={t('Default reservation duration in minutes')}
             />
             {errors.defaultReservationDuration && (
               <p className="text-sm text-destructive">
@@ -118,14 +119,14 @@ export function SettingsBusiness() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="reservationBufferMinutes">Buffer Between Reservations (minutes)</Label>
+            <Label htmlFor="reservationBufferMinutes">{t('Buffer Between Reservations (minutes)')}</Label>
             <Input
               id="reservationBufferMinutes"
               type="number"
               min="0"
               max="120"
               {...register('reservationBufferMinutes', { valueAsNumber: true })}
-              aria-label="Buffer time between reservations in minutes"
+              aria-label={t('Buffer time between reservations in minutes')}
             />
             {errors.reservationBufferMinutes && (
               <p className="text-sm text-destructive">
@@ -139,9 +140,9 @@ export function SettingsBusiness() {
               id="allowWalkIns"
               checked={!!allowWalkIns}
               onCheckedChange={(v) => setValue('allowWalkIns', v, { shouldDirty: true })}
-              aria-label="Allow walk-in customers"
+              aria-label={t('Allow walk-in customers')}
             />
-            <Label htmlFor="allowWalkIns" className="cursor-pointer">Allow Walk-ins</Label>
+            <Label htmlFor="allowWalkIns" className="cursor-pointer">{t('Allow Walk-ins')}</Label>
           </div>
 
           <div className="flex items-center gap-3">
@@ -149,22 +150,22 @@ export function SettingsBusiness() {
               id="autoConfirmReservations"
               checked={!!autoConfirm}
               onCheckedChange={(v) => setValue('autoConfirmReservations', v, { shouldDirty: true })}
-              aria-label="Auto-confirm reservations"
+              aria-label={t('Auto-confirm reservations')}
             />
             <Label htmlFor="autoConfirmReservations" className="cursor-pointer">
-              Auto-confirm Reservations
+              {t('Auto-confirm Reservations')}
             </Label>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="maxReservationsPerCustomer">Max Reservations Per Customer</Label>
+            <Label htmlFor="maxReservationsPerCustomer">{t('Max Reservations Per Customer')}</Label>
             <Input
               id="maxReservationsPerCustomer"
               type="number"
               min="1"
               max="100"
               {...register('maxReservationsPerCustomer', { valueAsNumber: true })}
-              aria-label="Maximum reservations per customer"
+              aria-label={t('Maximum reservations per customer')}
             />
             {errors.maxReservationsPerCustomer && (
               <p className="text-sm text-destructive">
@@ -175,7 +176,7 @@ export function SettingsBusiness() {
 
           <div className="space-y-2">
             <Label htmlFor="reservationCancellationHours">
-              Reservation Cancellation Window (hours)
+              {t('Reservation Cancellation Window (hours)')}
             </Label>
             <Input
               id="reservationCancellationHours"
@@ -183,7 +184,7 @@ export function SettingsBusiness() {
               min="0"
               max="720"
               {...register('reservationCancellationHours', { valueAsNumber: true })}
-              aria-label="Reservation cancellation window in hours"
+              aria-label={t('Reservation cancellation window in hours')}
             />
             {errors.reservationCancellationHours && (
               <p className="text-sm text-destructive">
@@ -195,7 +196,7 @@ export function SettingsBusiness() {
           <div className="flex items-center gap-4 pt-2">
             <Button type="submit" disabled={!isDirty || update.isPending}>
               <Save className="h-4 w-4 mr-1.5" />
-              {update.isPending ? 'Saving...' : 'Save Changes'}
+              {update.isPending ? t('Saving...') : t('Save Changes')}
             </Button>
           </div>
         </CardContent>

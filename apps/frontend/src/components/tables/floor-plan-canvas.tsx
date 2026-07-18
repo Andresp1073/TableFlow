@@ -5,6 +5,7 @@ import type { RestaurantTable } from '@/lib/table-types';
 import { TableCard } from './table-card';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 import {
   ZoomIn,
   ZoomOut,
@@ -221,17 +222,17 @@ export function FloorPlanCanvas({
             </span>
           )}
           <span className="text-xs text-muted-foreground">
-            {activeTables.length} table{activeTables.length !== 1 ? 's' : ''}
+            {activeTables.length} {activeTables.length === 1 ? t('table') : t('tables')}
           </span>
         </div>
-        <div className="flex items-center gap-1" role="toolbar" aria-label="Floor plan tools">
+        <div className="flex items-center gap-1" role="toolbar" aria-label={t('Floor plan tools')}>
           <Button
             variant={toolMode === 'select' ? 'secondary' : 'ghost'}
             size="icon-sm"
             onClick={() => setToolMode('select')}
-            aria-label="Select mode"
+            aria-label={t('Select mode')}
             aria-pressed={toolMode === 'select'}
-            title="Select (V)"
+            title={t('Select (V)')}
           >
             <Pointer className="h-4 w-4" />
           </Button>
@@ -239,9 +240,9 @@ export function FloorPlanCanvas({
             variant={toolMode === 'pan' ? 'secondary' : 'ghost'}
             size="icon-sm"
             onClick={() => setToolMode('pan')}
-            aria-label="Pan mode"
+            aria-label={t('Pan mode')}
             aria-pressed={toolMode === 'pan'}
-            title="Pan (H)"
+            title={t('Pan (H)')}
           >
             <Hand className="h-4 w-4" />
           </Button>
@@ -252,9 +253,9 @@ export function FloorPlanCanvas({
             variant="ghost"
             size="icon-sm"
             onClick={() => setShowGrid((v) => !v)}
-            aria-label={showGrid ? 'Hide grid' : 'Show grid'}
+            aria-label={showGrid ? t('Hide grid') : t('Show grid')}
             aria-pressed={showGrid}
-            title="Toggle Grid (G)"
+            title={t('Toggle Grid (G)')}
           >
             <Grid3X3 className="h-4 w-4" />
           </Button>
@@ -266,11 +267,11 @@ export function FloorPlanCanvas({
             size="icon-sm"
             onClick={zoomOut}
             disabled={scale <= MIN_ZOOM}
-            aria-label="Zoom out"
+            aria-label={t('Zoom out')}
           >
             <ZoomOut className="h-4 w-4" />
           </Button>
-          <span className="text-xs tabular-nums w-10 text-center" aria-label={`Zoom ${Math.round(scale * 100)}%`}>
+          <span className="text-xs tabular-nums w-10 text-center" aria-label={t('Zoom {percent}%', { percent: Math.round(scale * 100) })}>
             {Math.round(scale * 100)}%
           </span>
           <Button
@@ -278,7 +279,7 @@ export function FloorPlanCanvas({
             size="icon-sm"
             onClick={zoomIn}
             disabled={scale >= MAX_ZOOM}
-            aria-label="Zoom in"
+            aria-label={t('Zoom in')}
           >
             <ZoomIn className="h-4 w-4" />
           </Button>
@@ -289,8 +290,8 @@ export function FloorPlanCanvas({
             variant="ghost"
             size="icon-sm"
             onClick={fitToContent}
-            aria-label="Fit to screen"
-            title="Fit (F)"
+            aria-label={t('Fit to screen')}
+            title={t('Fit (F)')}
           >
             <Maximize2 className="h-4 w-4" />
           </Button>
@@ -298,8 +299,8 @@ export function FloorPlanCanvas({
             variant="ghost"
             size="icon-sm"
             onClick={resetView}
-            aria-label="Reset view"
-            title="Reset (R)"
+            aria-label={t('Reset view')}
+            title={t('Reset (R)')}
           >
             <RotateCcw className="h-4 w-4" />
           </Button>
@@ -311,15 +312,15 @@ export function FloorPlanCanvas({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex flex-col items-center gap-2">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-              <span className="text-sm text-muted-foreground">Loading floor plan...</span>
+              <span className="text-sm text-muted-foreground">{t('Loading floor plan...')}</span>
             </div>
           </div>
         ) : tables.length === 0 ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex flex-col items-center gap-2 text-center">
-              <p className="text-sm text-muted-foreground">No tables in this area</p>
+              <p className="text-sm text-muted-foreground">{t('No tables in this area')}</p>
               <p className="text-xs text-muted-foreground">
-                Create a table to get started
+                {t('Create a table to get started')}
               </p>
             </div>
           </div>
@@ -337,7 +338,7 @@ export function FloorPlanCanvas({
             onPointerUp={handleCanvasPointerUp}
             onWheel={handleWheel}
             role="application"
-            aria-label="Floor plan editor"
+            aria-label={t('Floor plan editor')}
           >
             <div
               style={{
@@ -392,8 +393,8 @@ export function FloorPlanCanvas({
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">
               {tables.find((t) => t.id === selectedTableId)?.tableNumber
-                ? `Table ${tables.find((t) => t.id === selectedTableId)!.tableNumber} selected`
-                : 'Table selected'}
+                ? t('Table {tableNumber} selected', { tableNumber: tables.find((t) => t.id === selectedTableId)!.tableNumber })
+                : t('Table selected')}
             </span>
           </div>
         </div>

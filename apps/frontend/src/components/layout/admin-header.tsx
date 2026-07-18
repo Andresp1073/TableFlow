@@ -11,6 +11,7 @@ import { GlobalSearch } from '@/components/layout/global-search';
 import { NotificationBell } from '@/components/layout/notification-bell';
 import { UserMenu } from '@/components/layout/user-menu';
 import { RestaurantSelector } from '@/components/layout/restaurant-selector';
+import { t } from '@/lib/i18n';
 
 interface AdminHeaderProps {
   className?: string;
@@ -29,7 +30,7 @@ export function AdminHeader({ className }: AdminHeaderProps) {
       )}
     >
       {isMobile && (
-        <Button variant="ghost" size="icon-md" onClick={toggleMobileOpen} aria-label="Open menu">
+        <Button variant="ghost" size="icon-md" onClick={toggleMobileOpen} aria-label={t('Open menu')}>
           <Menu className="h-5 w-5" />
         </Button>
       )}
@@ -48,7 +49,7 @@ export function AdminHeader({ className }: AdminHeaderProps) {
           variant="ghost"
           size="icon-md"
           onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-          aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
+          aria-label={resolvedTheme === 'dark' ? t('Switch to light mode') : t('Switch to dark mode')}
         >
           {resolvedTheme === 'dark' ? (
             <Sun className="h-4 w-4" />

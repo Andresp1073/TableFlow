@@ -31,31 +31,31 @@ export function SettingsRestaurant() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Name</p>
+              <p className="text-sm text-muted-foreground">{t('Name')}</p>
               <p className="font-medium">{current.name}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Slug</p>
+              <p className="text-sm text-muted-foreground">{t('Slug')}</p>
               <p className="font-medium">{current.slug}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">ID</p>
+              <p className="text-sm text-muted-foreground">{t('ID')}</p>
               <p className="font-medium text-xs font-mono">{current.id}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Count in Session</p>
-              <p className="font-medium">{restaurants.length} restaurant(s)</p>
+              <p className="text-sm text-muted-foreground">{t('Count in Session')}</p>
+              <p className="font-medium">{restaurants.length} {t('restaurant(s)')}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Status</p>
-              <Badge variant="success">Active</Badge>
+              <p className="text-sm text-muted-foreground">{t('Status')}</p>
+              <Badge variant="success">{t('Active')}</Badge>
             </div>
           </div>
           <div className="pt-4">
             <Button variant="outline" size="sm" asChild>
               <a href="/restaurants" target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                Manage Restaurants
+                {t('Manage Restaurants')}
               </a>
             </Button>
           </div>

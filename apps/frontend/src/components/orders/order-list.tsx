@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useRouter } from 'next/navigation';
 import { ShoppingCart } from 'lucide-react';
@@ -23,13 +24,13 @@ export function OrderList({ orders, isLoading, isError, error, onRetry }: OrderL
   const router = useRouter();
 
   if (isLoading) {
-    return <LoadingState message="Loading orders..." />;
+    return <LoadingState message={t("Loading orders...")} />;
   }
 
   if (isError) {
     return (
       <ErrorState
-        title="Failed to load orders"
+        title={t("Failed to load orders")}
         message={error?.message ?? 'An unexpected error occurred'}
         onRetry={onRetry}
       />
@@ -40,8 +41,8 @@ export function OrderList({ orders, isLoading, isError, error, onRetry }: OrderL
     return (
       <EmptyState
         icon={<ShoppingCart className="h-8 w-8" />}
-        title="No orders found"
-        description="Create your first order to get started."
+        title={t("No orders found")}
+        description={t("Create your first order to get started.")}
       />
     );
   }

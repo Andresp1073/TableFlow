@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -17,7 +18,7 @@ export default function StockMovementsPage() {
 
   return (
     <PageWrapper>
-      <PageHeader title="Stock Movements" description="Track all stock entries, consumptions, adjustments, and transfers" />
+      <PageHeader title={t("Stock Movements")} description={t("Track all stock entries, consumptions, adjustments, and transfers")} />
       <div className="space-y-4">
         <InventoryFilters movementType={movementType} onMovementTypeChange={setMovementType} showMovementType />
         <MovementTable data={data ?? []} loading={isLoading} error={error?.message ?? null} />

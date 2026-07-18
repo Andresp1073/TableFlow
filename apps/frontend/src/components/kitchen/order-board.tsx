@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useMemo } from 'react';
 import type { KitchenTicket } from '@/lib/order-types';
@@ -45,7 +46,7 @@ export function OrderBoard({ tickets, onStatusChange, className, compact = false
         gridTemplateColumns: `repeat(${columns.length}, minmax(${compact ? '280px' : '300px'}, 1fr))`,
       }}
       role="region"
-      aria-label="Order board"
+      aria-label={t("Order board")}
     >
       {columns.map((column) =>
         column.tickets.length === 0 && compact ? null : (

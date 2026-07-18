@@ -6,6 +6,7 @@ import {
 } from '@/lib/table-types';
 import { TableStatusBadge } from '@/components/tables/table-status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { t } from '@/lib/i18n';
 import {
   Hash,
   FileText,
@@ -71,14 +72,14 @@ export function TableDetailView({ table }: { table: RestaurantTable }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Table2 className="h-4 w-4" />
-              Table Information
+              {t('Table Information')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Hash className="h-4 w-4" />} label="Table Number" value={table.tableNumber} />
-            <DetailRow icon={<Building2 className="h-4 w-4" />} label="Name" value={table.name} />
-            <DetailRow icon={<FileText className="h-4 w-4" />} label="Description" value={table.description} />
-            {table.shape && <DetailRow icon={<Maximize2 className="h-4 w-4" />} label="Shape" value={shapeLabel} />}
+            <DetailRow icon={<Hash className="h-4 w-4" />} label={t('Table Number')} value={table.tableNumber} />
+            <DetailRow icon={<Building2 className="h-4 w-4" />} label={t('Name')} value={table.name} />
+            <DetailRow icon={<FileText className="h-4 w-4" />} label={t('Description')} value={table.description} />
+            {table.shape && <DetailRow icon={<Maximize2 className="h-4 w-4" />} label={t('Shape')} value={shapeLabel} />}
           </CardContent>
         </Card>
 
@@ -86,21 +87,21 @@ export function TableDetailView({ table }: { table: RestaurantTable }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Users className="h-4 w-4" />
-              Capacity & Status
+              {t('Capacity & Status')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Users className="h-4 w-4" />} label="Capacity" value={capacityLabel} />
-            <DetailRow icon={<Users className="h-4 w-4" />} label="Current Occupancy" value={String(table.currentCapacity)} />
+            <DetailRow icon={<Users className="h-4 w-4" />} label={t('Capacity')} value={capacityLabel} />
+            <DetailRow icon={<Users className="h-4 w-4" />} label={t('Current Occupancy')} value={String(table.currentCapacity)} />
             <DetailRow
               icon={<ToggleLeft className="h-4 w-4" />}
-              label="Reservable"
-              value={table.isReservable ? 'Yes' : 'No'}
+              label={t('Reservable')}
+              value={table.isReservable ? t('Yes') : t('No')}
             />
             <DetailRow
               icon={<ToggleLeft className="h-4 w-4" />}
-              label="Accessible"
-              value={table.isAccessible ? 'Yes' : 'No'}
+              label={t('Accessible')}
+              value={table.isAccessible ? t('Yes') : t('No')}
             />
           </CardContent>
         </Card>
@@ -109,26 +110,26 @@ export function TableDetailView({ table }: { table: RestaurantTable }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              Position & Dimensions
+              {t('Position & Dimensions')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <DetailRow
               icon={<MapPin className="h-4 w-4" />}
-              label="Position"
+              label={t('Position')}
               value={
                 table.positionX != null && table.positionY != null
                   ? `(${table.positionX}, ${table.positionY})`
-                  : 'Not positioned'
+                  : t('Not positioned')
               }
             />
             <DetailRow
               icon={<Maximize2 className="h-4 w-4" />}
-              label="Dimensions"
+              label={t('Dimensions')}
               value={`${table.width} × ${table.height}`}
             />
             {table.rotation != null && (
-              <DetailRow icon={<RotateCw className="h-4 w-4" />} label="Rotation" value={`${table.rotation}°`} />
+              <DetailRow icon={<RotateCw className="h-4 w-4" />}               label={t('Rotation')} value={`${table.rotation}°`} />
             )}
           </CardContent>
         </Card>
@@ -137,14 +138,14 @@ export function TableDetailView({ table }: { table: RestaurantTable }) {
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              Audit Information
+              {t('Audit Information')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <DetailRow icon={<Hash className="h-4 w-4" />} label="ID" value={table.id} />
-            <DetailRow icon={<Building2 className="h-4 w-4" />} label="Restaurant ID" value={table.restaurantId} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Created" value={new Date(table.createdAt).toLocaleString()} />
-            <DetailRow icon={<Clock className="h-4 w-4" />} label="Updated" value={new Date(table.updatedAt).toLocaleString()} />
+            <DetailRow icon={<Hash className="h-4 w-4" />} label={t('ID')} value={table.id} />
+            <DetailRow icon={<Building2 className="h-4 w-4" />} label={t('Restaurant ID')} value={table.restaurantId} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t('Created')} value={new Date(table.createdAt).toLocaleString()} />
+            <DetailRow icon={<Clock className="h-4 w-4" />} label={t('Updated')} value={new Date(table.updatedAt).toLocaleString()} />
           </CardContent>
         </Card>
       </div>

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -29,16 +30,16 @@ export function InventoryFilters({
     <div className="flex flex-wrap items-center gap-3">
       {onSearchChange && (
         <Input
-          placeholder="Search..."
+          placeholder={t("Search...")}
           value={search ?? ''}
           onChange={(e) => onSearchChange(e.target.value)}
           className="max-w-xs"
-          aria-label="Search"
+          aria-label={t("Search")}
         />
       )}
       {showCategory && onCategoryChange && (
         <Select value={category ?? 'all'} onValueChange={(v) => onCategoryChange(v === 'all' ? '' : v)}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="All Categories" /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder={t("All Categories")} /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
             {CATEGORY_OPTIONS.map((opt) => (
@@ -49,7 +50,7 @@ export function InventoryFilters({
       )}
       {showStatus && onStatusChange && (
         <Select value={status ?? 'all'} onValueChange={(v) => onStatusChange(v === 'all' ? '' : v)}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="All Statuses" /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder={t("All Statuses")} /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
             {PO_STATUS_OPTIONS.map((opt) => (
@@ -60,7 +61,7 @@ export function InventoryFilters({
       )}
       {showMovementType && onMovementTypeChange && (
         <Select value={movementType ?? 'all'} onValueChange={(v) => onMovementTypeChange(v === 'all' ? '' : v)}>
-          <SelectTrigger className="w-40"><SelectValue placeholder="All Types" /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder={t("All Types")} /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Types</SelectItem>
             {MOVEMENT_TYPE_OPTIONS.map((opt) => (

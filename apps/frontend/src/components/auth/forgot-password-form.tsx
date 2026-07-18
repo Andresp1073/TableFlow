@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { t } from '@/lib/i18n';
 
 export function ForgotPasswordForm() {
   const { submit, isLoading, isSuccess, error } = useForgotPassword();
@@ -36,15 +37,15 @@ export function ForgotPasswordForm() {
             <MailCheck className="h-6 w-6 text-success" />
           </div>
           <div className="space-y-1.5">
-            <h1 className="text-xl font-semibold tracking-tight">Check your email</h1>
+            <h1 className="text-xl font-semibold tracking-tight">{t('Check your email')}</h1>
             <p className="text-sm text-muted-foreground">
-              If that email is registered, you will receive a password reset link shortly.
+              {t('If that email is registered, you will receive a password reset link shortly.')}
             </p>
           </div>
           <Button variant="outline" size="sm" asChild>
             <Link href="/login">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to login
+              {t('Back to login')}
             </Link>
           </Button>
         </CardContent>
@@ -57,9 +58,9 @@ export function ForgotPasswordForm() {
       <CardContent className="p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
           <div className="space-y-1.5 text-center">
-            <h1 className="text-xl font-semibold tracking-tight">Forgot password?</h1>
+            <h1 className="text-xl font-semibold tracking-tight">{t('Forgot password?')}</h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email and we&apos;ll send you a reset link.
+              {t('Enter your email and we\'ll send you a reset link.')}
             </p>
           </div>
 
@@ -71,11 +72,11 @@ export function ForgotPasswordForm() {
 
           <FormField name="email" error={errors.email?.message}>
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('Email')}</FormLabel>
               <FormControl>
                 <Input
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder={t('name@example.com')}
                   autoComplete="email"
                   autoFocus
                   disabled={isLoading}
@@ -87,13 +88,13 @@ export function ForgotPasswordForm() {
           </FormField>
 
           <Button type="submit" className="w-full" loading={isLoading}>
-            {isLoading ? 'Sending...' : 'Send reset link'}
+            {isLoading ? t('Sending...') : t('Send reset link')}
           </Button>
 
           <div className="text-center">
             <Link href="/login" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
               <ArrowLeft className="h-3.5 w-3.5" />
-              Back to login
+              {t('Back to login')}
             </Link>
           </div>
         </form>

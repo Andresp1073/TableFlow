@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 
 interface PaginationProps {
   currentPage: number;
@@ -30,9 +31,9 @@ function Pagination({ currentPage, totalPages, onPageChange, paginationRange: pa
   if (totalPages <= 1) return null;
 
   return (
-    <nav aria-label="Pagination" className={cn('flex items-center justify-between', className)}>
+    <nav aria-label={t('Pagination')} className={cn('flex items-center justify-between', className)}>
       <p className="text-sm text-muted-foreground">
-        Page {currentPage} of {totalPages}
+        {t('Page {currentPage} of {totalPages}', { currentPage, totalPages })}
       </p>
 
       <div className="flex items-center gap-1">
@@ -41,7 +42,7 @@ function Pagination({ currentPage, totalPages, onPageChange, paginationRange: pa
           size="icon-sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          aria-label="Previous page"
+          aria-label={t('Previous page')}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -62,7 +63,7 @@ function Pagination({ currentPage, totalPages, onPageChange, paginationRange: pa
                 variant={item === currentPage ? 'primary' : 'outline'}
                 size="icon-sm"
                 onClick={() => onPageChange(item)}
-                aria-label={`Page ${item}`}
+                aria-label={t('Page {page}', { page: item })}
                 aria-current={item === currentPage ? 'page' : undefined}
               >
                 {item}
@@ -76,7 +77,7 @@ function Pagination({ currentPage, totalPages, onPageChange, paginationRange: pa
           size="icon-sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          aria-label="Next page"
+          aria-label={t('Next page')}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>

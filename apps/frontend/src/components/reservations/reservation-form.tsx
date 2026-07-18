@@ -18,6 +18,7 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
+import { t } from '@/lib/i18n';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ReservationFormProps {
@@ -83,10 +84,10 @@ export function ReservationForm({
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FormField name="reservationNumber" error={errors.reservationNumber?.message}>
           <FormItem>
-            <FormLabel required>Reservation Number</FormLabel>
+            <FormLabel required>{t('Reservation Number')}</FormLabel>
             <FormControl>
               <Input
-                placeholder="e.g. RES-001"
+                placeholder={t('e.g. RES-001')}
                 disabled={isLoading || mode === 'edit'}
                 {...register('reservationNumber')}
               />
@@ -97,7 +98,7 @@ export function ReservationForm({
 
         <FormField name="partySize" error={errors.partySize?.message}>
           <FormItem>
-            <FormLabel required>Party Size</FormLabel>
+            <FormLabel required>{t('Party Size')}</FormLabel>
             <FormControl>
               <Input
                 type="number"
@@ -114,7 +115,7 @@ export function ReservationForm({
 
         <FormField name="date" error={errors.date?.message}>
           <FormItem>
-            <FormLabel required>Date</FormLabel>
+            <FormLabel required>{t('Date')}</FormLabel>
             <FormControl>
               <Input type="date" disabled={isLoading} {...register('date')} />
             </FormControl>
@@ -125,7 +126,7 @@ export function ReservationForm({
         <div className="grid grid-cols-2 gap-4">
           <FormField name="startTime" error={errors.startTime?.message}>
             <FormItem>
-              <FormLabel required>Start Time</FormLabel>
+              <FormLabel required>{t('Start Time')}</FormLabel>
               <FormControl>
                 <Input type="time" disabled={isLoading} {...register('startTime')} />
               </FormControl>
@@ -135,7 +136,7 @@ export function ReservationForm({
 
           <FormField name="endTime" error={errors.endTime?.message}>
             <FormItem>
-              <FormLabel required>End Time</FormLabel>
+              <FormLabel required>{t('End Time')}</FormLabel>
               <FormControl>
                 <Input type="time" disabled={isLoading} {...register('endTime')} />
               </FormControl>
@@ -146,7 +147,7 @@ export function ReservationForm({
 
         <FormField name="source" error={errors.source?.message}>
           <FormItem>
-            <FormLabel required>Source</FormLabel>
+            <FormLabel required>{t('Source')}</FormLabel>
             <FormControl>
               <select
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -167,10 +168,10 @@ export function ReservationForm({
         {mode === 'create' && (
           <FormField name="customerId" error={errors.customerId?.message}>
             <FormItem>
-              <FormLabel>Customer ID</FormLabel>
+              <FormLabel>{t('Customer ID')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Optional customer UUID"
+                  placeholder={t('Optional customer UUID')}
                   disabled={isLoading}
                   {...register('customerId')}
                 />
@@ -183,10 +184,10 @@ export function ReservationForm({
         {mode === 'create' && (
           <FormField name="tableId" error={errors.tableId?.message}>
             <FormItem>
-              <FormLabel>Table ID</FormLabel>
+              <FormLabel>{t('Table ID')}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Optional table UUID"
+                  placeholder={t('Optional table UUID')}
                   disabled={isLoading}
                   {...register('tableId')}
                 />
@@ -199,10 +200,10 @@ export function ReservationForm({
 
       <FormField name="specialRequests" error={errors.specialRequests?.message}>
         <FormItem>
-          <FormLabel>Special Requests</FormLabel>
+          <FormLabel>{t('Special Requests')}</FormLabel>
           <FormControl>
             <Textarea
-              placeholder="Any special requests from the guest..."
+              placeholder={t('Any special requests from the guest...')}
               disabled={isLoading}
               rows={3}
               {...register('specialRequests')}
@@ -214,10 +215,10 @@ export function ReservationForm({
 
       <FormField name="notes" error={errors.notes?.message}>
         <FormItem>
-          <FormLabel>Notes</FormLabel>
+          <FormLabel>{t('Notes')}</FormLabel>
           <FormControl>
             <Textarea
-              placeholder="Internal notes..."
+              placeholder={t('Internal notes...')}
               disabled={isLoading}
               rows={3}
               {...register('notes')}
@@ -230,10 +231,10 @@ export function ReservationForm({
       <div className="flex gap-3 justify-end">
         <Button type="submit" loading={isLoading}>
           {isLoading
-            ? 'Saving...'
+            ? t('Saving...')
             : mode === 'create'
-              ? 'Create Reservation'
-              : 'Save Changes'}
+              ? t('Create Reservation')
+              : t('Save Changes')}
         </Button>
       </div>
     </form>

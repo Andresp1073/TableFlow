@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import type { PaymentTransaction } from '@/lib/payment-types';
 import {  formatCurrency } from '@/lib/payment-types';
+import { t } from '@/lib/i18n';
 import { useRefundPayment } from '@/hooks/use-payments';
 import { Button } from '@/components/ui/button';
 import {
@@ -67,7 +68,7 @@ export function PaymentActions({ payment }: PaymentActionsProps) {
           onClick={() => router.push('/payments')}
         >
           <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
-          Back to Payments
+          {t('Back to Payments')}
         </Button>
 
         {canRefund && (
@@ -81,7 +82,7 @@ export function PaymentActions({ payment }: PaymentActionsProps) {
             }}
           >
             <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
-            Refund
+            {t('Refund')}
           </Button>
         )}
       </div>
@@ -89,10 +90,9 @@ export function PaymentActions({ payment }: PaymentActionsProps) {
       <Dialog open={showRefundDialog} onOpenChange={setShowRefundDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Process Refund</DialogTitle>
+            <DialogTitle>{t('Process Refund')}</DialogTitle>
             <DialogDescription>
-              Refund payment of {formatCurrency(payment.amount)}.
-              Remaining refundable: {formatCurrency(remainingRefundable)}.
+              {t('Refund payment of {amount}. Remaining refundable: {remaining}.', { amount: formatCurrency(payment.amount), remaining: formatCurrency(remainingRefundable) })}
             </DialogDescription>
           </DialogHeader>
 
@@ -105,7 +105,7 @@ export function PaymentActions({ payment }: PaymentActionsProps) {
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <Label htmlFor="refund-amount">
-                Refund Amount ({formatCurrency(remainingRefundable)} max)
+                {t('Refund Amount ({max} max)', { max: formatCurrency(remainingRefundable) })}
               </Label>
               <Input
                 id="refund-amount"
@@ -119,14 +119,14 @@ export function PaymentActions({ payment }: PaymentActionsProps) {
                 disabled={refundMutation.isPending}
               />
               <p className="text-xs text-muted-foreground">
-                Leave empty for full refund ({formatCurrency(remainingRefundable)})
+                {t('Leave empty for full refund ({amount})', { amount: formatCurrency(remainingRefundable) })}
               </p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="refund-reason">Reason (optional)</Label>
+              <Label htmlFor="refund-reason">{t('Reason (optional)')}</Label>
               <Input
                 id="refund-reason"
-                placeholder="Customer request, duplicate charge, etc."
+                placeholder={t('Customer request, duplicate charge, etc.')}
                 value={refundReason}
                 onChange={(e) => setRefundReason(e.target.value)}
                 disabled={refundMutation.isPending}
@@ -140,14 +140,14 @@ export function PaymentActions({ payment }: PaymentActionsProps) {
               onClick={() => setShowRefundDialog(false)}
               disabled={refundMutation.isPending}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
             <Button
               onClick={handleRefund}
               loading={refundMutation.isPending}
               disabled={!remainingRefundable}
             >
-              {refundMutation.isPending ? 'Processing...' : 'Process Refund'}
+              {refundMutation.isPending ? t('Processing...') : t('Process Refund')}
             </Button>
           </DialogFooter>
         </DialogContent>

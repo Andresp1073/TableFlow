@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -21,28 +22,28 @@ export default function PurchaseOrdersPage() {
 
   const handleSubmit = (orderId: string) => {
     submitPO.mutate({ restaurantId, orderId }, {
-      onSuccess: () => toast.success('Purchase order submitted'),
-      onError: () => toast.error('Failed to submit order'),
+      onSuccess: () => toast.success(t("Purchase order submitted")),
+      onError: () => toast.error(t("Failed to submit order")),
     });
   };
 
   const handleApprove = (orderId: string) => {
     approvePO.mutate({ restaurantId, orderId }, {
-      onSuccess: () => toast.success('Purchase order approved'),
-      onError: () => toast.error('Failed to approve order'),
+      onSuccess: () => toast.success(t("Purchase order approved")),
+      onError: () => toast.error(t("Failed to approve order")),
     });
   };
 
   const handleCancel = (orderId: string) => {
     cancelPO.mutate({ restaurantId, orderId, reason: 'Cancelled by user' }, {
-      onSuccess: () => toast.success('Purchase order cancelled'),
-      onError: () => toast.error('Failed to cancel order'),
+      onSuccess: () => toast.success(t("Purchase order cancelled")),
+      onError: () => toast.error(t("Failed to cancel order")),
     });
   };
 
   return (
     <PageWrapper>
-      <PageHeader title="Purchase Orders" description="Manage orders to suppliers" createHref="/inventory/purchase-orders/new" createLabel="New Order" />
+      <PageHeader title={t("Purchase Orders")} description={t("Manage orders to suppliers")} createHref="/inventory/purchase-orders/new" createLabel={t("New Order")} />
       <div className="space-y-4">
         <InventoryFilters status={status} onStatusChange={setStatus} showStatus />
         <PurchaseOrderList

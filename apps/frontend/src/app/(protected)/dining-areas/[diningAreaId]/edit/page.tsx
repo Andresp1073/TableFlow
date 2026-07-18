@@ -9,6 +9,7 @@ import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { t } from '@/lib/i18n';
 
 export default function EditDiningAreaPage() {
   const params = useParams();
@@ -31,8 +32,8 @@ export default function EditDiningAreaPage() {
 
   return (
     <PageWrapper
-      title={area ? `Edit: ${area.name}` : 'Edit Dining Area'}
-      description="Update dining area information"
+      title={area ? t('Edit: {name}', { name: area.name }) : t('Edit Dining Area')}
+      description={t('Update dining area information')}
       actions={
         <Button
           variant="outline"
@@ -40,7 +41,7 @@ export default function EditDiningAreaPage() {
           onClick={() => router.push(`/dining-areas/${diningAreaId}`)}
         >
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Details
+          {t('Back to Details')}
         </Button>
       }
     >
@@ -54,7 +55,7 @@ export default function EditDiningAreaPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load dining area: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load dining area: {error}', { error: (error as Error)?.message || t('An unexpected error occurred') })}
           </AlertDescription>
         </Alert>
       ) : area ? (

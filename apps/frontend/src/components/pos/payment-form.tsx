@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { CreditCard, Banknote, Wallet, Smartphone } from 'lucide-react';
@@ -19,17 +20,17 @@ interface PaymentFormProps {
 }
 
 const PAYMENT_METHODS = [
-  { id: 'credit_card', label: 'Credit Card', icon: <CreditCard className="h-5 w-5" /> },
-  { id: 'debit_card', label: 'Debit Card', icon: <CreditCard className="h-5 w-5" /> },
-  { id: 'cash', label: 'Cash', icon: <Banknote className="h-5 w-5" /> },
-  { id: 'digital_wallet', label: 'Digital Wallet', icon: <Wallet className="h-5 w-5" /> },
-  { id: 'contactless', label: 'Contactless', icon: <Smartphone className="h-5 w-5" /> },
+  { id: 'credit_card', label: t('Credit Card'), icon: <CreditCard className="h-5 w-5" /> },
+  { id: 'debit_card', label: t('Debit Card'), icon: <CreditCard className="h-5 w-5" /> },
+  { id: 'cash', label: t('Cash'), icon: <Banknote className="h-5 w-5" /> },
+  { id: 'digital_wallet', label: t('Digital Wallet'), icon: <Wallet className="h-5 w-5" /> },
+  { id: 'contactless', label: t('Contactless'), icon: <Smartphone className="h-5 w-5" /> },
 ];
 
 const PAYMENT_PROVIDERS = [
-  { id: 'stripe', label: 'Stripe' },
-  { id: 'square', label: 'Square' },
-  { id: 'paypal', label: 'PayPal' },
+  { id: 'stripe', label: t('Stripe') },
+  { id: 'square', label: t('Square') },
+  { id: 'paypal', label: t('PayPal') },
 ];
 
 export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResult, onClose }: PaymentFormProps) {
@@ -153,7 +154,7 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
           disabled={!selectedMethod || isProcessing}
         >
           {isProcessing ? (
-            <LoadingState message="Processing..." />
+            <LoadingState message={t("Processing...")} />
           ) : (
             <>
               <CreditCard className="h-4 w-4 mr-2" />

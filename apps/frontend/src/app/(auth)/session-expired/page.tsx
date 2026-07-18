@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import Link from 'next/link';
 import { Clock, ArrowLeft } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';

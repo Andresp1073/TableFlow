@@ -21,6 +21,7 @@ import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
+import { t } from '@/lib/i18n';
 import { cn } from '@/lib/cn';
 
 export default function ReservationsPage() {
@@ -50,7 +51,7 @@ export default function ReservationsPage() {
     () => [
       {
         accessorKey: 'reservationNumber',
-        header: 'Reservation',
+        header: t('Reservation'),
         cell: ({ row }) => (
           <Link
             href={`/reservations/${row.original.id}`}
@@ -62,12 +63,12 @@ export default function ReservationsPage() {
       },
       {
         accessorKey: 'date',
-        header: 'Date',
+        header: t('Date'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
       {
         accessorKey: 'startTime',
-        header: 'Time',
+        header: t('Time'),
         cell: ({ row }) => {
           const start = new Date(row.original.startTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
           const end = new Date(row.original.endTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -76,21 +77,21 @@ export default function ReservationsPage() {
       },
       {
         accessorKey: 'partySize',
-        header: 'Party',
+        header: t('Party'),
         cell: ({ getValue }) => `${getValue<number>()}`,
       },
       {
         accessorKey: 'source',
-        header: 'Source',
+        header: t('Source'),
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: t('Status'),
         cell: ({ getValue }) => <ReservationStatusBadge status={getValue<ReservationStatus>()} />,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created',
+        header: t('Created'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
     ],
@@ -110,15 +111,15 @@ export default function ReservationsPage() {
 
   return (
     <PageWrapper
-      title="Reservations"
-      description="View and manage all reservations"
+      title={t('Reservations')}
+      description={t('View and manage all reservations')}
       actions={
         <div className="flex items-center gap-2">
           {restaurantId && (
             <Link href={`/restaurants/${restaurantId}/reservations/calendar`}>
               <Button variant="outline" size="sm">
                 <CalendarDays className="h-4 w-4 mr-1.5" />
-                Calendar
+                {t('Calendar')}
               </Button>
             </Link>
           )}
@@ -126,7 +127,7 @@ export default function ReservationsPage() {
             <Link href="/reservations/create">
               <Button>
                 <Plus className="h-4 w-4 mr-1.5" />
-                New Reservation
+                {t('New Reservation')}
               </Button>
             </Link>
           )}
@@ -138,11 +139,11 @@ export default function ReservationsPage() {
           <div className="relative max-w-xs w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search reservations..."
+              placeholder={t('Search reservations...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8"
-              aria-label="Search reservations"
+              aria-label={t('Search reservations')}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -150,7 +151,7 @@ export default function ReservationsPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              aria-label="Filter by status"
+              aria-label={t('Filter by status')}
             >
               {RESERVATION_STATUS_OPTIONS.map((opt) => (
                 <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
@@ -160,8 +161,8 @@ export default function ReservationsPage() {
         </div>
 
         <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full caption-bottom text-sm" aria-label="Reservations list">
-            <caption className="sr-only">List of reservations with search and filter options</caption>
+          <table className="w-full caption-bottom text-sm" aria-label={t('Reservations list')}>
+            <caption className="sr-only">{t('List of reservations with search and filter options')}</caption>
             <thead className="border-b bg-muted/50">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
@@ -215,8 +216,8 @@ export default function ReservationsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm font-medium text-destructive">Error loading reservations</p>
-                      <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                      <p className="text-sm font-medium text-destructive">{t('Error loading reservations')}</p>
+                      <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                     </div>
                   </td>
                 </tr>
@@ -224,7 +225,7 @@ export default function ReservationsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">Select a restaurant to manage reservations</p>
+                      <p className="text-sm">{t('Select a restaurant to manage reservations')}</p>
                     </div>
                   </td>
                 </tr>
@@ -232,15 +233,15 @@ export default function ReservationsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">No reservations found</p>
+                      <p className="text-sm">{t('No reservations found')}</p>
                       {search || statusFilter ? (
-                        <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                        <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                       ) : (
                         <Link
                           href="/reservations/create"
                           className="text-xs text-primary hover:underline mt-1"
                         >
-                          Create your first reservation
+                          {t('Create your first reservation')}
                         </Link>
                       )}
                     </div>
@@ -267,8 +268,8 @@ export default function ReservationsPage() {
 
         {!isLoading && filteredReservations.length > 0 && (
           <p className="text-sm text-muted-foreground">
-            {filteredReservations.length} reservation{filteredReservations.length !== 1 ? 's' : ''}
-            {search && ` matching "${search}"`}
+            {t('{count} reservations', { count: filteredReservations.length })}
+            {search && t(' matching "{query}"', { query: search })}
           </p>
         )}
       </div>

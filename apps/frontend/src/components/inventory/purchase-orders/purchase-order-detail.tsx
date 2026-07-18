@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -77,15 +78,15 @@ export function PurchaseOrderDetailView({ data, isLoading, isError, onSubmit, on
         <Card>
           <CardHeader><CardTitle className="text-base">Order Details</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label="Supplier" value={data.supplierName} />
-            <DetailRow label="Status" value={<StatusBadge status={data.status} />} />
-            <DetailRow label="Total Amount" value={formatCurrency(data.totalAmount)} />
-            <DetailRow label="Items" value={`${data.receivedCount}/${data.itemCount} received`} />
-            <DetailRow label="Created By" value={data.createdBy} />
-            <DetailRow label="Approved By" value={data.approvedBy ?? '—'} />
-            <DetailRow label="Ordered At" value={data.orderedAt ? new Date(data.orderedAt).toLocaleString() : '—'} />
-            <DetailRow label="Expected Delivery" value={data.expectedDeliveryAt ? new Date(data.expectedDeliveryAt).toLocaleDateString() : '—'} />
-            {data.receivedAt && <DetailRow label="Received At" value={new Date(data.receivedAt).toLocaleString()} />}
+            <DetailRow label={t("Supplier")} value={data.supplierName} />
+            <DetailRow label={t("Status")} value={<StatusBadge status={data.status} />} />
+            <DetailRow label={t("Total Amount")} value={formatCurrency(data.totalAmount)} />
+            <DetailRow label={t("Items")} value={`${data.receivedCount}/${data.itemCount} received`} />
+            <DetailRow label={t("Created By")} value={data.createdBy} />
+            <DetailRow label={t("Approved By")} value={data.approvedBy ?? '—'} />
+            <DetailRow label={t("Ordered At")} value={data.orderedAt ? new Date(data.orderedAt).toLocaleString() : '—'} />
+            <DetailRow label={t("Expected Delivery")} value={data.expectedDeliveryAt ? new Date(data.expectedDeliveryAt).toLocaleDateString() : '—'} />
+            {data.receivedAt && <DetailRow label={t("Received At")} value={new Date(data.receivedAt).toLocaleString()} />}
           </CardContent>
         </Card>
 

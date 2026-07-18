@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import type { RestaurantStatus } from '@/lib/restaurant-types';
 import { Badge } from '@/components/ui/badge';
 

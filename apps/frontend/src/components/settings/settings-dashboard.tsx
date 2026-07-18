@@ -40,35 +40,35 @@ export function SettingsDashboard() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Settings Overview</CardTitle>
+          <CardTitle>{t('Settings Overview')}</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Restaurant</p>
+            <p className="text-sm text-muted-foreground">{t('Restaurant')}</p>
             <p className="font-medium">{current.name}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Status</p>
-            <Badge variant="success">Active</Badge>
+            <p className="text-sm text-muted-foreground">{t('Status')}</p>
+            <Badge variant="success">{t('Active')}</Badge>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Timezone</p>
+            <p className="text-sm text-muted-foreground">{t('Timezone')}</p>
             <p className="font-medium">{settings?.timezone ?? 'UTC'}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Currency</p>
+            <p className="text-sm text-muted-foreground">{t('Currency')}</p>
             <p className="font-medium">{settings?.currency ?? 'USD'}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Language</p>
+            <p className="text-sm text-muted-foreground">{t('Language')}</p>
             <p className="font-medium">{settings?.language ?? 'en'}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Date Format</p>
+            <p className="text-sm text-muted-foreground">{t('Date Format')}</p>
             <p className="font-medium">{settings?.dateFormat ?? 'YYYY-MM-DD'}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Time Format</p>
+            <p className="text-sm text-muted-foreground">{t('Time Format')}</p>
             <p className="font-medium">{settings?.timeFormat ?? 'HH:mm'}</p>
           </div>
           <div className="space-y-1">

@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
@@ -90,11 +91,11 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="table">Table</Label>
-              <Input id="table" value={tableId} onChange={(e) => setTableId(e.target.value)} placeholder="e.g. T-12" />
+              <Input id="table" value={tableId} onChange={(e) => setTableId(e.target.value)} placeholder={t("e.g. T-12")} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="customer">Customer Name</Label>
-              <Input id="customer" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="Walk-in" />
+              <Input id="customer" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t("Walk-in")} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="guests">Guest Count</Label>
@@ -116,12 +117,12 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
           {items.map((item, index) => (
             <div key={item._key} className="flex items-end gap-3 p-3 border rounded-lg">
               <div className="flex-1 space-y-2">
-                <Label htmlFor={`name-${index}`}>Name</Label>
+                <Label htmlFor={`name-${index}`}>{t('Name')}</Label>
                 <Input
                   id={`name-${index}`}
                   value={item.menuItemName}
                   onChange={(e) => updateItem(item._key, { menuItemName: e.target.value })}
-                  placeholder="Item name"
+                  placeholder={t("Item name")}
                   required
                 />
               </div>
@@ -157,7 +158,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
                 className="text-destructive"
                 onClick={() => removeItem(item._key)}
                 disabled={items.length <= 1}
-                aria-label="Remove item"
+                aria-label={t("Remove item")}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

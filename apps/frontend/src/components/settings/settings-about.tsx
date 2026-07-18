@@ -1,5 +1,6 @@
 'use client';
 
+import { t } from '@/lib/i18n';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,30 +15,30 @@ export function SettingsAbout() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Application Information</CardTitle>
+          <CardTitle>{t('Application Information')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Application</p>
+              <p className="text-sm text-muted-foreground">{t('Application')}</p>
               <p className="font-medium">TableFlow</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Version</p>
+              <p className="text-sm text-muted-foreground">{t('Version')}</p>
               <p className="font-medium">{APP_VERSION}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Build</p>
+              <p className="text-sm text-muted-foreground">{t('Build')}</p>
               <p className="font-medium font-mono text-xs">{BUILD_VERSION}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Environment</p>
+              <p className="text-sm text-muted-foreground">{t('Environment')}</p>
               <Badge variant={NODE_ENV === 'production' ? 'success' : 'secondary'}>
                 {NODE_ENV}
               </Badge>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">License</p>
+              <p className="text-sm text-muted-foreground">{t('License')}</p>
               <p className="font-medium">MIT</p>
             </div>
           </div>
@@ -46,25 +47,25 @@ export function SettingsAbout() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Resources</CardTitle>
+          <CardTitle>{t('Resources')}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button variant="outline" size="sm" asChild>
             <a href="#" target="_blank" rel="noopener noreferrer">
               <FileText className="h-3.5 w-3.5 mr-1.5" />
-              Documentation
+              {t('Documentation')}
             </a>
           </Button>
           <Button variant="outline" size="sm" asChild>
             <a href="#" target="_blank" rel="noopener noreferrer">
               <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-              API Reference
+              {t('API Reference')}
             </a>
           </Button>
           <Button variant="outline" size="sm" asChild>
             <a href="#" target="_blank" rel="noopener noreferrer">
               <Github className="h-3.5 w-3.5 mr-1.5" />
-              Source Code
+              {t('Source Code')}
             </a>
           </Button>
         </CardContent>

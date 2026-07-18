@@ -1,4 +1,5 @@
 'use client';
+import { t } from '@/lib/i18n';
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
