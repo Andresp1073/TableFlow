@@ -34,6 +34,7 @@ import {
 
 interface TableActionsProps {
   table: RestaurantTable;
+  restaurantId?: string;
   allowedTransitions?: string[];
   showViewOnFloorPlan?: boolean;
   onViewOnFloorPlan?: () => void;
@@ -41,13 +42,14 @@ interface TableActionsProps {
 
 export function TableActions({
   table,
+  restaurantId: propRestaurantId,
   allowedTransitions,
   showViewOnFloorPlan,
   onViewOnFloorPlan,
 }: TableActionsProps) {
   const router = useRouter();
   const params = useParams();
-  const restaurantId = params?.['id'] as string;
+  const restaurantId = propRestaurantId ?? (params?.['id'] as string);
   const [showArchiveDialog, setShowArchiveDialog] = useState(false);
   const [showStatusDialog, setShowStatusDialog] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>('');
