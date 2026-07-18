@@ -12,12 +12,14 @@ import { ConfirmActionDialog } from '@/components/restaurants/confirm-action-dia
 
 interface DiningAreaActionsProps {
   area: DiningArea;
+  restaurantId?: string;
 }
 
-export function DiningAreaActions({ area }: DiningAreaActionsProps) {
+export function DiningAreaActions({ area, restaurantId: propRestaurantId }: DiningAreaActionsProps) {
   const router = useRouter();
   const params = useParams();
-  const restaurantId = params?.['id'] as string;
+  const paramsRestaurantId = params?.['id'] as string;
+  const restaurantId = propRestaurantId || paramsRestaurantId;
   const [showArchiveDialog, setShowArchiveDialog] = useState(false);
   const archiveMutation = useArchiveDiningArea();
 
