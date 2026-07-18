@@ -77,7 +77,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
         <CardContent className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="source">Source</Label>
+              <Label htmlFor="source">{t('Source')}</Label>
               <Select value={source} onValueChange={(v) => setSource(v as OrderSource)}>
                 <SelectTrigger id="source">
                   <SelectValue />

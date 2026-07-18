@@ -68,31 +68,31 @@ export function OrderList({ orders, isLoading, isError, error, onRetry }: OrderL
           <CardContent>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Source</span>
+                <span className="text-muted-foreground">{t('Source')}</span>
                 <span>{t(ORDER_SOURCE_LABELS[order.source])}</span>
               </div>
               {order.tableId && (
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Table</span>
-                  <span>{order.tableId}</span>
+                <span className="text-muted-foreground">{t('Table')}</span>
+                <span>{order.tableId}</span>
                 </div>
               )}
               {order.customerName && (
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Customer</span>
-                  <span>{order.customerName}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Items</span>
-                <span>{order.items.length}</span>
+                <span className="text-muted-foreground">{t('Customer')}</span>
+                <span>{order.customerName}</span>
               </div>
-              <div className="flex justify-between font-medium pt-1 border-t">
-                <span>Total</span>
-                <span>{formatCurrency(order.total)}</span>
-              </div>
-              <div className="flex justify-between text-xs pt-1">
-                <span className="text-muted-foreground">Payment</span>
+            )}
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">{t('Items')}</span>
+              <span>{order.items.length}</span>
+            </div>
+            <div className="flex justify-between font-medium pt-1 border-t">
+              <span>{t('Total')}</span>
+              <span>{formatCurrency(order.total)}</span>
+            </div>
+            <div className="flex justify-between text-xs pt-1">
+              <span className="text-muted-foreground">{t('Payment')}</span>
                 <Badge variant={order.paymentStatus === 'paid' ? 'success' : 'secondary'} className="text-xs">
                   {order.paymentStatus}
                 </Badge>

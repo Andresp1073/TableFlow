@@ -77,7 +77,7 @@ export function OrderDetailView({
             Order #{order.id.slice(0, 8)}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Created {new Date(order.createdAt).toLocaleString()}
+            {t('Created {date}', { date: new Date(order.createdAt).toLocaleString() })}
           </p>
         </div>
         <OrderStatusBadge status={order.status} />
@@ -86,7 +86,7 @@ export function OrderDetailView({
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle className="text-lg">Items</CardTitle>
+            <CardTitle className="text-lg">{t('Items')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -112,29 +112,29 @@ export function OrderDetailView({
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Summary</CardTitle>
+              <CardTitle className="text-lg">{t('Summary')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Subtotal</span>
+                <span className="text-muted-foreground">{t('Subtotal')}</span>
                 <span>{formatCurrency(order.subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Tax (8%)</span>
+                <span className="text-muted-foreground">{t('Tax (8%)')}</span>
                 <span>{formatCurrency(order.taxAmount)}</span>
               </div>
               {order.discountAmount > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Discount</span>
+                  <span className="text-muted-foreground">{t('Discount')}</span>
                   <span>-{formatCurrency(order.discountAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between font-medium text-lg pt-2 border-t">
-                <span>Total</span>
+                <span>{t('Total')}</span>
                 <span>{formatCurrency(order.total)}</span>
               </div>
               <div className="flex justify-between text-sm pt-1">
-                <span className="text-muted-foreground">Payment</span>
+                <span className="text-muted-foreground">{t('Payment')}</span>
                 <span>{t(PAYMENT_STATUS_LABELS[order.paymentStatus])}</span>
               </div>
             </CardContent>
@@ -142,33 +142,33 @@ export function OrderDetailView({
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Details</CardTitle>
+              <CardTitle className="text-lg">{t('Details')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Source</span>
+                <span className="text-muted-foreground">{t('Source')}</span>
                 <span>{t(ORDER_SOURCE_LABELS[order.source])}</span>
               </div>
               {order.tableId && (
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Table</span>
+                  <span className="text-muted-foreground">{t('Table')}</span>
                   <span>{order.tableId}</span>
                 </div>
               )}
               {order.customerName && (
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Customer</span>
+                  <span className="text-muted-foreground">{t('Customer')}</span>
                   <span>{order.customerName}</span>
                 </div>
               )}
               {order.customerCount && (
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Guests</span>
+                  <span className="text-muted-foreground">{t('Guests')}</span>
                   <span>{order.customerCount}</span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Items</span>
+                <span className="text-muted-foreground">{t('Items')}</span>
                 <span>{order.items.length}</span>
               </div>
             </CardContent>
