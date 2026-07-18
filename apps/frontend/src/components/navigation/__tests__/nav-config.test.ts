@@ -37,7 +37,7 @@ describe('nav-config', () => {
     expect(dashboard?.label).toBe('Dashboard');
 
     const settings = getNavItemByHref('/settings');
-    expect(settings?.label).toBe('Settings');
+    expect(settings?.label).toBe('User Settings');
   });
 
   it('getNavItemByHref returns undefined for unknown href', () => {

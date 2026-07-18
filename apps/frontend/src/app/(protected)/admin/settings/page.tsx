@@ -1,0 +1,173 @@
+'use client';
+
+import { AdminPageLayout } from '@/components/admin/admin-page-layout';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Globe, Palette, Bell, Shield, Clock, DollarSign } from 'lucide-react';
+
+export default function AdminSettingsPage() {
+  return (
+    <AdminPageLayout
+      title="System Preferences"
+      description="Configure platform-wide settings"
+    >
+      <Breadcrumb
+        items={[
+          { label: 'Admin', href: '/admin' },
+          { label: 'Settings' },
+        ]}
+      />
+
+      <div className="space-y-6">
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Globe className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">Localization</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
+            <div className="space-y-2">
+              <Label htmlFor="locale">Default Locale</Label>
+              <Select id="locale" defaultValue="en-US">
+                <option value="en-US">English (US)</option>
+                <option value="es-MX">Spanish (Mexico)</option>
+                <option value="fr-FR">French (France)</option>
+                <option value="de-DE">German (Germany)</option>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="timezone">Timezone</Label>
+              <Select id="timezone" defaultValue="UTC">
+                <option value="UTC">UTC</option>
+                <option value="America/New_York">Eastern (US)</option>
+                <option value="America/Chicago">Central (US)</option>
+                <option value="America/Denver">Mountain (US)</option>
+                <option value="America/Los_Angeles">Pacific (US)</option>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="dateFormat">Date Format</Label>
+              <Select id="dateFormat" defaultValue="MM/DD/YYYY">
+                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="timeFormat">Time Format</Label>
+              <Select id="timeFormat" defaultValue="12h">
+                <option value="12h">12-hour (AM/PM)</option>
+                <option value="24h">24-hour</option>
+              </Select>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Palette className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">Appearance</h2>
+          </div>
+          <div className="space-y-4 max-w-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="darkMode">Dark Mode</Label>
+                <p className="text-sm text-muted-foreground">Enable dark mode across the platform</p>
+              </div>
+              <Switch id="darkMode" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="compactMode">Compact Mode</Label>
+                <p className="text-sm text-muted-foreground">Use compact layout for data-dense views</p>
+              </div>
+              <Switch id="compactMode" />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Shield className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">Security</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
+            <div className="space-y-2">
+              <Label htmlFor="sessionTimeout">Session Timeout (minutes)</Label>
+              <Input id="sessionTimeout" type="number" defaultValue="60" min={5} max={1440} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="maxLoginAttempts">Max Login Attempts</Label>
+              <Input id="maxLoginAttempts" type="number" defaultValue="5" min={1} max={20} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lockoutDuration">Lockout Duration (minutes)</Label>
+              <Input id="lockoutDuration" type="number" defaultValue="15" min={1} max={1440} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="passwordMinLength">Min Password Length</Label>
+              <Input id="passwordMinLength" type="number" defaultValue="8" min={6} max={128} />
+            </div>
+            <div className="flex items-center gap-3 sm:col-span-2">
+              <Switch id="twoFactorAuth" />
+              <Label htmlFor="twoFactorAuth">Require Two-Factor Authentication for all users</Label>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Bell className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">Notifications</h2>
+          </div>
+          <div className="space-y-4 max-w-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="emailNotifications">Email Notifications</Label>
+                <p className="text-sm text-muted-foreground">Send system notifications via email</p>
+              </div>
+              <Switch id="emailNotifications" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="auditAlerts">Security Alerts</Label>
+                <p className="text-sm text-muted-foreground">Alert admins on security events</p>
+              </div>
+              <Switch id="auditAlerts" defaultChecked />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <DollarSign className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">Billing & Currency</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 max-w-lg">
+            <div className="space-y-2">
+              <Label htmlFor="currency">Default Currency</Label>
+              <Select id="currency" defaultValue="USD">
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="MXN">MXN ($)</option>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="taxRate">Default Tax Rate (%)</Label>
+              <Input id="taxRate" type="number" defaultValue="8.5" min={0} max={100} step={0.01} />
+            </div>
+          </div>
+        </Card>
+
+        <div className="flex justify-end">
+          <Button>Save Settings</Button>
+        </div>
+      </div>
+    </AdminPageLayout>
+  );
+}

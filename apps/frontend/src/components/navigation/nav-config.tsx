@@ -22,6 +22,10 @@ import {
   DollarSign,
   Shield,
   Download,
+  Key,
+  ShieldCheck,
+  FileSearch,
+  Bell,
 } from 'lucide-react';
 import type { NavGroup, NavItem } from './nav-types';
 
@@ -148,7 +152,22 @@ export const NAV_ITEMS: NavGroup = [
     title: 'System',
     items: [
       {
-        label: 'Settings',
+        label: 'Admin',
+        href: '/admin',
+        icon: <Shield className="h-4 w-4" />,
+        items: [
+          { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard className="h-4 w-4" /> },
+          { label: 'Users', href: '/admin/users', icon: <Users className="h-4 w-4" /> },
+          { label: 'Roles', href: '/admin/roles', icon: <Key className="h-4 w-4" /> },
+          { label: 'Permissions', href: '/admin/permissions', icon: <ShieldCheck className="h-4 w-4" /> },
+          { label: 'Restaurants', href: '/admin/restaurants', icon: <Building2 className="h-4 w-4" /> },
+          { label: 'Audit', href: '/admin/audit', icon: <FileSearch className="h-4 w-4" /> },
+          { label: 'Notifications', href: '/admin/notifications', icon: <Bell className="h-4 w-4" /> },
+          { label: 'Settings', href: '/admin/settings', icon: <Settings className="h-4 w-4" /> },
+        ],
+      },
+      {
+        label: 'User Settings',
         href: '/settings',
         icon: <Settings className="h-4 w-4" />,
       },

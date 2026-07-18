@@ -7,3 +7,4 @@ export { default as inventoryRouter } from '../modules/inventory/presentation/ro
 export { default as customersRouter } from '../modules/restaurant/customers/presentation/routes/customers.routes.js';
 export { default as loyaltyRouter } from '../modules/loyalty/presentation/routes/loyalty.routes.js';
 export { ordersRouter, checkoutRouter } from '../modules/sales/presentation/routes/index.js';
+export { default as adminRouter } from '../modules/admin/admin.routes.js';

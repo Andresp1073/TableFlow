@@ -13,7 +13,7 @@ import {
   notFoundHandler,
   errorHandler,
 } from './middlewares/index.js';
-import { healthRouter, authRouter, restaurantRouter, auditRouter, dashboardRouter, inventoryRouter, customersRouter, loyaltyRouter, ordersRouter, checkoutRouter } from './routes/index.js';
+import { healthRouter, authRouter, restaurantRouter, auditRouter, dashboardRouter, inventoryRouter, customersRouter, loyaltyRouter, ordersRouter, checkoutRouter, adminRouter } from './routes/index.js';
 import { eventBus } from './events/index.js';
 const app = express();
 
@@ -62,6 +62,8 @@ app.use(`${APP.API_PREFIX}/restaurants/:id/customers`, customersRouter);
 app.use(`${APP.API_PREFIX}/restaurants/:id/loyalty`, loyaltyRouter);
 app.use(`${APP.API_PREFIX}/restaurants/:id/orders`, ordersRouter);
 app.use(`${APP.API_PREFIX}/restaurants/:id/checkout`, checkoutRouter);
+
+app.use(`${APP.API_PREFIX}/admin`, adminRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
