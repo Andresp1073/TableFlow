@@ -18,6 +18,10 @@ import {
   Award,
   Star,
   Wallet,
+  TrendingUp,
+  DollarSign,
+  Shield,
+  Download,
 } from 'lucide-react';
 import type { NavGroup, NavItem } from './nav-types';
 
@@ -125,6 +129,18 @@ export const NAV_ITEMS: NavGroup = [
         label: 'Analytics',
         href: '/analytics',
         icon: <BarChart3 className="h-4 w-4" />,
+        items: [
+          { label: 'Executive Dashboard', href: '/analytics', icon: <LayoutDashboard className="h-4 w-4" /> },
+          { label: 'Sales', href: '/analytics/sales', icon: <TrendingUp className="h-4 w-4" /> },
+          { label: 'Reservations', href: '/analytics/reservations', icon: <CalendarCheck className="h-4 w-4" /> },
+          { label: 'Occupancy', href: '/analytics/occupancy', icon: <Table2 className="h-4 w-4" /> },
+          { label: 'Inventory', href: '/analytics/inventory', icon: <Package className="h-4 w-4" /> },
+          { label: 'Kitchen', href: '/analytics/kitchen', icon: <ChefHat className="h-4 w-4" /> },
+          { label: 'Customers', href: '/analytics/customers', icon: <Users className="h-4 w-4" /> },
+          { label: 'Financial', href: '/analytics/financial', icon: <DollarSign className="h-4 w-4" /> },
+          { label: 'Audit', href: '/analytics/audit', icon: <Shield className="h-4 w-4" /> },
+          { label: 'Export Center', href: '/analytics/export', icon: <Download className="h-4 w-4" /> },
+        ],
       },
     ],
   },
