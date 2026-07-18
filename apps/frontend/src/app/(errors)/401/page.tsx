@@ -9,16 +9,16 @@ export default function UnauthorizedPage() {
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10">
         <ShieldX className="h-8 w-8 text-destructive" />
       </div>
-      <h1 className="mt-6 text-2xl font-bold">401 - Unauthorized</h1>
+      <h1 className="mt-6 text-2xl font-bold">{t('401 - Unauthorized')}</h1>
       <p className="mt-2 text-sm text-muted-foreground max-w-md">
-        You need to be authenticated to access this page. Please sign in to continue.
+        {t('You need to be authenticated to access this page. Please sign in to continue.')}
       </p>
       <div className="mt-6 flex gap-3">
         <Button asChild>
-          <Link href="/login">Sign in</Link>
+          <Link href="/login">{t('Sign in')}</Link>
         </Button>
         <Button variant="outline" asChild>
-          <Link href="/">Go home</Link>
+          <Link href="/">{t('Go home')}</Link>
         </Button>
       </div>
     </div>

@@ -29,7 +29,7 @@ export default function PosPage() {
       const order = await createOrder.mutateAsync({ restaurantId, data });
       setCurrentOrder(order);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create order');
+      setError(err instanceof Error ? err.message : t('Failed to create order'));
     }
   }, [restaurantId, createOrder]);
 
@@ -51,7 +51,7 @@ export default function PosPage() {
           data: itemData,
         });
       } catch {
-        setError('Failed to add item');
+        setError(t('Failed to add item'));
       }
     }
   }, [restaurantId, currentOrder, addItem]);
@@ -88,7 +88,7 @@ export default function PosPage() {
       });
       setSubmitResult(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to submit order');
+      setError(err instanceof Error ? err.message : t('Failed to submit order'));
     }
   }, [restaurantId, currentOrder, submitOrder]);
 
@@ -103,7 +103,7 @@ export default function PosPage() {
       });
       setPaymentResult(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Payment failed');
+      setError(err instanceof Error ? err.message : t('Payment failed'));
     }
   }, [restaurantId, currentOrder, processPayment]);
 
@@ -117,9 +117,9 @@ export default function PosPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Point of Sale</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">{t('Point of Sale')}</h1>
         <p className="text-sm text-muted-foreground">
-          Create orders and process payments
+          {t('Create orders and process payments')}
         </p>
       </div>
 

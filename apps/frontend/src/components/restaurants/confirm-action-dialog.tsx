@@ -41,10 +41,10 @@ export function ConfirmActionDialog({
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button variant={confirmVariant} onClick={onConfirm} loading={loading}>
-            {loading ? 'Processing...' : confirmLabel}
+            {loading ? t('Processing...') : confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

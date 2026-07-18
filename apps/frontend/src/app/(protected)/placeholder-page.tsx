@@ -18,7 +18,7 @@ export function PlaceholderPage({ title, description, icon }: PlaceholderPagePro
             <div>
               <CardTitle>{title}</CardTitle>
               <CardDescription>
-                This page is under construction. Content will be implemented in a future phase.
+                {t('This page is under construction. Content will be implemented in a future phase.')}
               </CardDescription>
             </div>
           </div>
@@ -26,7 +26,7 @@ export function PlaceholderPage({ title, description, icon }: PlaceholderPagePro
         <CardContent>
           <div className="flex h-48 items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/20">
             <p className="text-sm text-muted-foreground">
-              {title} module coming soon
+              {t('{title} module coming soon', { title })}
             </p>
           </div>
         </CardContent>

@@ -13,5 +13,6 @@ const STATUS_VARIANTS: Record<RestaurantStatus, 'success' | 'warning' | 'danger'
 
 export function RestaurantStatusBadge({ status }: { status: RestaurantStatus }) {
   const variant = STATUS_VARIANTS[status] ?? 'default';
-  return <Badge variant={variant}>{status.charAt(0).toUpperCase() + status.slice(1)}</Badge>;
+  const label = status.charAt(0).toUpperCase() + status.slice(1);
+  return <Badge variant={variant}>{t(label)}</Badge>;
 }

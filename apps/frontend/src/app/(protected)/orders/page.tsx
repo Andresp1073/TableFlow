@@ -37,14 +37,14 @@ export default function OrdersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">Orders</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">{t('Orders')}</h1>
           <p className="text-sm text-muted-foreground">
-            Manage and track customer orders
+            {t('Manage and track customer orders')}
           </p>
         </div>
         <Button onClick={() => router.push('/orders/new')}>
           <Plus className="h-4 w-4 mr-2" />
-          New Order
+          {t('New Order')}
         </Button>
       </div>
 
@@ -58,12 +58,12 @@ export default function OrdersPage() {
 
       <Tabs defaultValue="all" onValueChange={(v) => setStatusFilter(v === 'all' ? undefined : v)}>
         <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="draft">Drafts</TabsTrigger>
-          <TabsTrigger value="submitted">Submitted</TabsTrigger>
-          <TabsTrigger value="in_progress">In Progress</TabsTrigger>
-          <TabsTrigger value="ready">Ready</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
+          <TabsTrigger value="all">{t('All')}</TabsTrigger>
+          <TabsTrigger value="draft">{t('Drafts')}</TabsTrigger>
+          <TabsTrigger value="submitted">{t('Submitted')}</TabsTrigger>
+          <TabsTrigger value="in_progress">{t('In Progress')}</TabsTrigger>
+          <TabsTrigger value="ready">{t('Ready')}</TabsTrigger>
+          <TabsTrigger value="completed">{t('Completed')}</TabsTrigger>
         </TabsList>
         <TabsContent value={statusFilter ?? 'all'} className="mt-4">
           <OrderList

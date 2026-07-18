@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { toast } from 'sonner';
+import { t } from '@/lib/i18n';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useBusinessHours, useUpdateBusinessHours } from '@/hooks/use-settings';
 import { DAY_NAMES } from '@/lib/settings-types';
