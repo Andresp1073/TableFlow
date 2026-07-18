@@ -4,17 +4,15 @@ import { sendSuccess } from "../../../../utils/response.js";
 import type { AuthenticatedRequest } from "../../../../middlewares/auth.js";
 import { OrderManager } from "../../application/services/OrderManager.js";
 import { InMemorySalesOrderRepository } from "../../infrastructure/repositories/InMemorySalesOrderRepository.js";
-import { PaymentManager } from "../../../payments/application/services/PaymentManager.js";
-import { PaymentProviderService } from "../../../payments/application/services/PaymentProviderService.js";
-import { InMemoryPaymentTransactionRepository } from "../../../payments/infrastructure/repositories/InMemoryPaymentRepositories.js";
-import { InMemoryPaymentProviderRepository } from "../../../payments/infrastructure/repositories/InMemoryPaymentRepositories.js";
+import {
+  createPaymentManager,
+  createPaymentProviderService,
+} from "../../../payments/infrastructure/repositories/store.js";
 import { KitchenManager } from "../../../kitchen/application/services/KitchenManager.js";
 import { InMemoryKitchenTicketRepository, InMemoryKitchenStationRepository } from "../../../kitchen/infrastructure/repositories/InMemoryKitchenRepositories.js";
 import { PaymentIntent } from "../../../payments/domain/models/PaymentIntent.js";
 
 const orderRepo = new InMemorySalesOrderRepository();
-const paymentTransactionRepo = new InMemoryPaymentTransactionRepository();
-const paymentProviderRepo = new InMemoryPaymentProviderRepository();
 const kitchenTicketRepo = new InMemoryKitchenTicketRepository();
 const kitchenStationRepo = new InMemoryKitchenStationRepository();
 
@@ -28,21 +26,13 @@ function getOrderManager(): OrderManager {
   return orderManager;
 }
 
-function getPaymentManager(): PaymentManager {
-  if (!paymentManager) {
-    paymentManager = new PaymentManager(
-      paymentTransactionRepo,
-      paymentProviderRepo,
-      { publish: () => {} },
-    );
-  }
+function getPaymentManager(): ReturnType<typeof createPaymentManager> {
+  if (!paymentManager) paymentManager = createPaymentManager();
   return paymentManager;
 }
 
-function getPaymentProviderService(): PaymentProviderService {
-  if (!paymentProviderService) {
-    paymentProviderService = new PaymentProviderService(paymentProviderRepo);
-  }
+function getPaymentProviderService(): ReturnType<typeof createPaymentProviderService> {
+  if (!paymentProviderService) paymentProviderService = createPaymentProviderService();
   return paymentProviderService;
 }
 

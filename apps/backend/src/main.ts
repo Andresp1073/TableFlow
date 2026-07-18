@@ -13,8 +13,9 @@ import {
   notFoundHandler,
   errorHandler,
 } from './middlewares/index.js';
-import { healthRouter, authRouter, restaurantRouter, auditRouter, dashboardRouter, inventoryRouter, customersRouter, loyaltyRouter, ordersRouter, checkoutRouter, adminRouter } from './routes/index.js';
+import { healthRouter, authRouter, restaurantRouter, auditRouter, dashboardRouter, inventoryRouter, customersRouter, loyaltyRouter, ordersRouter, checkoutRouter, paymentsRouter, adminRouter } from './routes/index.js';
 import { eventBus } from './events/index.js';
+import { initializePaymentStore } from './modules/payments/infrastructure/repositories/store.js';
 const app = express();
 
 app.set('trust proxy', 1);
@@ -77,6 +78,7 @@ app.use(`${APP.API_PREFIX}/restaurants/:id/customers`, customersRouter);
 app.use(`${APP.API_PREFIX}/restaurants/:id/loyalty`, loyaltyRouter);
 app.use(`${APP.API_PREFIX}/restaurants/:id/orders`, ordersRouter);
 app.use(`${APP.API_PREFIX}/restaurants/:id/checkout`, checkoutRouter);
+app.use(`${APP.API_PREFIX}/restaurants/:id/payments`, paymentsRouter);
 
 app.use(`${APP.API_PREFIX}/admin`, adminRouter);
 
@@ -92,6 +94,7 @@ function registerEventHandlers(): void {
 async function start(): Promise<void> {
   try {
     await connectDatabase();
+    await initializePaymentStore();
     registerEventHandlers();
 
     app.listen(env.PORT, env.HOST, () => {
