@@ -17,6 +17,7 @@ import {
   Gift,
   Award,
   Star,
+  Wallet,
 } from 'lucide-react';
 import type { NavGroup, NavItem } from './nav-types';
 
@@ -60,9 +61,18 @@ export const NAV_ITEMS: NavGroup = [
     title: 'Service',
     items: [
       {
+        label: 'Point of Sale',
+        href: '/pos',
+        icon: <Wallet className="h-4 w-4" />,
+      },
+      {
         label: 'Orders',
         href: '/orders',
         icon: <ShoppingCart className="h-4 w-4" />,
+        items: [
+          { label: 'All Orders', href: '/orders', icon: <ShoppingCart className="h-4 w-4" /> },
+          { label: 'New Order', href: '/orders/new', icon: <ShoppingCart className="h-4 w-4" /> },
+        ],
       },
       {
         label: 'Kitchen',
