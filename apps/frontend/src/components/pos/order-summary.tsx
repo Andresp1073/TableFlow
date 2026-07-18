@@ -22,10 +22,10 @@ export function OrderSummary({ items, onRemoveItem, onClear }: OrderSummaryProps
     <Card className="flex flex-col h-full">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Current Order</CardTitle>
+          <CardTitle className="text-lg">{t('Current Order')}</CardTitle>
           {items.length > 0 && (
             <Button variant="ghost" size="sm" onClick={onClear} className="text-destructive h-auto px-2">
-              Clear
+              {t('Clear')}
             </Button>
           )}
         </div>
@@ -34,7 +34,7 @@ export function OrderSummary({ items, onRemoveItem, onClear }: OrderSummaryProps
         <div className="h-[300px] overflow-y-auto px-4">
           {items.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">
-              No items added yet
+              {t('No items added yet')}
             </p>
           ) : (
             <div className="space-y-2">
@@ -53,7 +53,7 @@ export function OrderSummary({ items, onRemoveItem, onClear }: OrderSummaryProps
                       size="icon-sm"
                       className="h-6 w-6 text-destructive"
                       onClick={() => onRemoveItem(item.id)}
-                      aria-label={`Remove ${item.menuItemName}`}
+                      aria-label={t('Remove {itemName}', { itemName: item.menuItemName })}
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>
@@ -66,15 +66,15 @@ export function OrderSummary({ items, onRemoveItem, onClear }: OrderSummaryProps
       </CardContent>
       <CardFooter className="flex-col gap-1 border-t pt-3">
         <div className="flex justify-between w-full text-sm text-muted-foreground">
-          <span>Subtotal</span>
+          <span>{t('Subtotal')}</span>
           <span>{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between w-full text-sm text-muted-foreground">
-          <span>Tax (8%)</span>
+          <span>{t('Tax (8%)')}</span>
           <span>{formatCurrency(tax)}</span>
         </div>
         <div className="flex justify-between w-full font-semibold text-base pt-1 border-t mt-1">
-          <span>Total</span>
+          <span>{t('Total')}</span>
           <span>{formatCurrency(total)}</span>
         </div>
       </CardFooter>

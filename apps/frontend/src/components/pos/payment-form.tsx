@@ -1,5 +1,5 @@
 'use client';
-import { t } from '@/lib/i18n';
+import { t, formatCurrency } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { CreditCard, Banknote, Wallet, Smartphone } from 'lucide-react';
@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { LoadingState } from '@/components/ui/loading-state';
-import { formatCurrency } from '@/lib/sales-types';
 import type { ProcessPaymentInput } from '@/lib/sales-types';
 import type { PaymentResult } from '@/lib/sales-types';
 
@@ -56,26 +55,26 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
         <CardHeader>
           <CardTitle className="text-green-600 flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            Payment Successful
+            {t('Payment Successful')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="text-center py-4">
             <div className="text-3xl font-bold text-green-600">{formatCurrency(paymentResult.paid)}</div>
-            <div className="text-sm text-muted-foreground">Payment received</div>
+            <div className="text-sm text-muted-foreground">{t('Payment received')}</div>
           </div>
           {paymentResult.tip > 0 && (
             <div className="flex justify-between text-sm">
-              <span>Tip</span>
+              <span>{t('Tip')}</span>
               <span>{formatCurrency(paymentResult.tip)}</span>
             </div>
           )}
           <div className="flex justify-between text-sm">
-            <span>Transaction ID</span>
+            <span>{t('Transaction ID')}</span>
             <span className="font-mono text-xs">{paymentResult.paymentTransactionId.slice(0, 12)}</span>
           </div>
           <Button className="w-full mt-4" onClick={onClose}>
-            Done
+            {t('Done')}
           </Button>
         </CardContent>
       </Card>
@@ -85,16 +84,16 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Process Payment</CardTitle>
+        <CardTitle>{t('Process Payment')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="text-center py-3">
           <div className="text-3xl font-bold">{formatCurrency(total)}</div>
-          <div className="text-sm text-muted-foreground">Total due</div>
+          <div className="text-sm text-muted-foreground">{t('Total due')}</div>
         </div>
 
         <div className="space-y-2">
-          <Label>Payment Method</Label>
+          <Label>{t('Payment Method')}</Label>
           <div className="grid grid-cols-2 gap-2">
             {PAYMENT_METHODS.map((method) => (
               <Button
@@ -112,7 +111,7 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="provider">Provider</Label>
+          <Label htmlFor="provider">{t('Provider')}</Label>
           <select
             id="provider"
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -126,7 +125,7 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
         </div>
 
         <div className="space-y-2">
-          <Label>Tip</Label>
+          <Label>{t('Tip')}</Label>
           <div className="flex gap-2">
             {[0, 10, 15, 20].map((pct) => (
               <Button
@@ -136,13 +135,13 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
                 onClick={() => setTipPercent(pct)}
                 type="button"
               >
-                {pct === 0 ? 'No Tip' : `${pct}%`}
+                {pct === 0 ? t('No Tip') : `${pct}%`}
               </Button>
             ))}
           </div>
           {tipPercent > 0 && (
             <div className="text-sm text-muted-foreground">
-              Tip: {formatCurrency(tipAmount)} — Total: {formatCurrency(totalWithTip)}
+              {t('Tip: {amount} — Total: {total}', { amount: formatCurrency(tipAmount), total: formatCurrency(totalWithTip) })}
             </div>
           )}
         </div>
@@ -158,7 +157,7 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
           ) : (
             <>
               <CreditCard className="h-4 w-4 mr-2" />
-              Pay {formatCurrency(totalWithTip)}
+              {t('Pay {amount}', { amount: formatCurrency(totalWithTip) })}
             </>
           )}
         </Button>

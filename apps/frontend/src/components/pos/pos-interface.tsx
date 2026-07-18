@@ -1,5 +1,5 @@
 'use client';
-import { t } from '@/lib/i18n';
+import { t, formatCurrency } from '@/lib/i18n';
 
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
@@ -137,25 +137,25 @@ export function PosInterface({
         {showNewOrderForm ? (
           <Card>
             <CardHeader>
-              <CardTitle>New POS Order</CardTitle>
+              <CardTitle>{t('New POS Order')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="pos-table">Table</Label>
+                  <Label htmlFor="pos-table">{t('Table')}</Label>
                   <Input id="pos-table" value={tableId} onChange={(e) => setTableId(e.target.value)} placeholder={t("e.g. T-05")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="pos-customer">Customer</Label>
+                  <Label htmlFor="pos-customer">{t('Customer')}</Label>
                   <Input id="pos-customer" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t("Walk-in")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="pos-guests">Guests</Label>
+                  <Label htmlFor="pos-guests">{t('Guests')}</Label>
                   <Input id="pos-guests" type="number" min={1} value={customerCount} onChange={(e) => setCustomerCount(e.target.value)} />
                 </div>
               </div>
               <Button onClick={handleNewOrder} className="w-full" disabled={isCreating}>
-                {isCreating ? <LoadingState message={t("Creating...")} /> : 'Start New Order'}
+                {isCreating ? <LoadingState message={t("Creating...")} /> : t('Start New Order')}
               </Button>
             </CardContent>
           </Card>
@@ -163,7 +163,7 @@ export function PosInterface({
           <>
             <Card>
               <CardHeader>
-                <CardTitle>Menu Items</CardTitle>
+                <CardTitle>{t('Menu Items')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="all" onValueChange={setCategory}>
@@ -183,7 +183,7 @@ export function PosInterface({
                           type="button"
                         >
                           <span className="text-sm font-medium">{item.name}</span>
-                          <span className="text-xs text-muted-foreground">${item.price.toFixed(2)}</span>
+                          <span className="text-xs text-muted-foreground">{formatCurrency(item.price)}</span>
                         </Button>
                       ))}
                     </div>
@@ -220,11 +220,11 @@ export function PosInterface({
               {isSubmitting ? (
                 <LoadingState message={t("Submitting...")} />
               ) : submitResult ? (
-                'Submitted to Kitchen'
+                t('Submitted to Kitchen')
               ) : (
                 <>
                   <ShoppingCart className="h-4 w-4 mr-2" />
-                  Submit Order
+                  {t('Submit Order')}
                 </>
               )}
             </Button>
@@ -235,7 +235,7 @@ export function PosInterface({
                 variant="primary"
                 onClick={() => setShowPayment(true)}
               >
-                Proceed to Payment
+                {t('Proceed to Payment')}
               </Button>
             )}
           </div>
@@ -244,8 +244,8 @@ export function PosInterface({
 
       <Dialog open={showPayment} onOpenChange={setShowPayment}>
         <DialogContent className="sm:max-w-md">
-          <DialogTitle>Payment</DialogTitle>
-          <DialogDescription>Process payment for this order</DialogDescription>
+          <DialogTitle>{t('Payment')}</DialogTitle>
+          <DialogDescription>{t('Process payment for this order')}</DialogDescription>
           <PaymentForm
             total={currentOrder?.total ?? 0}
             isProcessing={isProcessingPayment}

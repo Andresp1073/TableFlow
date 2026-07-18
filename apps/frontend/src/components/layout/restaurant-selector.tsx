@@ -9,11 +9,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useRestaurant } from '@/providers/restaurant-provider';
+import { t } from '@/lib/i18n';
 
 const MOCK_RESTAURANTS = [
-  { id: '1', name: 'Main Restaurant', slug: 'main' },
-  { id: '2', name: 'Downtown Bistro', slug: 'downtown' },
-  { id: '3', name: 'Uptown Grill', slug: 'uptown' },
+  { id: '1', name: t('Main Restaurant'), slug: 'main' },
+  { id: '2', name: t('Downtown Bistro'), slug: 'downtown' },
+  { id: '3', name: t('Uptown Grill'), slug: 'uptown' },
 ];
 
 export function RestaurantSelector() {
@@ -29,7 +30,7 @@ export function RestaurantSelector() {
       <Building2 className="h-4 w-4 text-muted-foreground shrink-0" aria-hidden="true" />
       <Select value={current?.slug ?? ''} onValueChange={handleChange}>
         <SelectTrigger className="h-8 w-44 border-none bg-transparent px-0 text-sm font-medium hover:text-foreground focus:ring-0">
-          <SelectValue placeholder="Select restaurant" />
+          <SelectValue placeholder={t('Select restaurant')} />
         </SelectTrigger>
         <SelectContent align="start">
           {MOCK_RESTAURANTS.map((r) => (
