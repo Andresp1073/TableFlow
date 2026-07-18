@@ -33,7 +33,7 @@ export default function AdminDashboardPage() {
               value={stats.activeUsers.toLocaleString()}
               icon={<Activity className="h-4 w-4" />}
               description="Currently active accounts"
-              trend={{ value: stats.activeUsers / Math.max(stats.totalUsers, 1), label: 'of total' }}
+              trend={{ value: String(stats.activeUsers / Math.max(stats.totalUsers, 1)), positive: true }}
             />
             <StatCard
               title="Locked Users"

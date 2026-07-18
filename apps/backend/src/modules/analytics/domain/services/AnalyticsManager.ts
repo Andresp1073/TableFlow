@@ -13,6 +13,8 @@ import type { KpiDefinition, KpiPeriod } from "../models/KpiDefinition.js";
 import type { AnalyticsDataset, DatasetType } from "../models/AnalyticsDataset.js";
 import type { AnalyticsReport, AnalyticsReportConfig } from "../models/AnalyticsReport.js";
 import type { AnalyticsQuery } from "../models/AnalyticsQuery.js";
+import type { MetricRecord } from "../models/MetricRecord.js";
+import type { ReportDefinition } from "../models/ReportDefinition.js";
 import { MetricCalculated } from "../events/MetricCalculated.js";
 import { KpiUpdated } from "../events/KpiUpdated.js";
 import { AnalyticsDatasetBuilt } from "../events/AnalyticsDatasetBuilt.js";

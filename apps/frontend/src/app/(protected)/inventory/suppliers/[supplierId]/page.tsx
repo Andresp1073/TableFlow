@@ -10,7 +10,7 @@ export default function SupplierDetailPage() {
   const params = useParams();
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const supplierId = params.supplierId as string;
+  const supplierId = params['supplierId'] as string;
 
   const { data, isLoading, isError } = useSupplier(restaurantId, supplierId);
 

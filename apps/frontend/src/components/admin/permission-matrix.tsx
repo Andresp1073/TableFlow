@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/cn';
-import { RISK_LEVEL_COLORS, type AdminPermission, type PermissionGroup } from '@/lib/admin-types';
+import { RISK_LEVEL_COLORS, type PermissionGroup } from '@/lib/admin-types';
 import { Search } from 'lucide-react';
 
 interface PermissionMatrixProps {

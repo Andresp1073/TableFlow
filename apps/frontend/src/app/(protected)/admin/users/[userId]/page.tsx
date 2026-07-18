@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { UserStatusBadge } from '@/components/admin/user-status-badge';
 import { useUser, useRoles, useReplaceUserRoles, useDeactivateUser, useActivateUser, useResetUserPassword } from '@/hooks/use-admin';
@@ -22,13 +22,11 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select } from '@/components/ui/select';
-import { Mail, Clock, Lock, Shield, Ban, CheckCircle, Key } from 'lucide-react';
+import { Shield, Ban, CheckCircle, Key } from 'lucide-react';
 
 export default function UserDetailPage() {
   const params = useParams();
-  const router = useRouter();
-  const userId = params.userId as string;
+  const userId = params['userId'] as string;
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [newPassword, setNewPassword] = useState('');

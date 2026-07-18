@@ -11,9 +11,9 @@ import { useState } from 'react';
 
 export default function OrderDetailPage() {
   const params = useParams();
-  const orderId = params.orderId as string;
-  const { restaurant } = useRestaurant();
-  const restaurantId = restaurant?.id ?? 'default';
+  const orderId = params['orderId'] as string;
+  const { current } = useRestaurant();
+  const restaurantId = current?.id ?? 'default';
   const [showPayment, setShowPayment] = useState(false);
 
   const {

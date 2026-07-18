@@ -9,7 +9,7 @@ import { SupplierList } from '@/components/inventory/suppliers/supplier-list';
 export default function SuppliersPage() {
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const { data, isLoading, isError, error } = useSuppliers(restaurantId);
+  const { data, isLoading, error } = useSuppliers(restaurantId);
 
   return (
     <PageWrapper>

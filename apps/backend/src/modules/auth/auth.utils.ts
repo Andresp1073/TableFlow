@@ -32,19 +32,19 @@ export function signAccessToken(
       role: payload.role,
       jti,
     },
-    env.JWT_SECRET,
-    { expiresIn: env.JWT_EXPIRES_IN }
+    env.JWT_SECRET as string,
+    { expiresIn: env.JWT_EXPIRES_IN } as jwt.SignOptions
   );
 }
 
 export function signRefreshToken(jti: string): string {
-  return jwt.sign({ jti, type: "refresh" }, env.JWT_SECRET, {
+  return jwt.sign({ jti, type: "refresh" }, env.JWT_SECRET as string, {
     expiresIn: env.JWT_REFRESH_EXPIRES_IN,
-  });
+  } as jwt.SignOptions);
 }
 
 export function verifyToken(token: string): JwtPayload {
-  return jwt.verify(token, env.JWT_SECRET) as JwtPayload;
+  return jwt.verify(token, env.JWT_SECRET as string) as JwtPayload;
 }
 
 export function parseTokenExpiration(expiresIn: string): number {

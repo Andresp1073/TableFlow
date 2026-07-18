@@ -10,7 +10,7 @@ import { AnalyticsDataset, type DatasetType } from "../../domain/models/Analytic
 import { ReportDefinition, type ReportFormat, type ReportType, type ReportFilter } from "../../domain/models/ReportDefinition.js";
 import { AnalyticsReport } from "../../domain/models/AnalyticsReport.js";
 import { AnalyticsQuery } from "../../domain/models/AnalyticsQuery.js";
-import { BusinessMetric, type MetricCategory, type MetricUnit } from "../../domain/models/BusinessMetric.js";
+import { BusinessMetric, type MetricCategory, type MetricUnit, type MetricPeriod } from "../../domain/models/BusinessMetric.js";
 import { BusinessDimension, type DimensionType } from "../../domain/models/BusinessDimension.js";
 import type { KpiRecord } from "../../domain/models/KpiRecord.js";
 import type { MetricRecord } from "../../domain/models/MetricRecord.js";
@@ -23,6 +23,9 @@ import { toAnalyticsQueryDto, type AnalyticsQueryDto, type CreateAnalyticsQueryD
 
 export class BusinessIntelligenceService {
   private readonly manager: AnalyticsManager;
+  private readonly kpiRepo: KpiRepository;
+  private readonly metricRepo: MetricRepository;
+  private readonly reportRepo: ReportRepository;
 
   constructor(
     metricRepo: MetricRepository,
@@ -32,6 +35,9 @@ export class BusinessIntelligenceService {
     queryRepo: AnalyticsQueryRepository,
   ) {
     this.manager = new AnalyticsManager(metricRepo, kpiRepo, datasetRepo, reportRepo, queryRepo);
+    this.kpiRepo = kpiRepo;
+    this.metricRepo = metricRepo;
+    this.reportRepo = reportRepo;
   }
 
   getAnalyticsManager(): AnalyticsManager {
@@ -74,15 +80,15 @@ export class BusinessIntelligenceService {
   }
 
   async updateKpis(restaurantId: string, period: KpiPeriod, periodStart: Date, periodEnd: Date): Promise<KpiRecordDto[]> {
-    const definitions = await this.manager.kpiRepo.findActiveDefinitions(restaurantId);
-    const records = await this.manager.metricRepo.findRecordsByRestaurant(restaurantId, periodStart, periodEnd);
+    const definitions = await this.kpiRepo.findActiveDefinitions(restaurantId);
+    const records = await this.metricRepo.findRecordsByRestaurant(restaurantId, periodStart, periodEnd);
     const results: KpiRecordDto[] = [];
 
     for (const def of definitions) {
       const metricRecords = this.manager.kpiEngine.filterRecordsByMetricName(records, def.metricName);
       const value = this.manager.kpiEngine.calculateValue(def, metricRecords);
       const kpiRecord = this.manager.kpiEngine.createRecord(def, value, period, periodStart, periodEnd);
-      await this.manager.kpiRepo.saveRecord(kpiRecord);
+      await this.kpiRepo.saveRecord(kpiRecord);
       results.push(toKpiRecordDto(kpiRecord));
     }
 
@@ -141,7 +147,7 @@ export class BusinessIntelligenceService {
       schedule: schedule ? {
         cron: schedule.cron,
         timezone: schedule.timezone,
-        period: schedule.period as KpiPeriod,
+        period: schedule.period as MetricPeriod,
       } : undefined,
     });
     await this.manager.createReportDefinition(def);
@@ -191,7 +197,7 @@ export class BusinessIntelligenceService {
     await this.manager.analyzeTrends(restaurantId, periodStart, periodEnd);
   }
 
-  registerMetricProvider(metricName: string, provider: (params: MetricCalculationParams) => Promise<{ name: string; category: MetricCategory; value: number; unit: MetricUnit; period: KpiPeriod }>): void {
+  registerMetricProvider(metricName: string, provider: (params: MetricCalculationParams) => Promise<{ name: string; category: MetricCategory; value: number; unit: MetricUnit; period: MetricPeriod }>): void {
     this.manager.metricsEngine.registerProvider(metricName, provider);
   }
 }

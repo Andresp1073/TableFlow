@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { requireAuth } from '../../../../../middlewares/auth.js';
-import { validate } from '../../../../../middlewares/validate.js';
+import { requireAuth } from '../../../../middlewares/auth.js';
+import { validate } from '../../../../middlewares/validate.js';
 import { createLoyaltyController } from '../controllers/LoyaltyController.js';
 import { z } from 'zod';
 

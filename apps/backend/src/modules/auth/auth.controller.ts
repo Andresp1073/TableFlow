@@ -120,7 +120,7 @@ export const getCurrentSession = asyncHandler(
 
 export const revokeSession = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
-    await authService.revokeSession(req.params.sessionId, req.userId!, req.ip);
+    await authService.revokeSession(req.params.sessionId as string, req.userId!, req.ip);
     sendNoContent(res);
   }
 );
@@ -128,7 +128,7 @@ export const revokeSession = asyncHandler(
 export const unlockUserAccount = asyncHandler(
   async (req: AuthenticatedRequest, res: Response) => {
     await authService.unlockUserAccount(
-      req.params.userId,
+      req.params.userId as string,
       req.userId!,
       req.ip
     );

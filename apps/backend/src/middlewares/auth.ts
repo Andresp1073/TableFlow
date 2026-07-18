@@ -16,7 +16,7 @@ export interface AuthenticatedRequest extends Request {
   /** Full authorization context built by enrichContext middleware */
   authContext?: AuthorizationContext;
   /** Unique request ID added by requestId middleware */
-  requestId?: string;
+  requestId: string;
 }
 
 export function requireAuth(

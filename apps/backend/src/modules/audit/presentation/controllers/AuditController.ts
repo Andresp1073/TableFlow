@@ -50,7 +50,7 @@ export function createAuditController(service: AuditApplicationService) {
 
     getById: asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
       const result = await service.getById({
-        id: req.params.id,
+        id: req.params.id as string,
         organizationId: req.organizationId!,
       });
 

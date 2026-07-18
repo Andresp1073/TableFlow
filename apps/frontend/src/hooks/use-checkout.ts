@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as checkoutService from '@/services/checkout';
-import * as ordersService from '@/services/orders';
 import type { SubmitOrderInput, ProcessPaymentInput } from '@/lib/sales-types';
 
 const ORDERS_KEY = 'orders';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { get } from './api';
 import type {
   ExecutiveDashboardData,
@@ -13,11 +14,6 @@ import type {
 } from '@/lib/analytics-types';
 
 const BASE = '/restaurants';
-
-async function fetchAllPages<T>(url: string, restaurantId: string, params?: string): Promise<T[]> {
-  const response = await get<T[]>(`${BASE}/${restaurantId}/${url}${params ?? ''}`);
-  return response.data;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function as<T>(data: any): T {

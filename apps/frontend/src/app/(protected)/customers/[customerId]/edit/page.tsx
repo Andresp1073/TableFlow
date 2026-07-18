@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useCustomer, useUpdateCustomer } from '@/hooks/use-customers';
 import { CustomerForm } from '@/components/customers/form/customer-form';
@@ -14,9 +14,9 @@ export default function EditCustomerPage() {
   const router = useRouter();
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const customerId = params.customerId as string;
+  const customerId = params['customerId'] as string;
 
-  const { data, isLoading, isError } = useCustomer(restaurantId, customerId);
+  const { data, isLoading } = useCustomer(restaurantId, customerId);
   const updateCustomer = useUpdateCustomer();
 
   const handleSubmit = (formData: CreateCustomerInput) => {

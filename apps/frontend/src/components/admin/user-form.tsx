@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
 import type { AdminRole, CreateUserDto, UpdateUserDto } from '@/lib/admin-types';
 
 interface UserFormProps {
@@ -84,25 +83,26 @@ export function UserForm({ roles, initialData, onSubmit, isSubmitting, mode }: U
       {mode === 'create' && (
         <div className="space-y-2">
           <Label htmlFor="roles">Roles</Label>
-          <Select
+          <select
             id="roles"
             multiple
-            value={selectedRoles}
             onChange={(e) => {
               const options = (e.target as HTMLSelectElement).options;
               const selected: string[] = [];
               for (let i = 0; i < options.length; i++) {
-                if (options[i].selected) selected.push(options[i].value);
+                const option = options[i];
+                if (option && option.selected) selected.push(option.value);
               }
               setSelectedRoles(selected);
             }}
+            className="flex h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm"
           >
             {roles.map((role) => (
               <option key={role.id} value={role.id}>
-                {role.name} ({role.code})
+                {role.name}
               </option>
             ))}
-          </Select>
+          </select>
         </div>
       )}
 

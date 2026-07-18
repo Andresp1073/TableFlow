@@ -36,7 +36,7 @@ function StatCard({ title, value, icon, description, href }: { title: string; va
   return href ? <Link href={href}>{content}</Link> : content;
 }
 
-export function InventoryDashboardContent({ data, isLoading, isError, error, onRefresh, onRetry }: InventoryDashboardContentProps) {
+export function InventoryDashboardContent({ data, isLoading, isError, error, onRefresh: _onRefresh, onRetry }: InventoryDashboardContentProps) {
   if (isLoading) {
     return (
       <DashboardGrid>

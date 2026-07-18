@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, RefreshCw, Award, Gift, TrendingUp, Star, Users, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -72,7 +72,7 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
           <p className="text-sm text-muted-foreground">Customer loyalty program overview</p>
         </div>
         {onRefresh && (
-          <Button variant="outline" size="icon" onClick={onRefresh} aria-label="Refresh">
+          <Button variant="outline" size="icon-sm" onClick={onRefresh} aria-label="Refresh">
             <RefreshCw className="h-4 w-4" />
           </Button>
         )}
@@ -90,7 +90,7 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardWidget title="Tier Distribution" icon={<Award className="h-4 w-4" />}>
+        <DashboardWidget title="Tier Distribution">
           <div className="space-y-3">
             {Object.entries(data.tierDistribution).length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No members enrolled yet</p>
@@ -112,7 +112,7 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
           </div>
         </DashboardWidget>
 
-        <DashboardWidget title="Recent Redemptions" icon={<Gift className="h-4 w-4" />}>
+        <DashboardWidget title="Recent Redemptions">
           <div className="space-y-3">
             {data.recentRedemptions.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No recent redemptions</p>

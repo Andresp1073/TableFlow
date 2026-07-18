@@ -8,8 +8,8 @@ import { PosInterface } from '@/components/pos/pos-interface';
 import type { SalesOrder, CreateOrderInput, CreateOrderItemInput, SubmitOrderInput, ProcessPaymentInput, SubmitOrderResult, PaymentResult } from '@/lib/sales-types';
 
 export default function PosPage() {
-  const { restaurant } = useRestaurant();
-  const restaurantId = restaurant?.id ?? 'default';
+  const { current } = useRestaurant();
+  const restaurantId = current?.id ?? 'default';
 
   const [currentOrder, setCurrentOrder] = useState<SalesOrder | null>(null);
   const [submitResult, setSubmitResult] = useState<SubmitOrderResult | null>(null);
@@ -36,19 +36,22 @@ export default function PosPage() {
     if (!currentOrder) return;
     setError(null);
     try {
-      const updatedOrder = await addItem.mutateAsync({
+      await addItem.mutateAsync({
         restaurantId,
         orderId: currentOrder.id,
         data: itemData,
       });
-      setCurrentOrder(await updatedOrder);
-    } catch (err) {
-      const updated = await addItem.mutateAsync({
-        restaurantId,
-        orderId: currentOrder.id,
-        data: itemData,
-      });
-      setCurrentOrder(updated);
+    } catch {
+      // retry once
+      try {
+        await addItem.mutateAsync({
+          restaurantId,
+          orderId: currentOrder.id,
+          data: itemData,
+        });
+      } catch {
+        setError('Failed to add item');
+      }
     }
   }, [restaurantId, currentOrder, addItem]);
 

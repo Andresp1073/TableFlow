@@ -199,7 +199,7 @@ export class AuthService {
   ): Promise<LoginResponse> {
     let payload: { jti: string; type: string };
     try {
-      payload = verifyToken(request.refreshToken) as {
+      payload = verifyToken(request.refreshToken) as unknown as {
         jti: string;
         type: string;
       };

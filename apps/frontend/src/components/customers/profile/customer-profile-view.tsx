@@ -57,7 +57,7 @@ export function CustomerProfileView({ data, isLoading, isError, onArchive, onRes
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
           <Link href="/customers">
-            <Button variant="ghost" size="icon" aria-label="Back to customers">
+            <Button variant="ghost" size="icon-sm" aria-label="Back to customers">
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>

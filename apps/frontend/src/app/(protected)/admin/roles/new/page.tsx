@@ -5,15 +5,15 @@ import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { RoleForm } from '@/components/admin/role-form';
 import { useCreateRole } from '@/hooks/use-admin';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import type { CreateRoleDto } from '@/lib/admin-types';
+import type { CreateRoleDto, UpdateRoleDto } from '@/lib/admin-types';
 
 export default function NewRolePage() {
   const router = useRouter();
   const createMutation = useCreateRole();
 
-  const handleSubmit = async (data: CreateRoleDto) => {
+  const handleSubmit = async (data: CreateRoleDto | UpdateRoleDto) => {
     try {
-      await createMutation.mutateAsync(data);
+      await createMutation.mutateAsync(data as CreateRoleDto);
       router.push('/admin/roles');
     } catch {
       // Error handled by query client

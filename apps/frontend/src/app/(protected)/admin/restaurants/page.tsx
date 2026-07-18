@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
-import { Button } from '@/components/ui/button';
 import { Building2, ExternalLink } from 'lucide-react';
 
 export default function AdminRestaurantsPage() {

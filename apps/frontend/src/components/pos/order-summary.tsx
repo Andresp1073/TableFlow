@@ -49,7 +49,7 @@ export function OrderSummary({ items, onRemoveItem, onClear }: OrderSummaryProps
                     <span className="text-sm font-medium">{formatCurrency(item.lineTotal)}</span>
                     <Button
                       variant="ghost"
-                      size="icon"
+                      size="icon-sm"
                       className="h-6 w-6 text-destructive"
                       onClick={() => onRemoveItem(item.id)}
                       aria-label={`Remove ${item.menuItemName}`}

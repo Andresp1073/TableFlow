@@ -13,7 +13,7 @@ export default function StockMovementsPage() {
   const restaurantId = current?.id ?? 'default';
   const [movementType, setMovementType] = useState('');
 
-  const { data, isLoading, isError, error } = useStockMovements(restaurantId, { type: movementType || undefined });
+  const { data, isLoading, error } = useStockMovements(restaurantId, { type: movementType || undefined });
 
   return (
     <PageWrapper>

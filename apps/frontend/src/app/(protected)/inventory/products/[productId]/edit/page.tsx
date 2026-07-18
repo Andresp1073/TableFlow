@@ -15,7 +15,7 @@ export default function EditProductPage() {
   const router = useRouter();
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const productId = params.productId as string;
+  const productId = params['productId'] as string;
 
   const { data, isLoading, isError, error, refetch } = useProduct(restaurantId, productId);
   const updateProduct = useUpdateProduct();

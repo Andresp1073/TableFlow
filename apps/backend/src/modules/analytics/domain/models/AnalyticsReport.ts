@@ -63,7 +63,9 @@ export class AnalyticsReport {
 
   toCSV(): string {
     if (this.config.records.length === 0) return "";
-    const headers = Object.keys(this.config.records[0]);
+    const first = this.config.records[0];
+    if (!first) return "";
+    const headers = Object.keys(first);
     const rows = this.config.records.map((row) =>
       headers.map((h) => {
         const val = row[h];

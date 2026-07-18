@@ -60,7 +60,7 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting }: P
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={category} onValueChange={(value) => setCategory(value as typeof category)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {CATEGORY_OPTIONS.map((opt) => (
@@ -71,7 +71,7 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting }: P
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="unit">Unit of Measure</Label>
-              <Select value={unit} onValueChange={setUnit}>
+              <Select value={unit} onValueChange={(value) => setUnit(value as typeof unit)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {UNIT_OPTIONS.map((opt) => (

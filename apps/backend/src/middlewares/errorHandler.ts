@@ -22,7 +22,7 @@ function buildZodDetails(error: ZodError): Record<string, string[]> {
 function handlePrismaError(error: Prisma.PrismaClientKnownRequestError): AppError {
   switch (error.code) {
     case 'P2002': {
-      const target = (error.meta?.target as string[] | undefined)?.join(', ') ?? 'field';
+      const target = (error.meta?.['target'] as string[] | undefined)?.join(', ') ?? 'field';
       return new AppError(409, 'resource.duplicate', `A record with this ${target} already exists`);
     }
     case 'P2025':

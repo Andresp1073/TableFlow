@@ -1,6 +1,6 @@
 'use client';
 
-import { BarChart3, TrendingUp, CalendarCheck, Table2, DollarSign, Package, ShoppingCart } from 'lucide-react';
+import { TrendingUp, CalendarCheck, Table2, DollarSign, Package, ShoppingCart } from 'lucide-react';
 import { StatCard } from '@/components/ui/stat-card';
 import { ReportChart } from '@/components/analytics/report-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

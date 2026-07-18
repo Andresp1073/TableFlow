@@ -14,7 +14,7 @@ export default function PurchaseOrdersPage() {
   const restaurantId = current?.id ?? 'default';
   const [status, setStatus] = useState('');
 
-  const { data, isLoading, isError, error } = usePurchaseOrders(restaurantId, { status: status || undefined });
+  const { data, isLoading, error } = usePurchaseOrders(restaurantId, { status: status || undefined });
   const submitPO = useSubmitPurchaseOrder();
   const approvePO = useApprovePurchaseOrder();
   const cancelPO = useCancelPurchaseOrder();

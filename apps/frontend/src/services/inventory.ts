@@ -1,4 +1,4 @@
-import { get, post, put, patch, del } from './api';
+import { get, post, put, patch } from './api';
 import type {
   InventoryDashboardData,
   Product,

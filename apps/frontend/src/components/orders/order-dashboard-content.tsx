@@ -1,7 +1,6 @@
 'use client';
 
-import { ShoppingCart, Clock, ChefHat, CheckCircle2, XCircle, DollarSign } from 'lucide-react';
-import { LoadingState } from '@/components/ui/loading-state';
+import { ShoppingCart, Clock, ChefHat, CheckCircle2, DollarSign } from 'lucide-react';
 import { ErrorState } from '@/components/ui/error-state';
 import { StatCard } from '@/components/ui/stat-card';
 import type { OrderDashboard } from '@/lib/sales-types';

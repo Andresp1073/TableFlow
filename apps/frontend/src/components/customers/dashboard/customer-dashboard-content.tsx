@@ -1,10 +1,9 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, RefreshCw, Users, UserPlus, UserCheck, Award, Cake, TrendingUp, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DashboardGrid } from '@/components/dashboard/dashboard-grid';
 import { DashboardWidget } from '@/components/dashboard/dashboard-widget';
 import Link from 'next/link';
 import type { CustomerDashboardData } from '@/lib/customer-types';
@@ -75,7 +74,7 @@ export function CustomerDashboardContent({ data, isLoading, isError, error, onRe
           <p className="text-sm text-muted-foreground">Customer relationship and loyalty overview</p>
         </div>
         {onRefresh && (
-          <Button variant="outline" size="icon" onClick={onRefresh} aria-label="Refresh dashboard">
+          <Button variant="outline" size="icon-sm" onClick={onRefresh} aria-label="Refresh dashboard">
             <RefreshCw className="h-4 w-4" />
           </Button>
         )}
@@ -93,7 +92,7 @@ export function CustomerDashboardContent({ data, isLoading, isError, error, onRe
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardWidget title="Recent Registrations" icon={<UserPlus className="h-4 w-4" />}>
+        <DashboardWidget title="Recent Registrations">
           <div className="space-y-3">
             {data.recentRegistrations.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No recent registrations</p>
@@ -111,7 +110,7 @@ export function CustomerDashboardContent({ data, isLoading, isError, error, onRe
           </div>
         </DashboardWidget>
 
-        <DashboardWidget title="Birthdays This Month" icon={<Cake className="h-4 w-4" />}>
+        <DashboardWidget title="Birthdays This Month">
           <div className="space-y-3">
             {data.birthdays.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No birthdays this month</p>

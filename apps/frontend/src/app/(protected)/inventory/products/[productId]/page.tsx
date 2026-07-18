@@ -12,9 +12,9 @@ export default function ProductDetailPage() {
   const router = useRouter();
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const productId = params.productId as string;
+  const productId = params['productId'] as string;
 
-  const { data, isLoading, isError, error } = useProduct(restaurantId, productId);
+  const { data, isLoading, isError } = useProduct(restaurantId, productId);
   const archiveProduct = useArchiveProduct();
   const restoreProduct = useRestoreProduct();
 

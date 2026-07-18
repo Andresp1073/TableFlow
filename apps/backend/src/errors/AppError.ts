@@ -23,6 +23,7 @@ export class AppError extends Error {
     return {
       success: false,
       data: null,
+      timestamp: new Date().toISOString(),
       error: {
         code: this.code,
         message: this.message,

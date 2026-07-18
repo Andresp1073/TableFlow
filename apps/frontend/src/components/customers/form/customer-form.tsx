@@ -48,7 +48,7 @@ export function CustomerForm({ initialData, onSubmit, onCancel, isSubmitting, er
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Link href="/customers">
-          <Button variant="ghost" size="icon" aria-label="Back">
+          <Button variant="ghost" size="icon-sm" aria-label="Back">
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
@@ -67,7 +67,7 @@ export function CustomerForm({ initialData, onSubmit, onCancel, isSubmitting, er
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <Alert variant="destructive">
+              <Alert variant="error">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>

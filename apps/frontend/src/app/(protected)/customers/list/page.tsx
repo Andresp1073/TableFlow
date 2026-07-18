@@ -15,7 +15,7 @@ export default function CustomerListPage() {
   const restaurantId = current?.id ?? 'default';
   const [search, setSearch] = useState('');
 
-  const { data, isLoading, isError, error } = useCustomers(restaurantId, { search: search || undefined });
+  const { data, isLoading, error } = useCustomers(restaurantId, { search: search || undefined });
   const archiveCustomer = useArchiveCustomer();
   const restoreCustomer = useRestoreCustomer();
 

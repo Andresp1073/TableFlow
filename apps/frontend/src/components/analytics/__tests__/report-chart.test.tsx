@@ -54,7 +54,7 @@ describe('ReportChart', () => {
   });
 
   it('renders bar chart with data', () => {
-    const { container } = render(
+    render(
       <ReportChart
         title="Bar Chart"
         type="bar"

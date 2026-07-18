@@ -274,7 +274,7 @@ export class AuthRepository extends BaseRepository {
   }
 
   async findActiveRole(name: string) {
-    return this.prisma.role.findUnique({
+    return this.prisma.role.findFirst({
       where: { name },
     });
   }

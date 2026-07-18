@@ -1,7 +1,7 @@
 import type { Response } from 'express';
-import { asyncHandler } from '../../../../../utils/asyncHandler.js';
-import { sendSuccess, sendCreated } from '../../../../../utils/response.js';
-import type { AuthenticatedRequest } from '../../../../../middlewares/auth.js';
+import { asyncHandler } from '../../../../utils/asyncHandler.js';
+import { sendSuccess, sendCreated } from '../../../../utils/response.js';
+import type { AuthenticatedRequest } from '../../../../middlewares/auth.js';
 import { LoyaltyManager } from '../../application/services/LoyaltyManager.js';
 import { CustomerEngagementService } from '../../application/services/CustomerEngagementService.js';
 import {

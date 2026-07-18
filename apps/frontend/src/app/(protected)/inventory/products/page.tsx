@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRestaurant } from '@/providers/restaurant-provider';
-import { useProducts, useCategories, useArchiveProduct, useRestoreProduct } from '@/hooks/use-inventory';
+import { useProducts, useArchiveProduct, useRestoreProduct } from '@/hooks/use-inventory';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { PageHeader } from '@/components/inventory/shared/page-header';
 import { InventoryFilters } from '@/components/inventory/shared/inventory-filters';
@@ -15,7 +15,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
 
-  const { data, isLoading, isError, error } = useProducts(restaurantId, { search, category: category || undefined });
+  const { data, isLoading, error } = useProducts(restaurantId, { search, category: category || undefined });
   const archiveProduct = useArchiveProduct();
   const restoreProduct = useRestoreProduct();
 

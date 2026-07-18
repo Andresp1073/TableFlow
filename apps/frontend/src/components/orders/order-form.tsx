@@ -153,7 +153,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
               <Button
                 type="button"
                 variant="ghost"
-                size="icon"
+                size="icon-sm"
                 className="text-destructive"
                 onClick={() => removeItem(item._key)}
                 disabled={items.length <= 1}

@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertTriangle, Package, Clock, Ban, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
-import { StatusBadge } from '@/components/inventory/shared/status-badge';
 import type { InventoryAlertsData } from '@/lib/inventory-types';
 import { formatCurrency } from '@/lib/inventory-types';
 

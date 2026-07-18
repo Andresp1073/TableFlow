@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Trash2, Plus, CreditCard, Send } from 'lucide-react';
+import { ArrowLeft, Trash2, CreditCard, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
 import { OrderStatusBadge } from './order-status-badge';
@@ -34,7 +33,7 @@ export function OrderDetailView({
   onCancel,
 }: OrderDetailViewProps) {
   const router = useRouter();
-  const [cancelReason, setCancelReason] = useState('');
+  const [cancelReason] = useState('');
 
   if (isLoading) {
     return <LoadingState message="Loading order..." />;
@@ -69,7 +68,7 @@ export function OrderDetailView({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Go back">
+        <Button variant="ghost" size="icon-sm" onClick={() => router.back()} aria-label="Go back">
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1">
@@ -182,7 +181,7 @@ export function OrderDetailView({
               </Button>
             )}
             {canPay && (
-              <Button onClick={onPay} className="w-full" variant="default">
+              <Button onClick={onPay} className="w-full" variant="primary">
                 <CreditCard className="h-4 w-4 mr-2" />
                 Process Payment
               </Button>

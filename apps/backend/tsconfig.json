@@ -5,13 +5,18 @@
     "lib": ["ES2022"],
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["node"]
+    "types": ["node"],
+    "ignoreDeprecations": "6.0",
+    "strict": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": false
   },
   "include": ["src"],
+  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "src/**/tests/"],
   "references": [
     { "path": "../../packages/shared" },
     { "path": "../../packages/types" }

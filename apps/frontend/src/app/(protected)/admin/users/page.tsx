@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
 import { UserStatusBadge } from '@/components/admin/user-status-badge';
 import { useUsers, useDeactivateUser, useActivateUser } from '@/hooks/use-admin';
@@ -18,7 +17,6 @@ import { Plus, Search, Eye, Ban, CheckCircle, RefreshCw, Users } from 'lucide-re
 import type { AdminUser } from '@/lib/admin-types';
 
 export default function AdminUsersPage() {
-  const router = useRouter();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');

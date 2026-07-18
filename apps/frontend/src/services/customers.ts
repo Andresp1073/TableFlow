@@ -8,7 +8,7 @@ export async function getCustomerDashboard(restaurantId: string): Promise<Custom
   return response.data;
 }
 
-export async function listCustomers(restaurantId: string, params = {}): Promise<Customer[]> {
+export async function listCustomers(restaurantId: string, params: { search?: string; status?: string } = {}): Promise<Customer[]> {
   const query = new URLSearchParams();
   if (params.search) query.set('search', params.search);
   if (params.status) query.set('status', params.status);

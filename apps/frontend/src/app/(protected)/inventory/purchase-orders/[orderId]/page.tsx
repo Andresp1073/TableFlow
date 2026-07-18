@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
-import { usePurchaseOrder, useSubmitPurchaseOrder, useApprovePurchaseOrder, useCancelPurchaseOrder, useReceivePurchaseOrder } from '@/hooks/use-inventory';
+import { usePurchaseOrder, useSubmitPurchaseOrder, useApprovePurchaseOrder, useCancelPurchaseOrder } from '@/hooks/use-inventory';
 import { ContentArea } from '@/components/layout/content-area';
 import { PurchaseOrderDetailView } from '@/components/inventory/purchase-orders/purchase-order-detail';
 import { toast } from 'sonner';
@@ -12,13 +12,12 @@ export default function PurchaseOrderDetailPage() {
   const router = useRouter();
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const orderId = params.orderId as string;
+  const orderId = params['orderId'] as string;
 
   const { data, isLoading, isError } = usePurchaseOrder(restaurantId, orderId);
   const submitPO = useSubmitPurchaseOrder();
   const approvePO = useApprovePurchaseOrder();
   const cancelPO = useCancelPurchaseOrder();
-  const receivePO = useReceivePurchaseOrder();
 
   const handleSubmit = () => {
     submitPO.mutate({ restaurantId, orderId }, {

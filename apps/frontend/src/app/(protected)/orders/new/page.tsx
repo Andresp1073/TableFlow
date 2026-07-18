@@ -10,8 +10,8 @@ import type { CreateOrderInput } from '@/lib/sales-types';
 
 export default function NewOrderPage() {
   const router = useRouter();
-  const { restaurant } = useRestaurant();
-  const restaurantId = restaurant?.id ?? 'default';
+  const { current } = useRestaurant();
+  const restaurantId = current?.id ?? 'default';
   const createOrder = useCreateOrder();
 
   async function handleSubmit(data: CreateOrderInput) {
@@ -26,7 +26,7 @@ export default function NewOrderPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.back()} aria-label="Go back">
+        <Button variant="ghost" size="icon-sm" onClick={() => router.back()} aria-label="Go back">
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>

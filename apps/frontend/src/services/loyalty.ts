@@ -21,28 +21,28 @@ export async function getCustomerLoyalty(restaurantId: string, customerProfileId
 export async function registerLoyaltyCustomer(restaurantId: string, data: {
   customerId: string; firstName: string; lastName: string; email: string; phone?: string; dateOfBirth?: string; programId: string;
 }): Promise<{ profileId: string; accountId: string; currentBalance: number; tier: string }> {
-  const response = await post(`${BASE}/${restaurantId}/loyalty/register`, data);
+  const response = await post<{ profileId: string; accountId: string; currentBalance: number; tier: string }>(`${BASE}/${restaurantId}/loyalty/register`, data);
   return response.data;
 }
 
 export async function earnPoints(restaurantId: string, data: {
   customerProfileId: string; spentAmount: number; referenceId: string; referenceType: string;
 }): Promise<{ transactionId: string; points: number; balanceAfter: number }> {
-  const response = await post(`${BASE}/${restaurantId}/loyalty/earn`, data);
+  const response = await post<{ transactionId: string; points: number; balanceAfter: number }>(`${BASE}/${restaurantId}/loyalty/earn`, data);
   return response.data;
 }
 
 export async function redeemReward(restaurantId: string, data: {
   customerProfileId: string; rewardId: string; referenceId: string;
 }): Promise<{ redemptionId: string; transactionId: string; pointsCost: number; balanceAfter: number; status: string }> {
-  const response = await post(`${BASE}/${restaurantId}/loyalty/redeem`, data);
+  const response = await post<{ redemptionId: string; transactionId: string; pointsCost: number; balanceAfter: number; status: string }>(`${BASE}/${restaurantId}/loyalty/redeem`, data);
   return response.data;
 }
 
 export async function adjustPoints(restaurantId: string, data: {
   customerProfileId: string; points: number; reason: string;
 }): Promise<{ transactionId: string; points: number; balanceAfter: number }> {
-  const response = await post(`${BASE}/${restaurantId}/loyalty/adjust`, data);
+  const response = await post<{ transactionId: string; points: number; balanceAfter: number }>(`${BASE}/${restaurantId}/loyalty/adjust`, data);
   return response.data;
 }
 
@@ -52,6 +52,6 @@ export async function getTransactionHistory(restaurantId: string, customerProfil
 }
 
 export async function getBirthdays(restaurantId: string): Promise<Array<{ id: string; customerId: string; firstName: string; lastName: string; email: string; dateOfBirth?: string }>> {
-  const response = await get(`${BASE}/${restaurantId}/loyalty/birthdays`);
+  const response = await get<Array<{ id: string; customerId: string; firstName: string; lastName: string; email: string; dateOfBirth?: string }>>(`${BASE}/${restaurantId}/loyalty/birthdays`);
   return response.data;
 }

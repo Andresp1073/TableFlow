@@ -7,16 +7,16 @@ import { useCreateUser, useRoles } from '@/hooks/use-admin';
 import { Breadcrumb } from '@/components/ui/breadcrumb';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
-import type { CreateUserDto } from '@/lib/admin-types';
+import type { CreateUserDto, UpdateUserDto } from '@/lib/admin-types';
 
 export default function NewUserPage() {
   const router = useRouter();
   const { data: roles, isLoading, error } = useRoles();
   const createMutation = useCreateUser();
 
-  const handleSubmit = async (data: CreateUserDto) => {
+  const handleSubmit = async (data: CreateUserDto | UpdateUserDto) => {
     try {
-      await createMutation.mutateAsync(data);
+      await createMutation.mutateAsync(data as CreateUserDto);
       router.push('/admin/users');
     } catch {
       // Error handled by query client

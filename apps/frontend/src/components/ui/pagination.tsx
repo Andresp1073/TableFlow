@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { Button } from '@/components/ui/button';
@@ -8,11 +9,24 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  paginationRange: (number | 'ellipsis')[];
+  paginationRange?: (number | 'ellipsis')[];
   className?: string;
 }
 
-function Pagination({ currentPage, totalPages, onPageChange, paginationRange, className }: PaginationProps) {
+function Pagination({ currentPage, totalPages, onPageChange, paginationRange: paginationRangeProp, className }: PaginationProps) {
+  const defaultRange = useMemo(() => {
+    const range: (number | 'ellipsis')[] = [];
+    const delta = 2;
+    const left = Math.max(2, currentPage - delta);
+    const right = Math.min(totalPages - 1, currentPage + delta);
+    range.push(1);
+    if (left > 2) range.push('ellipsis');
+    for (let i = left; i <= right; i++) range.push(i);
+    if (right < totalPages - 1) range.push('ellipsis');
+    if (totalPages > 1) range.push(totalPages);
+    return range;
+  }, [currentPage, totalPages]);
+  const paginationRange = paginationRangeProp ?? defaultRange;
   if (totalPages <= 1) return null;
 
   return (

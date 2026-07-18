@@ -23,9 +23,9 @@ export class PrismaAuditRepository implements AuditRepository {
         ipAddress: entry.ipAddress,
         userAgent: entry.userAgent,
         requestId: entry.requestId,
-        oldValues: entry.oldValues as Prisma.InputJsonValue | null,
-        newValues: entry.newValues as Prisma.InputJsonValue | null,
-        metadata: entry.metadata as Prisma.InputJsonValue | null,
+        oldValues: entry.oldValues as Prisma.NullableJsonNullValueInput | Prisma.InputJsonValue,
+        newValues: entry.newValues as Prisma.NullableJsonNullValueInput | Prisma.InputJsonValue,
+        metadata: entry.metadata as Prisma.NullableJsonNullValueInput | Prisma.InputJsonValue,
       },
     });
     return this.reconstitute(record);

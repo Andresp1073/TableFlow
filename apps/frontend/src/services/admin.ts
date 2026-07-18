@@ -33,7 +33,7 @@ export async function listUsers(params: {
   if (params.status) query.set('status', params.status);
   const qs = query.toString();
   const response = await get<AdminUser[]>(`${ADMIN_BASE}/users${qs ? `?${qs}` : ''}`);
-  return { data: response.data, meta: response.meta as typeof response.meta };
+  return { data: response.data, meta: response.meta ?? { page: 1, limit: 10, total: 0, totalPages: 1 } };
 }
 
 export async function getUser(userId: string): Promise<AdminUser> {

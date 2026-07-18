@@ -9,7 +9,7 @@ import { StockTable } from '@/components/inventory/stock/stock-table';
 export default function StockPage() {
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const { data, isLoading, isError, error } = useStockSummary(restaurantId);
+  const { data, isLoading, error } = useStockSummary(restaurantId);
 
   return (
     <PageWrapper>

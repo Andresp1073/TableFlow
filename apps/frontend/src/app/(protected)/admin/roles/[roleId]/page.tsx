@@ -15,7 +15,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb';
 
 export default function RoleDetailPage() {
   const params = useParams();
-  const roleId = params.roleId as string;
+  const roleId = params['roleId'] as string;
   const [editing, setEditing] = useState(false);
 
   const { data: role, isLoading, error, refetch } = useRole(roleId);

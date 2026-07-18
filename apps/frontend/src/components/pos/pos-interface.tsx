@@ -7,12 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OrderSummary } from './order-summary';
 import { PaymentForm } from './payment-form';
 import { LoadingState } from '@/components/ui/loading-state';
-import { ErrorState } from '@/components/ui/error-state';
 import type { SalesOrder, OrderItem, CreateOrderInput, CreateOrderItemInput, SubmitOrderInput, ProcessPaymentInput, SubmitOrderResult, PaymentResult } from '@/lib/sales-types';
 
 interface PosInterfaceProps {
@@ -233,7 +231,7 @@ export function PosInterface({
             {submitResult && (
               <Button
                 className="w-full"
-                variant="default"
+                variant="primary"
                 onClick={() => setShowPayment(true)}
               >
                 Proceed to Payment

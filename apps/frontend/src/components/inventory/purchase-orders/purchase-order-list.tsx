@@ -3,13 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { StatusBadge } from '@/components/inventory/shared/status-badge';
 import type { PurchaseOrder } from '@/lib/inventory-types';
-import { formatCurrency, getStatusColor } from '@/lib/inventory-types';
+import { formatCurrency } from '@/lib/inventory-types';
 
 interface PurchaseOrderListProps {
   data: PurchaseOrder[];

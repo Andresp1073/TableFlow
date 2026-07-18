@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { CreditCard, Banknote, Wallet, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoadingState } from '@/components/ui/loading-state';
 import { formatCurrency } from '@/lib/sales-types';
@@ -99,7 +98,7 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
             {PAYMENT_METHODS.map((method) => (
               <Button
                 key={method.id}
-                variant={selectedMethod === method.id ? 'default' : 'outline'}
+                variant={selectedMethod === method.id ? 'primary' : 'outline'}
                 className="h-16 flex-col gap-1"
                 onClick={() => setSelectedMethod(method.id)}
                 type="button"
@@ -131,7 +130,7 @@ export function PaymentForm({ total, isProcessing, onProcessPayment, paymentResu
             {[0, 10, 15, 20].map((pct) => (
               <Button
                 key={pct}
-                variant={tipPercent === pct ? 'default' : 'outline'}
+                variant={tipPercent === pct ? 'primary' : 'outline'}
                 size="sm"
                 onClick={() => setTipPercent(pct)}
                 type="button"

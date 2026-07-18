@@ -1,6 +1,6 @@
 'use client';
 
-import { Package, DollarSign, AlertTriangle, XCircle, ClipboardList, TrendingDown, Trash2 } from 'lucide-react';
+import { Package, DollarSign, AlertTriangle, XCircle, ClipboardList, Trash2 } from 'lucide-react';
 import { StatCard } from '@/components/ui/stat-card';
 import { ReportChart } from '@/components/analytics/report-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

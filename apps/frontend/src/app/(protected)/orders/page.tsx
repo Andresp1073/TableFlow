@@ -9,12 +9,11 @@ import { useRestaurant } from '@/providers/restaurant-provider';
 import { useOrders, useOrderDashboard } from '@/hooks/use-orders';
 import { OrderList } from '@/components/orders/order-list';
 import { OrderDashboardContent } from '@/components/orders/order-dashboard-content';
-import type { OrderStatus } from '@/lib/sales-types';
 
 export default function OrdersPage() {
   const router = useRouter();
-  const { restaurant } = useRestaurant();
-  const restaurantId = restaurant?.id ?? 'default';
+  const { current } = useRestaurant();
+  const restaurantId = current?.id ?? 'default';
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
 
   const {

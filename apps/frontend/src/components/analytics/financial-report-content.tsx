@@ -1,9 +1,9 @@
 'use client';
 
-import { DollarSign, Percent, Tag, RotateCcw, TrendingUp, CreditCard, Banknote, Wallet } from 'lucide-react';
+import { DollarSign, Percent, Tag, TrendingUp, CreditCard, Wallet } from 'lucide-react';
 import { StatCard } from '@/components/ui/stat-card';
 import { ReportChart } from '@/components/analytics/report-chart';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { useFinancialReport } from '@/hooks/use-analytics';
 import { formatCurrency } from '@/lib/analytics-types';
 import type { DateRange } from '@/lib/analytics-types';

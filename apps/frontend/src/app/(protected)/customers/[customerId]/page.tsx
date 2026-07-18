@@ -1,8 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
-import { useParams } from 'next/navigation';
 import { useCustomer, useArchiveCustomer, useRestoreCustomer } from '@/hooks/use-customers';
 import { CustomerProfileView } from '@/components/customers/profile/customer-profile-view';
 import { ContentArea } from '@/components/layout/content-area';
@@ -13,9 +12,9 @@ export default function CustomerDetailPage() {
   const router = useRouter();
   const { current } = useRestaurant();
   const restaurantId = current?.id ?? 'default';
-  const customerId = params.customerId as string;
+  const customerId = params['customerId'] as string;
 
-  const { data, isLoading, isError, error } = useCustomer(restaurantId, customerId);
+  const { data, isLoading, isError } = useCustomer(restaurantId, customerId);
   const archiveCustomer = useArchiveCustomer();
   const restoreCustomer = useRestoreCustomer();
 
