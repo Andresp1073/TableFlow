@@ -1,0 +1,20 @@
+'use client';
+
+import { useRestaurant } from '@/providers/restaurant-provider';
+import { useSuppliers } from '@/hooks/use-inventory';
+import { PageWrapper } from '@/components/layout/page-wrapper';
+import { PageHeader } from '@/components/inventory/shared/page-header';
+import { SupplierList } from '@/components/inventory/suppliers/supplier-list';
+
+export default function SuppliersPage() {
+  const { current } = useRestaurant();
+  const restaurantId = current?.id ?? 'default';
+  const { data, isLoading, isError, error } = useSuppliers(restaurantId);
+
+  return (
+    <PageWrapper>
+      <PageHeader title="Suppliers" description="Manage your product suppliers" createHref="/inventory/suppliers/new" createLabel="New Supplier" />
+      <SupplierList data={data ?? []} loading={isLoading} error={error?.message ?? null} />
+    </PageWrapper>
+  );
+}

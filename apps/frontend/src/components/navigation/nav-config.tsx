@@ -11,6 +11,9 @@ import {
   CreditCard,
   BarChart3,
   Settings,
+  ArrowUpDown,
+  ClipboardList,
+  AlertTriangle,
 } from 'lucide-react';
 import type { NavGroup, NavItem } from './nav-types';
 
@@ -67,6 +70,17 @@ export const NAV_ITEMS: NavGroup = [
         label: 'Inventory',
         href: '/inventory',
         icon: <Package className="h-4 w-4" />,
+        items: [
+          { label: 'Dashboard', href: '/inventory', icon: <LayoutDashboard className="h-4 w-4" /> },
+          { label: 'Products', href: '/inventory/products', icon: <Package className="h-4 w-4" /> },
+          { label: 'Categories', href: '/inventory/categories', icon: <Package className="h-4 w-4" /> },
+          { label: 'Suppliers', href: '/inventory/suppliers', icon: <Building2 className="h-4 w-4" /> },
+          { label: 'Stock', href: '/inventory/stock', icon: <Package className="h-4 w-4" /> },
+          { label: 'Movements', href: '/inventory/stock-movements', icon: <ArrowUpDown className="h-4 w-4" /> },
+          { label: 'Purchase Orders', href: '/inventory/purchase-orders', icon: <ClipboardList className="h-4 w-4" /> },
+          { label: 'Receiving', href: '/inventory/receiving', icon: <Package className="h-4 w-4" /> },
+          { label: 'Alerts', href: '/inventory/alerts', icon: <AlertTriangle className="h-4 w-4" /> },
+        ],
       },
     ],
   },

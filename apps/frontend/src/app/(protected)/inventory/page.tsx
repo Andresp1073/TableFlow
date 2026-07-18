@@ -1,12 +1,25 @@
-import { Package } from 'lucide-react';
-import { PlaceholderPage } from '@/app/(protected)/placeholder-page';
+'use client';
 
-export default function InventoryPage() {
+import { useRestaurant } from '@/providers/restaurant-provider';
+import { useInventoryDashboard } from '@/hooks/use-inventory';
+import { PageWrapper } from '@/components/layout/page-wrapper';
+import { InventoryDashboardContent } from '@/components/inventory/dashboard/inventory-dashboard-content';
+
+export default function InventoryDashboardPage() {
+  const { current } = useRestaurant();
+  const restaurantId = current?.id ?? 'default';
+  const { data, isLoading, isError, error, refetch } = useInventoryDashboard(restaurantId);
+
   return (
-    <PlaceholderPage
-      title="Inventory"
-      description="Manage inventory stock, suppliers, and orders."
-      icon={<Package className="h-5 w-5" />}
-    />
+    <PageWrapper title="Inventory" description="Manage inventory stock, suppliers, and orders.">
+      <InventoryDashboardContent
+        data={data}
+        isLoading={isLoading}
+        isError={isError}
+        error={error}
+        onRefresh={() => refetch()}
+        onRetry={() => refetch()}
+      />
+    </PageWrapper>
   );
 }
