@@ -24,6 +24,7 @@ function CurrentOccupancyWidget({ data, isLoading, isError, error, onRefresh, on
       isEmpty={!data || data.totalTables === 0}
       error={error}
       emptyMessage={t('No tables configured')}
+
       onRefresh={onRefresh}
       onRetry={onRetry}
     >

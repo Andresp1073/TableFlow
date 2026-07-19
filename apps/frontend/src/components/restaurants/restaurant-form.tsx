@@ -104,7 +104,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="taxId" error={errors.taxId?.message}>
           <FormItem>
-            <FormLabel>Tax ID</FormLabel>
+            <FormLabel>{t('Tax ID')}</FormLabel>
             <FormControl>
               <Input placeholder={t("XX-XXXXXXX")} disabled={isLoading} {...register('taxId')} />
             </FormControl>
@@ -114,7 +114,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="email" error={errors.email?.message}>
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>{t('Email')}</FormLabel>
             <FormControl>
               <Input type="email" placeholder={t("contact@example.com")} disabled={isLoading} {...register('email')} />
             </FormControl>
@@ -124,7 +124,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="phone" error={errors.phone?.message}>
           <FormItem>
-            <FormLabel>Phone</FormLabel>
+            <FormLabel>{t('Phone')}</FormLabel>
             <FormControl>
               <Input type="tel" placeholder={t("+1 555-123-4567")} disabled={isLoading} {...register('phone')} />
             </FormControl>
@@ -134,7 +134,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="website" error={errors.website?.message}>
           <FormItem>
-            <FormLabel>Website</FormLabel>
+            <FormLabel>{t('Website')}</FormLabel>
             <FormControl>
               <Input placeholder={t("https://example.com")} disabled={isLoading} {...register('website')} />
             </FormControl>
@@ -144,7 +144,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
         <FormField name="logoUrl" error={errors.logoUrl?.message}>
           <FormItem>
-            <FormLabel>Logo URL</FormLabel>
+            <FormLabel>{t('Logo URL')}</FormLabel>
             <FormControl>
               <Input placeholder={t("https://example.com/logo.png")} disabled={isLoading} {...register('logoUrl')} />
             </FormControl>
@@ -185,7 +185,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
       <FormField name="address" error={errors.address?.message}>
         <FormItem>
-          <FormLabel>Address</FormLabel>
+            <FormLabel>{t('Address')}</FormLabel>
           <FormControl>
             <Input placeholder={t("123 Main St, City, State ZIP")} disabled={isLoading} {...register('address')} />
           </FormControl>
@@ -195,7 +195,7 @@ export function RestaurantForm({ mode, initialData, isLoading = false, error = n
 
       <div className="flex gap-3 justify-end">
         <Button type="submit" loading={isLoading}>
-          {isLoading ? 'Saving...' : mode === 'create' ? 'Create Restaurant' : 'Save Changes'}
+          {isLoading ? t('Saving...') : mode === 'create' ? t('Create Restaurant') : t('Save Changes')}
         </Button>
       </div>
     </form>

@@ -55,8 +55,8 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <AlertTriangle className="h-8 w-8 text-destructive mb-4" />
-        <p className="text-sm text-muted-foreground">Failed to load alerts</p>
-        <Button variant="outline" size="sm" className="mt-4" onClick={onRefresh}><RefreshCw className="h-4 w-4 mr-1" />Retry</Button>
+        <p className="text-sm text-muted-foreground">{t('Failed to load alerts')}</p>
+        <Button variant="outline" size="sm" className="mt-4" onClick={onRefresh}><RefreshCw className="h-4 w-4 mr-1" />{t('Retry')}</Button>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <AlertCard icon={<Ban className="h-4 w-4 text-destructive" />} title={t("Out of Stock")} count={data.totalOutOfStock} emptyMessage={t("All products are in stock")} variant="danger">
+        <AlertCard icon={<Ban className="h-4 w-4 text-destructive" />} title={t('Out of Stock')} count={data.totalOutOfStock} emptyMessage={t('All products are in stock')} variant="danger">
           <div className="space-y-1">
             {data.outOfStock.map((p) => (
               <div key={p.id} className="flex justify-between text-sm py-1">
@@ -75,7 +75,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           </div>
         </AlertCard>
 
-        <AlertCard icon={<AlertTriangle className="h-4 w-4 text-warning" />} title={t("Low Stock")} count={data.totalLowStock} emptyMessage={t("All inventory levels are healthy")} variant="warning">
+        <AlertCard icon={<AlertTriangle className="h-4 w-4 text-warning" />} title={t('Low Stock')} count={data.totalLowStock} emptyMessage={t('All inventory levels are healthy')} variant="warning">
           <div className="space-y-1">
             {data.lowStock.map((p) => (
               <div key={p.id} className="flex justify-between text-sm py-1">
@@ -86,7 +86,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           </div>
         </AlertCard>
 
-        <AlertCard icon={<Clock className="h-4 w-4 text-info" />} title={t("Expiring Soon (7 days)")} count={data.totalExpiringSoon} emptyMessage={t("No products expiring soon")} variant="info">
+        <AlertCard icon={<Clock className="h-4 w-4 text-info" />} title={t('Expiring Soon (7 days)')} count={data.totalExpiringSoon} emptyMessage={t('No products expiring soon')} variant="info">
           <div className="space-y-1">
             {data.expiringSoon.map((p) => (
               <div key={p.id} className="flex justify-between text-sm py-1">
@@ -97,17 +97,17 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           </div>
         </AlertCard>
 
-        <AlertCard icon={<Package className="h-4 w-4 text-secondary" />} title={t("Pending Receiving")} count={data.totalPendingReceiving} emptyMessage={t("No pending receipts")} variant="secondary">
+        <AlertCard icon={<Package className="h-4 w-4 text-secondary" />} title={t('Pending Receiving')} count={data.totalPendingReceiving} emptyMessage={t('No pending receipts')} variant="secondary">
           <div className="space-y-1">
             {data.pendingReceiving.map((po) => (
               <div key={po.id} className="flex justify-between text-sm py-1">
                 <div>
                   <Link href={`/inventory/purchase-orders/${po.id}`} className="hover:underline">{po.supplierName}</Link>
-                  <Badge variant="secondary" className="ml-2">{po.itemCount} items</Badge>
+                  <Badge variant="secondary" className="ml-2">{po.itemCount} {t('items')}</Badge>
                 </div>
                 <div className="text-right">
                   <div>{formatCurrency(po.totalAmount)}</div>
-                  <div className="text-xs text-muted-foreground">{po.expectedDeliveryAt ? new Date(po.expectedDeliveryAt).toLocaleDateString() : 'No date'}</div>
+                   <div className="text-xs text-muted-foreground">{po.expectedDeliveryAt ? new Date(po.expectedDeliveryAt).toLocaleDateString() : t('No date')}</div>
                 </div>
               </div>
             ))}
@@ -120,7 +120,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
           <CardHeader className="py-3 px-4">
             <CardTitle className="text-sm font-medium flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-4 w-4" />
-              Expired Products ({data.totalExpired})
+               {t('Expired Products ({count})', { count: data.totalExpired })}
             </CardTitle>
           </CardHeader>
           <CardContent className="px-4 pb-4 pt-0">
@@ -129,7 +129,7 @@ export function AlertsView({ data, isLoading, isError, onRefresh }: AlertsViewPr
                 <div key={p.id} className="flex justify-between text-sm py-1">
                   <div>
                     <Link href={`/inventory/products/${p.ingredientId}`} className="hover:underline">{p.ingredientName}</Link>
-                    {p.batchCode && <Badge variant="secondary" className="ml-2">Batch: {p.batchCode}</Badge>}
+                    {p.batchCode && <Badge variant="secondary" className="ml-2">{t('Batch:')} {p.batchCode}</Badge>}
                   </div>
                   <span className="text-destructive">{p.quantity} {p.unit}</span>
                 </div>

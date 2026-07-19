@@ -47,60 +47,60 @@ export function ProductForm({ initialData, onSubmit, onCancel, isSubmitting }: P
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader>
-          <CardTitle>{initialData ? 'Edit Product' : 'Create Product'}</CardTitle>
+          <CardTitle>{initialData ? t('Edit Product') : t('Create Product')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="name">Name *</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder={t("Product name")} />
+              <Label htmlFor="name">{t('Name *')}</Label>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder={t('Product name')} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="sku">SKU</Label>
-              <Input id="sku" value={sku} onChange={(e) => setSku(e.target.value)} placeholder={t("Optional SKU")} />
+              <Label htmlFor="sku">{t('SKU')}</Label>
+              <Input id="sku" value={sku} onChange={(e) => setSku(e.target.value)} placeholder={t('Optional SKU')} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t('Category')}</Label>
               <Select value={category} onValueChange={(value) => setCategory(value as typeof category)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {CATEGORY_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                    <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="unit">Unit of Measure</Label>
+              <Label htmlFor="unit">{t('Unit of Measure')}</Label>
               <Select value={unit} onValueChange={(value) => setUnit(value as typeof unit)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {UNIT_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                    <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="cost">Cost per Unit</Label>
+              <Label htmlFor="cost">{t('Cost per Unit')}</Label>
               <Input id="cost" type="number" min="0" step="0.01" value={costPerUnit} onChange={(e) => setCostPerUnit(Number(e.target.value))} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="shelfLife">Shelf Life (days)</Label>
+              <Label htmlFor="shelfLife">{t('Shelf Life (days)')}</Label>
               <Input id="shelfLife" type="number" min="1" value={shelfLifeDays ?? ''} onChange={(e) => setShelfLifeDays(e.target.value ? Number(e.target.value) : undefined)} placeholder={t("Optional")} />
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Switch id="perishable" checked={perishable} onCheckedChange={setPerishable} />
-            <Label htmlFor="perishable">Perishable item</Label>
+            <Label htmlFor="perishable">{t('Perishable item')}</Label>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="storage">Storage Instructions</Label>
-            <Textarea id="storage" value={storageInstructions} onChange={(e) => setStorageInstructions(e.target.value)} placeholder={t("Optional storage notes")} />
+            <Label htmlFor="storage">{t('Storage Instructions')}</Label>
+            <Textarea id="storage" value={storageInstructions} onChange={(e) => setStorageInstructions(e.target.value)} placeholder={t('Optional storage notes')} />
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-            <Button type="submit" loading={isSubmitting}>{initialData ? 'Update' : 'Create'} Product</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>{t('Cancel')}</Button>
+            <Button type="submit" loading={isSubmitting}>{initialData ? t('Update') : t('Create')} {t('Product')}</Button>
           </div>
         </CardContent>
       </Card>

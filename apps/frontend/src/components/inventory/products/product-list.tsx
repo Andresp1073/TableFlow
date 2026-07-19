@@ -74,20 +74,20 @@ export function ProductList({ data, loading, error, onArchive, onRestore }: Prod
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon-sm">
               <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">{t('Actions')}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => router.push(`/inventory/products/${row.original.id}`)}>View Details</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => router.push(`/inventory/products/${row.original.id}/edit`)}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push(`/inventory/products/${row.original.id}`)}>{t('View Details')}</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push(`/inventory/products/${row.original.id}/edit`)}>{t('Edit')}</DropdownMenuItem>
             <DropdownMenuSeparator />
             {row.original.isActive ? (
               <DropdownMenuItem onClick={() => onArchive(row.original.id)}>
-                <Archive className="h-4 w-4 mr-2" /> Archive
+                <Archive className="h-4 w-4 mr-2" /> {t('Archive')}
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem onClick={() => onRestore(row.original.id)}>
-                <RotateCcw className="h-4 w-4 mr-2" /> Restore
+                <RotateCcw className="h-4 w-4 mr-2" /> {t('Restore')}
               </DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -103,7 +103,7 @@ export function ProductList({ data, loading, error, onArchive, onRestore }: Prod
       loading={loading}
       error={error}
       searchable
-      emptyMessage={t("No products found. Create your first product to get started.")}
+      emptyMessage={t('No products found. Create your first product to get started.')}
     />
   );
 }

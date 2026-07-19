@@ -31,8 +31,8 @@ export default function NewOrderPage() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">New Order</h1>
-          <p className="text-sm text-muted-foreground">Create a new customer order</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t('New Order')}</h1>
+          <p className="text-sm text-muted-foreground">{t('Create a new customer order')}</p>
         </div>
       </div>
       <OrderForm onSubmit={handleSubmit} isSubmitting={createOrder.isPending} />

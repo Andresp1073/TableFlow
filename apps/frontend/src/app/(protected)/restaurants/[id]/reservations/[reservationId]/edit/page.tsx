@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 export default function EditReservationPage() {
   const params = useParams();
@@ -30,8 +31,8 @@ export default function EditReservationPage() {
 
   return (
     <PageWrapper
-      title={reservation ? `Edit: ${reservation.reservationNumber}` : 'Edit Reservation'}
-      description="Update reservation information"
+      title={reservation ? `Edit: ${reservation.reservationNumber}` : t('Edit Reservation')}
+      description={t('Update reservation information')}
       actions={
         <Button
           variant="outline"
@@ -39,7 +40,7 @@ export default function EditReservationPage() {
           onClick={() => router.push(`/restaurants/${restaurantId}/reservations/${reservationId}`)}
         >
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Details
+          {t('Back to Details')}
         </Button>
       }
     >
@@ -53,7 +54,7 @@ export default function EditReservationPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load reservation: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load reservation')}: {(error as Error)?.message || t('An unexpected error occurred')}
           </AlertDescription>
         </Alert>
       ) : reservation ? (

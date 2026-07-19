@@ -32,21 +32,21 @@ export function RestaurantActions({ restaurant }: RestaurantActionsProps) {
 
   const actionConfig = {
     activate: {
-      title: 'Activate Restaurant',
-      description: `Are you sure you want to activate "${restaurant.name}"? It will become fully operational.`,
-      confirmLabel: 'Activate',
+      title: t('Activate Restaurant'),
+      description: t('Are you sure you want to activate "{name}"? It will become fully operational.', { name: restaurant.name }),
+      confirmLabel: t('Activate'),
       confirmVariant: 'primary' as const,
     },
     suspend: {
-      title: 'Suspend Restaurant',
-      description: `Are you sure you want to suspend "${restaurant.name}"? It will stop accepting operations.`,
-      confirmLabel: 'Suspend',
+      title: t('Suspend Restaurant'),
+      description: t('Are you sure you want to suspend "{name}"? It will stop accepting operations.', { name: restaurant.name }),
+      confirmLabel: t('Suspend'),
       confirmVariant: 'secondary' as const,
     },
     archive: {
-      title: 'Archive Restaurant',
-      description: `Are you sure you want to archive "${restaurant.name}"? This action can be reversed later.`,
-      confirmLabel: 'Archive',
+      title: t('Archive Restaurant'),
+      description: t('Are you sure you want to archive "{name}"? This action can be reversed later.', { name: restaurant.name }),
+      confirmLabel: t('Archive'),
       confirmVariant: 'danger' as const,
     },
   };
@@ -75,7 +75,7 @@ export function RestaurantActions({ restaurant }: RestaurantActionsProps) {
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurant.id}/edit`)}>
           <Edit className="h-3.5 w-3.5 mr-1.5" />
-          Edit
+          {t('Edit')}
         </Button>
 
         <DropdownMenu>
@@ -88,18 +88,18 @@ export function RestaurantActions({ restaurant }: RestaurantActionsProps) {
             {isActivated ? (
               <DropdownMenuItem onClick={() => setAction('suspend')}>
                 <Pause className="h-4 w-4 mr-2" />
-                Suspend
+                 {t('Suspend')}
               </DropdownMenuItem>
             ) : (
               <DropdownMenuItem onClick={() => setAction('activate')}>
                 <Play className="h-4 w-4 mr-2" />
-                Activate
+                {t('Activate')}
               </DropdownMenuItem>
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setAction('archive')} className="text-destructive">
               <Archive className="h-4 w-4 mr-2" />
-              Archive
+              {t('Archive')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

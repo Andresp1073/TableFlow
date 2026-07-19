@@ -18,10 +18,10 @@ export default function NewCustomerPage() {
   const handleSubmit = (data: CreateCustomerInput) => {
     createCustomer.mutate({ restaurantId, data }, {
       onSuccess: (result) => {
-        toast.success(t("Customer created"));
+        toast.success(t('Customer created'));
         router.push(`/customers/${result.id}`);
       },
-      onError: () => toast.error(t("Failed to create customer")),
+      onError: () => toast.error(t('Failed to create customer')),
     });
   };
 

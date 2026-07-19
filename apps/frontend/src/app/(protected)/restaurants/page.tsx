@@ -113,7 +113,7 @@ export default function RestaurantsPage() {
         <Link href="/restaurants/create">
           <Button>
             <Plus className="h-4 w-4 mr-1.5" />
-            New Restaurant
+            {t('New Restaurant')}
           </Button>
         </Link>
       }
@@ -137,9 +137,9 @@ export default function RestaurantsPage() {
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
               aria-label={t("Filter by status")}
             >
-              <option value="">All Statuses</option>
+              <option value="">{t('All statuses')}</option>
               {RESTAURANT_STATUS_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>{t(opt.label)}</option>
               ))}
             </select>
           </div>
@@ -200,8 +200,8 @@ export default function RestaurantsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm font-medium text-destructive">Error loading restaurants</p>
-                      <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                       <p className="text-sm font-medium text-destructive">{t('Error loading restaurants')}</p>
+                      <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                     </div>
                   </td>
                 </tr>
@@ -209,12 +209,12 @@ export default function RestaurantsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">No restaurants found</p>
+                       <p className="text-sm">{t('No restaurants found')}</p>
                       {search || statusFilter ? (
-                        <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                        <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                       ) : (
                         <Link href="/restaurants/create" className="text-xs text-primary hover:underline mt-1">
-                          Create your first restaurant
+                          {t('Create your first restaurant')}
                         </Link>
                       )}
                     </div>
@@ -242,7 +242,7 @@ export default function RestaurantsPage() {
         {meta && totalPages > 1 && (
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Page {page} of {totalPages} ({meta.total} total)
+               {t('Page {currentPage} of {totalPages}', { currentPage: page, totalPages })} ({meta.total})
             </p>
             <div className="flex items-center gap-1">
               <Button
@@ -251,7 +251,7 @@ export default function RestaurantsPage() {
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page <= 1 || isLoading}
               >
-                Previous
+                {t('Previous')}
               </Button>
               {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
                 const pageNum = i + 1;
@@ -273,7 +273,7 @@ export default function RestaurantsPage() {
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page >= totalPages || isLoading}
               >
-                Next
+                 {t('Next')}
               </Button>
             </div>
           </div>

@@ -40,7 +40,7 @@ function DetailRow({ icon, label, value }: DetailRowProps) {
 }
 
 export function TableDetailView({ table }: { table: RestaurantTable }) {
-  const shapeLabel = TABLE_SHAPE_OPTIONS.find((o) => o.value === table.shape)?.label ?? table.shape;
+  const shapeLabel = t(TABLE_SHAPE_OPTIONS.find((o) => o.value === table.shape)?.label ?? table.shape);
   const capacityLabel = table.minimumCapacity === table.maximumCapacity
     ? String(table.minimumCapacity)
     : `${table.minimumCapacity} – ${table.maximumCapacity}`;
@@ -50,7 +50,7 @@ export function TableDetailView({ table }: { table: RestaurantTable }) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold">
-            Table {table.tableNumber}
+            {t('Table')} {table.tableNumber}
             {table.name && <span className="text-muted-foreground ml-2">({table.name})</span>}
           </h2>
           <div className="flex items-center gap-2 mt-1">
@@ -60,7 +60,7 @@ export function TableDetailView({ table }: { table: RestaurantTable }) {
               aria-hidden="true"
             />
             <span className="text-sm text-muted-foreground">
-              {TABLE_STATUS_LABELS[table.status]}
+              {t(TABLE_STATUS_LABELS[table.status])}
             </span>
           </div>
         </div>

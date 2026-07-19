@@ -34,7 +34,7 @@ export interface DiningAreaListParams {
 }
 
 export const DINING_AREA_STATUS_OPTIONS: { value: DiningAreaStatus | ''; label: string }[] = [
-  { value: '', label: 'All Statuses' },
+  { value: '', label: 'All statuses' },
   { value: 'active', label: 'Active' },
   { value: 'archived', label: 'Archived' },
 ];

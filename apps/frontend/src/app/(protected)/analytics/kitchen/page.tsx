@@ -5,6 +5,7 @@ import { KitchenPerformanceContent } from '@/components/analytics/kitchen-perfor
 import { ReportLayout } from '@/components/analytics/report-layout';
 import type { DateRange } from '@/lib/analytics-types';
 import { getDateRangeFromPreset } from '@/lib/analytics-types';
+import { t } from '@/lib/i18n';
 
 export default function KitchenPerformancePage() {
   const [dateRange, setDateRange] = useState<DateRange>(() => getDateRangeFromPreset('thisWeek'));
@@ -15,8 +16,8 @@ export default function KitchenPerformancePage() {
 
   return (
     <ReportLayout
-      title="Kitchen Performance"
-      description="Ticket times, station performance, and delay analysis."
+      title={t('Kitchen Performance')}
+      description={t('Ticket times, station performance, and delay analysis.')}
       onDateRangeChange={handleDateRangeChange}
     >
       <KitchenPerformanceContent dateRange={dateRange} />

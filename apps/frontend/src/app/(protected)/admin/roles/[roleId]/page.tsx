@@ -1,5 +1,6 @@
 'use client';
 
+import { t } from '@/lib/i18n';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { AdminPageLayout } from '@/components/admin/admin-page-layout';
@@ -33,16 +34,16 @@ export default function RoleDetailPage() {
     replacePermissionsMutation.mutate(updated);
   };
 
-  if (isLoading) return <LoadingState message="Loading role..." />;
-  if (error) return <ErrorState message="Failed to load role" onRetry={() => refetch()} />;
-  if (!role) return <ErrorState message="Role not found" />;
+  if (isLoading) return <LoadingState message={t("Loading role...")} />;
+  if (error) return <ErrorState message={t("Failed to load role")} onRetry={() => refetch()} />;
+  if (!role) return <ErrorState message={t("Role not found")} />;
 
   return (
-    <AdminPageLayout title={role.name} description={`Code: ${role.code}`}>
+    <AdminPageLayout title={role.name} description={t("Code: {code}", { code: role.code })}>
       <Breadcrumb
         items={[
-          { label: 'Admin', href: '/admin' },
-          { label: 'Roles', href: '/admin/roles' },
+          { label: t('Admin'), href: '/admin' },
+          { label: t('Roles'), href: '/admin/roles' },
           { label: role.name },
         ]}
       />
@@ -50,9 +51,9 @@ export default function RoleDetailPage() {
       <div className="space-y-6">
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Role Details</h2>
+            <h2 className="text-lg font-semibold">{t("Role Details")}</h2>
             <Button variant="outline" size="sm" onClick={() => setEditing(!editing)}>
-              {editing ? 'Cancel' : 'Edit'}
+              {editing ? t('Cancel') : t('Edit')}
             </Button>
           </div>
 
@@ -69,28 +70,28 @@ export default function RoleDetailPage() {
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 text-sm">
               <div>
-                <span className="text-muted-foreground">Code</span>
+                <span className="text-muted-foreground">{t("Code")}</span>
                 <p className="font-mono">{role.code}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Status</span>
+                <span className="text-muted-foreground">{t("Status")}</span>
                 <p><Badge variant={role.status === 'active' ? 'default' : 'secondary'}>{role.status}</Badge></p>
               </div>
               <div>
-                <span className="text-muted-foreground">Priority</span>
+                <span className="text-muted-foreground">{t("Priority")}</span>
                 <p>{role.priority}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Users</span>
+                <span className="text-muted-foreground">{t("Users")}</span>
                 <p>{role._count?.userRoles ?? 0}</p>
               </div>
               <div>
-                <span className="text-muted-foreground">Permissions</span>
+                <span className="text-muted-foreground">{t("Permissions")}</span>
                 <p>{role._count?.rolePermissions ?? 0}</p>
               </div>
               {role.description && (
                 <div className="sm:col-span-2">
-                  <span className="text-muted-foreground">Description</span>
+                  <span className="text-muted-foreground">{t("Description")}</span>
                   <p>{role.description}</p>
                 </div>
               )}
@@ -100,9 +101,9 @@ export default function RoleDetailPage() {
 
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Permissions</h2>
+            <h2 className="text-lg font-semibold">{t("Permissions")}</h2>
             {replacePermissionsMutation.isPending && (
-              <span className="text-sm text-muted-foreground">Saving...</span>
+              <span className="text-sm text-muted-foreground">{t("Saving...")}</span>
             )}
           </div>
           {groups ? (
@@ -113,7 +114,7 @@ export default function RoleDetailPage() {
               readOnly={role.isSystem}
             />
           ) : (
-            <LoadingState message="Loading permissions..." />
+            <LoadingState message={t("Loading permissions...")} />
           )}
         </Card>
       </div>

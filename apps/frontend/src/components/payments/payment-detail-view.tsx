@@ -43,7 +43,7 @@ function DetailRow({ icon, label, value }: DetailRowProps) {
 }
 
 export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) {
-  const methodLabel = METHOD_TYPE_LABELS[payment.methodType] ?? payment.methodType;
+  const methodLabel = t(METHOD_TYPE_LABELS[payment.methodType] ?? payment.methodType);
 
   return (
     <div className="space-y-6">
@@ -51,6 +51,7 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
         <div>
           <h2 className="text-2xl font-semibold">
             {t('Payment Transaction')}
+
           </h2>
           <div className="flex items-center gap-2 mt-1">
             <span
@@ -59,7 +60,7 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
               aria-hidden="true"
             />
             <span className="text-sm text-muted-foreground">
-              {TRANSACTION_STATUS_LABELS[payment.status]}
+              {t(TRANSACTION_STATUS_LABELS[payment.status])}
             </span>
           </div>
         </div>
@@ -72,6 +73,7 @@ export function PaymentDetailView({ payment }: { payment: PaymentTransaction }) 
             <CardTitle className="text-base flex items-center gap-2">
               <DollarSign className="h-4 w-4" />
               {t('Payment Information')}
+
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

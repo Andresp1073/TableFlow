@@ -38,7 +38,7 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Building2 className="h-4 w-4" />
-              Business Information
+              {t('Business Information')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -55,7 +55,7 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
                   </svg>
                 </span>
                 <div>
-                  <p className="text-xs text-muted-foreground">Logo</p>
+                  <p className="text-xs text-muted-foreground">{t('Logo')}</p>
                   <img src={restaurant.logoUrl} alt={`${restaurant.name} logo`} className="mt-1 h-12 w-12 rounded object-cover" />
                 </div>
               </div>
@@ -67,7 +67,7 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              Location & Contact
+              {t('Location & Contact')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -81,7 +81,7 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <Clock className="h-4 w-4" />
-              Regional Settings
+              {t('Regional Settings')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -95,7 +95,7 @@ export function RestaurantDetailView({ restaurant }: { restaurant: Restaurant })
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              System Info
+              {t('System Info')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

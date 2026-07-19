@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { useCreateReservation } from '@/hooks/use-reservations';
+import { t } from '@/lib/i18n';
 import { ReservationForm } from '@/components/reservations/reservation-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
@@ -25,12 +26,12 @@ export default function CreateReservationPage() {
 
   return (
     <PageWrapper
-      title="Create Reservation"
-      description="Add a new reservation"
+      title={t('Create Reservation')}
+      description={t('Add a new reservation')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}/reservations`)}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Reservations
+          {t('Back to Reservations')}
         </Button>
       }
     >

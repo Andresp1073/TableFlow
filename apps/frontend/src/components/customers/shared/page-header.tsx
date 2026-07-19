@@ -23,7 +23,7 @@ export function PageHeader({ title, description, createHref, createLabel }: Page
         <Link href={createHref}>
           <Button>
             <Plus className="h-4 w-4 mr-2" />
-            {createLabel ?? 'Create'}
+            {createLabel ?? t('Create')}
           </Button>
         </Link>
       )}

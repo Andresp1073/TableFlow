@@ -29,8 +29,8 @@ export default function ExecutiveDashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Executive Dashboard</h1>
-          <p className="text-sm text-muted-foreground">High-level business performance overview.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("Executive Dashboard")}</h1>
+          <p className="text-sm text-muted-foreground">{t("High-level business performance overview.")}</p>
         </div>
         <ExportButton config={exportConfig} label={t("Export")} />
       </div>

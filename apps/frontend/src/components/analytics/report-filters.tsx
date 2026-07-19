@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Calendar } from 'lucide-react';
+import { t } from '@/lib/i18n';
 import {
   Select,
   SelectContent,
@@ -30,16 +31,16 @@ export function ReportFilters({ onDateRangeChange, defaultPreset = 'thisMonth' }
     <div className="flex flex-wrap items-center gap-3 mb-6">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Calendar className="h-4 w-4" />
-        <span>Period:</span>
+        <span>{t('Period:')}</span>
       </div>
       <Select value={preset} onValueChange={handlePresetChange}>
-        <SelectTrigger className="w-[180px]" aria-label="Select date range">
+        <SelectTrigger className="w-[180px]" aria-label={t('Select date range')}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {DATE_RANGE_PRESETS.map((p) => (
             <SelectItem key={p.value} value={p.value}>
-              {p.label}
+              {t(p.label)}
             </SelectItem>
           ))}
         </SelectContent>

@@ -1,5 +1,7 @@
 'use client';
 
+import { t } from '@/lib/i18n';
+
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -63,17 +65,17 @@ export default function DiningAreasPage() {
       },
       {
         accessorKey: 'code',
-        header: 'Code',
+        header: t('Code'),
       },
       {
         accessorKey: 'displayOrder',
-        header: 'Order',
+        header: t('Order'),
         cell: ({ getValue }) => getValue<number>(),
       },
       {
         accessorKey: 'isReservable',
-        header: 'Reservable',
-        cell: ({ getValue }) => (getValue<boolean>() ? 'Yes' : 'No'),
+        header: t('Reservable'),
+        cell: ({ getValue }) => (getValue<boolean>() ? t('Yes') : t('No')),
       },
       {
         accessorKey: 'status',
@@ -102,18 +104,18 @@ export default function DiningAreasPage() {
 
   return (
     <PageWrapper
-      title="Dining Areas"
-      description={restaurant ? `Manage dining areas for ${restaurant.name}` : 'Manage dining areas'}
+      title={t('Dining Areas')}
+      description={restaurant ? t('Manage dining areas for {name}', { name: restaurant.name }) : t('Manage dining areas')}
       actions={
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}`)}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back
+            {t('Back')}
           </Button>
           <Link href={`/restaurants/${restaurantId}/dining-areas/create`}>
             <Button>
               <Plus className="h-4 w-4 mr-1.5" />
-              New Area
+              {t('New Area')}
             </Button>
           </Link>
         </div>
@@ -124,11 +126,11 @@ export default function DiningAreasPage() {
           <div className="relative max-w-xs w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search areas..."
+              placeholder={t('Search areas...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8"
-              aria-label="Search dining areas"
+              aria-label={t('Search dining areas')}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -136,10 +138,10 @@ export default function DiningAreasPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              aria-label="Filter by status"
+              aria-label={t('Filter by status')}
             >
               {DINING_AREA_STATUS_OPTIONS.map((opt) => (
-                <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
               ))}
             </select>
           </div>
@@ -200,8 +202,8 @@ export default function DiningAreasPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm font-medium text-destructive">Error loading dining areas</p>
-                      <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                       <p className="text-sm font-medium text-destructive">{t('Error loading dining areas')}</p>
+                      <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                     </div>
                   </td>
                 </tr>
@@ -209,15 +211,15 @@ export default function DiningAreasPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">No dining areas found</p>
+                       <p className="text-sm">{t('No dining areas found')}</p>
                       {search || statusFilter ? (
-                        <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                        <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                       ) : (
                         <Link
                           href={`/restaurants/${restaurantId}/dining-areas/create`}
                           className="text-xs text-primary hover:underline mt-1"
                         >
-                          Create your first dining area
+                          {t('Create your first dining area')}
                         </Link>
                       )}
                     </div>
@@ -243,9 +245,9 @@ export default function DiningAreasPage() {
         </div>
 
         {!isLoading && filteredAreas.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            {filteredAreas.length} area{filteredAreas.length !== 1 ? 's' : ''}
-            {search && ` matching "${search}"`}
+           <p className="text-sm text-muted-foreground">
+            {t('{count} area(s)', { count: filteredAreas.length })}
+            {search && ` ${t('matching "{search}"', { search })}`}
           </p>
         )}
       </div>

@@ -20,7 +20,7 @@ function pathToBreadcrumbs(pathname: string): BreadcrumbItem[] {
     currentPath += `/${segment}`;
     const navItem = getNavItemByHref(currentPath);
     if (navItem) {
-      items.push({ label: navItem.label, href: currentPath });
+      items.push({ label: t(navItem.label), href: currentPath });
     } else {
       items.push({
         label: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' '),

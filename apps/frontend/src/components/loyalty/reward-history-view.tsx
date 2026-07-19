@@ -1,5 +1,6 @@
 'use client';
 
+import { t } from '@/lib/i18n';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -30,9 +31,9 @@ export function RewardHistoryView({ data, isLoading, isError }: RewardHistoryVie
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-        <p className="text-lg font-medium mb-2">Failed to load rewards</p>
-        <p className="text-sm text-muted-foreground mb-4">An error occurred while loading rewards.</p>
-        <Link href="/loyalty"><Button variant="outline">Back to Loyalty</Button></Link>
+        <p className="text-lg font-medium mb-2">{t('Failed to load rewards')}</p>
+        <p className="text-sm text-muted-foreground mb-4">{t('An error occurred while loading rewards.')}</p>
+        <Link href="/loyalty"><Button variant="outline">{t('Back to Loyalty')}</Button></Link>
       </div>
     );
   }
@@ -41,9 +42,9 @@ export function RewardHistoryView({ data, isLoading, isError }: RewardHistoryVie
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <Gift className="h-12 w-12 text-muted-foreground mb-4" />
-        <p className="text-lg font-medium mb-2">No rewards available</p>
-        <p className="text-sm text-muted-foreground mb-4">Rewards will appear here once configured.</p>
-        <Link href="/loyalty"><Button variant="outline">Back to Loyalty</Button></Link>
+        <p className="text-lg font-medium mb-2">{t('No rewards available')}</p>
+        <p className="text-sm text-muted-foreground mb-4">{t('Rewards will appear here once configured.')}</p>
+        <Link href="/loyalty"><Button variant="outline">{t('Back to Loyalty')}</Button></Link>
       </div>
     );
   }
@@ -51,7 +52,7 @@ export function RewardHistoryView({ data, isLoading, isError }: RewardHistoryVie
   return (
     <div className="space-y-4">
       {data.map((reward) => {
-        const typeLabel = REWARD_TYPE_OPTIONS.find((o) => o.value === reward.type)?.label ?? reward.type;
+        const typeLabel = t(REWARD_TYPE_OPTIONS.find((o) => o.value === reward.type)?.label ?? reward.type);
         return (
           <Card key={reward.id} className={reward.isCurrentlyAvailable ? '' : 'opacity-60'}>
             <CardHeader className="pb-3">
@@ -61,33 +62,33 @@ export function RewardHistoryView({ data, isLoading, isError }: RewardHistoryVie
                   <p className="text-sm text-muted-foreground mt-1">{reward.description}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary">{typeLabel}</Badge>
-                  {!reward.isCurrentlyAvailable && <Badge variant="secondary">Unavailable</Badge>}
+                   <Badge variant="secondary">{typeLabel}</Badge>
+                   {!reward.isCurrentlyAvailable && <Badge variant="secondary">{t('Unavailable')}</Badge>}
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="text-muted-foreground">Cost</span>
+                  <span className="text-muted-foreground">{t('Cost')}</span>
                   <p className="font-medium">{formatPoints(reward.costInPoints)} pts</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Value</span>
+                  <span className="text-muted-foreground">{t('Value')}</span>
                   <p className="font-medium">{reward.valueCurrency} {reward.value.toFixed(2)}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Valid From</span>
+                  <span className="text-muted-foreground">{t('Valid From')}</span>
                   <p className="font-medium">{new Date(reward.validFrom).toLocaleDateString()}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Valid To</span>
-                  <p className="font-medium">{reward.validTo ? new Date(reward.validTo).toLocaleDateString() : 'No expiry'}</p>
+                  <span className="text-muted-foreground">{t('Valid To')}</span>
+                  <p className="font-medium">{reward.validTo ? new Date(reward.validTo).toLocaleDateString() : t('No expiry')}</p>
                 </div>
               </div>
               {reward.remainingQuantity !== null && (
                 <p className="text-xs text-muted-foreground mt-3">
-                  {reward.remainingQuantity} remaining
+                  {reward.remainingQuantity} {t('remaining')}
                 </p>
               )}
             </CardContent>

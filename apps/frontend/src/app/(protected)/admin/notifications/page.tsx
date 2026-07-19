@@ -14,12 +14,12 @@ const channels = [
 ];
 
 const templates = [
-  { name: t('Reservation Confirmation'), channel: 'Email', status: t('Active') },
-  { name: t('Reservation Reminder'), channel: 'Email', status: t('Active') },
-  { name: t('Reservation Cancellation'), channel: 'Email', status: t('Active') },
-  { name: t('Password Reset'), channel: 'Email', status: t('Active') },
-  { name: t('Account Verification'), channel: 'Email', status: t('Active') },
-  { name: t('Welcome Email'), channel: 'Email', status: t('Inactive') },
+  { name: t('Reservation Confirmation'), channel: t('Email'), status: t('Active') },
+  { name: t('Reservation Reminder'), channel: t('Email'), status: t('Active') },
+  { name: t('Reservation Cancellation'), channel: t('Email'), status: t('Active') },
+  { name: t('Password Reset'), channel: t('Email'), status: t('Active') },
+  { name: t('Account Verification'), channel: t('Email'), status: t('Active') },
+  { name: t('Welcome Email'), channel: t('Email'), status: t('Inactive') },
 ];
 
 export default function AdminNotificationsPage() {
@@ -53,7 +53,7 @@ export default function AdminNotificationsPage() {
                         channel.enabled ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200' :
                         'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
                       }`}>
-                        {channel.enabled ? 'Configured' : 'Coming Soon'}
+                        {channel.enabled ? t('Configured') : t('Coming Soon')}
                       </span>
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">{channel.description}</p>

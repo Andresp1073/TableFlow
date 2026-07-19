@@ -81,8 +81,8 @@ export default function PermissionsViewerPage() {
                   <p className="text-xs text-muted-foreground font-mono">{permission.code}</p>
                   <p className="text-xs text-muted-foreground">{permission.description}</p>
                   <div className="flex gap-2 text-[10px] text-muted-foreground">
-                    <span>Resource: {permission.resource}</span>
-                    <span>Action: {permission.action}</span>
+                    <span>{t("Resource:")}{permission.resource}</span>
+                    <span>{t("Action:")}{permission.action}</span>
                   </div>
                 </Card>
               ))}
@@ -91,7 +91,7 @@ export default function PermissionsViewerPage() {
         ))}
         {filtered && filtered.length === 0 && (
           <p className="text-sm text-muted-foreground py-8 text-center">
-            No permissions match your search.
+            {t("No permissions match your search.")}
           </p>
         )}
       </div>

@@ -3,6 +3,7 @@
 import { ReportFilters } from '@/components/analytics/report-filters';
 import { LoadingState } from '@/components/ui/loading-state';
 import { ErrorState } from '@/components/ui/error-state';
+import { t } from '@/lib/i18n';
 import type { DateRange, DateRangePreset } from '@/lib/analytics-types';
 
 interface ReportLayoutProps {
@@ -38,7 +39,7 @@ export function ReportLayout({
       {filters}
       {error ? (
         <ErrorState
-          title="Failed to load report"
+          title={t('Failed to load report')}
           message={error.message}
           onRetry={onRetry}
         />

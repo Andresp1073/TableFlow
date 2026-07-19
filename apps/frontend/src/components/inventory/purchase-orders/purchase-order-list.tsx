@@ -76,20 +76,20 @@ export function PurchaseOrderList({ data, loading, error, onSubmit, onApprove, o
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon-sm"><MoreHorizontal className="h-4 w-4" /><span className="sr-only">Actions</span></Button>
+               <Button variant="ghost" size="icon-sm"><MoreHorizontal className="h-4 w-4" /><span className="sr-only">{t('Actions')}</span></Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => router.push(`/inventory/purchase-orders/${po.id}`)}>View Details</DropdownMenuItem>
+               <DropdownMenuItem onClick={() => router.push(`/inventory/purchase-orders/${po.id}`)}>{t('View Details')}</DropdownMenuItem>
               {po.status === 'Draft' && (
-                <DropdownMenuItem onClick={() => onSubmit(po.id)}>Submit</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onSubmit(po.id)}>{t('Submit')}</DropdownMenuItem>
               )}
               {po.status === 'Submitted' && (
-                <DropdownMenuItem onClick={() => onApprove(po.id)}>Approve</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onApprove(po.id)}>{t('Approve')}</DropdownMenuItem>
               )}
               {(po.status === 'Draft' || po.status === 'Submitted' || po.status === 'Approved') && (
                 <>
-                  <DropdownMenuItem onClick={() => router.push(`/inventory/receiving?orderId=${po.id}`)}>Receive</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onCancel(po.id)} className="text-destructive">Cancel</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push(`/inventory/receiving?orderId=${po.id}`)}>{t('Receive')}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onCancel(po.id)} className="text-destructive">{t('Cancel')}</DropdownMenuItem>
                 </>
               )}
             </DropdownMenuContent>
@@ -106,7 +106,7 @@ export function PurchaseOrderList({ data, loading, error, onSubmit, onApprove, o
       loading={loading}
       error={error}
       searchable
-      emptyMessage={t("No purchase orders found.")}
+      emptyMessage={t('No purchase orders found.')}
     />
   );
 }

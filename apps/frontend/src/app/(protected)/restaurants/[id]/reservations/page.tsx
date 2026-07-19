@@ -1,5 +1,7 @@
 'use client';
 
+import { t } from '@/lib/i18n';
+
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -51,7 +53,7 @@ export default function ReservationsPage() {
     () => [
       {
         accessorKey: 'reservationNumber',
-        header: 'Reservation',
+        header: t('Reservation'),
         cell: ({ row }) => (
           <Link
             href={`/restaurants/${restaurantId}/reservations/${row.original.id}`}
@@ -63,12 +65,12 @@ export default function ReservationsPage() {
       },
       {
         accessorKey: 'date',
-        header: 'Date',
+        header: t('Date'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
       {
         accessorKey: 'startTime',
-        header: 'Time',
+        header: t('Time'),
         cell: ({ row }) => {
           const start = new Date(row.original.startTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
           const end = new Date(row.original.endTime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
@@ -77,21 +79,21 @@ export default function ReservationsPage() {
       },
       {
         accessorKey: 'partySize',
-        header: 'Party',
+        header: t('Party'),
         cell: ({ getValue }) => `${getValue<number>()}`,
       },
       {
         accessorKey: 'source',
-        header: 'Source',
+        header: t('Source'),
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: t('Status'),
         cell: ({ getValue }) => <ReservationStatusBadge status={getValue<ReservationStatus>()} />,
       },
       {
         accessorKey: 'createdAt',
-        header: 'Created',
+        header: t('Created'),
         cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
       },
     ],
@@ -111,24 +113,24 @@ export default function ReservationsPage() {
 
   return (
     <PageWrapper
-      title="Reservations"
-      description={restaurant ? `Manage reservations for ${restaurant.name}` : 'Manage reservations'}
+      title={t('Reservations')}
+      description={restaurant ? t('Manage reservations for {name}', { name: restaurant.name }) : t('Manage reservations')}
       actions={
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}`)}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back
+            {t('Back')}
           </Button>
           <Link href={`/restaurants/${restaurantId}/reservations/calendar`}>
             <Button variant="outline" size="sm">
               <CalendarDays className="h-4 w-4 mr-1.5" />
-              Calendar
+              {t('Calendar')}
             </Button>
           </Link>
           <Link href={`/restaurants/${restaurantId}/reservations/create`}>
             <Button>
               <Plus className="h-4 w-4 mr-1.5" />
-              New Reservation
+              {t('New Reservation')}
             </Button>
           </Link>
         </div>
@@ -139,11 +141,11 @@ export default function ReservationsPage() {
           <div className="relative max-w-xs w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search reservations..."
+              placeholder={t('Search reservations...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8"
-              aria-label="Search reservations"
+              aria-label={t('Search reservations')}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -151,10 +153,10 @@ export default function ReservationsPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              aria-label="Filter by status"
+              aria-label={t('Filter by status')}
             >
               {RESERVATION_STATUS_OPTIONS.map((opt) => (
-                <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
               ))}
             </select>
           </div>
@@ -215,8 +217,8 @@ export default function ReservationsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm font-medium text-destructive">Error loading reservations</p>
-                      <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                       <p className="text-sm font-medium text-destructive">{t('Error loading reservations')}</p>
+                      <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                     </div>
                   </td>
                 </tr>
@@ -224,15 +226,15 @@ export default function ReservationsPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">No reservations found</p>
+                       <p className="text-sm">{t('No reservations found')}</p>
                       {search || statusFilter ? (
-                        <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                        <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                       ) : (
                         <Link
                           href={`/restaurants/${restaurantId}/reservations/create`}
                           className="text-xs text-primary hover:underline mt-1"
                         >
-                          Create your first reservation
+                          {t('Create your first reservation')}
                         </Link>
                       )}
                     </div>
@@ -258,9 +260,9 @@ export default function ReservationsPage() {
         </div>
 
         {!isLoading && filteredReservations.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            {filteredReservations.length} reservation{filteredReservations.length !== 1 ? 's' : ''}
-            {search && ` matching "${search}"`}
+           <p className="text-sm text-muted-foreground">
+            {t('{count} reservation(s)', { count: filteredReservations.length })}
+            {search && ` ${t('matching "{search}"', { search })}`}
           </p>
         )}
       </div>

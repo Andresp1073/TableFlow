@@ -6,6 +6,7 @@ import { useCreateTable } from '@/hooks/use-tables';
 import { TableForm } from '@/components/tables/table-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 
 export default function CreateTablePage() {
   const params = useParams();
@@ -24,12 +25,12 @@ export default function CreateTablePage() {
 
   return (
     <PageWrapper
-      title="Create Table"
-      description="Add a new table to this restaurant"
+      title={t('Create Table')}
+      description={t('Add a new table to this restaurant')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}/tables`)}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Tables
+          {t('Back to Tables')}
         </Button>
       }
     >

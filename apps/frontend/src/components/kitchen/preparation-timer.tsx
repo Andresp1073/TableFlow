@@ -74,7 +74,7 @@ export function PreparationTimer({
         <Clock className="h-4 w-4 shrink-0" aria-hidden="true" />
       )}
       <span>{display}</span>
-      <span className="sr-only">{PRIORITY_LABELS[priority]} priority</span>
+      <span className="sr-only">{t(PRIORITY_LABELS[priority])} {t('priority')}</span>
     </div>
   );
 }

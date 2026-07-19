@@ -44,8 +44,8 @@ export function PurchaseOrderDetailView({ data, isLoading, isError, onSubmit, on
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <AlertTriangle className="h-8 w-8 text-destructive mb-4" />
-        <p className="text-sm text-muted-foreground">Failed to load purchase order</p>
-        <Button variant="outline" size="sm" className="mt-4" asChild><Link href="/inventory/purchase-orders">Go Back</Link></Button>
+        <p className="text-sm text-muted-foreground">{t('Failed to load purchase order')}</p>
+        <Button variant="outline" size="sm" className="mt-4" asChild><Link href="/inventory/purchase-orders">{t('Go Back')}</Link></Button>
       </div>
     );
   }
@@ -56,61 +56,61 @@ export function PurchaseOrderDetailView({ data, isLoading, isError, onSubmit, on
         <Button variant="ghost" size="icon-sm" asChild><Link href="/inventory/purchase-orders"><ArrowLeft className="h-4 w-4" /></Link></Button>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold">Order #{data.id.slice(-8)}</h1>
+            <h1 className="text-xl font-semibold">{t('Order #')}{data.id.slice(-8)}</h1>
             <StatusBadge status={data.status} />
-            {data.isFullyReceived && data.status === 'Received' && <Badge variant="success">Fully Received</Badge>}
+            {data.isFullyReceived && data.status === 'Received' && <Badge variant="success">{t('Fully Received')}</Badge>}
           </div>
           <p className="text-sm text-muted-foreground">{data.supplierName}</p>
         </div>
         <div className="flex gap-2">
-          {data.status === 'Draft' && <Button onClick={onSubmit}>Submit</Button>}
-          {data.status === 'Submitted' && <Button onClick={onApprove}>Approve</Button>}
-          {(data.status === 'Approved' || data.status === 'Submitted') && (
-            <Button variant="success" onClick={onReceive}>Receive</Button>
-          )}
-          {data.canTransitionTo.includes('Cancelled') && (
-            <Button variant="danger" onClick={onCancel}>Cancel</Button>
-          )}
+           {data.status === 'Draft' && <Button onClick={onSubmit}>{t('Submit')}</Button>}
+           {data.status === 'Submitted' && <Button onClick={onApprove}>{t('Approve')}</Button>}
+           {(data.status === 'Approved' || data.status === 'Submitted') && (
+             <Button variant="success" onClick={onReceive}>{t('Receive')}</Button>
+           )}
+           {data.canTransitionTo.includes('Cancelled') && (
+             <Button variant="danger" onClick={onCancel}>{t('Cancel')}</Button>
+           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
-          <CardHeader><CardTitle className="text-base">Order Details</CardTitle></CardHeader>
+          <CardHeader>          <CardTitle className="text-base">{t('Order Details')}</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label={t("Supplier")} value={data.supplierName} />
-            <DetailRow label={t("Status")} value={<StatusBadge status={data.status} />} />
-            <DetailRow label={t("Total Amount")} value={formatCurrency(data.totalAmount)} />
-            <DetailRow label={t("Items")} value={`${data.receivedCount}/${data.itemCount} received`} />
-            <DetailRow label={t("Created By")} value={data.createdBy} />
-            <DetailRow label={t("Approved By")} value={data.approvedBy ?? '—'} />
-            <DetailRow label={t("Ordered At")} value={data.orderedAt ? new Date(data.orderedAt).toLocaleString() : '—'} />
-            <DetailRow label={t("Expected Delivery")} value={data.expectedDeliveryAt ? new Date(data.expectedDeliveryAt).toLocaleDateString() : '—'} />
-            {data.receivedAt && <DetailRow label={t("Received At")} value={new Date(data.receivedAt).toLocaleString()} />}
+            <DetailRow label={t('Supplier')} value={data.supplierName} />
+            <DetailRow label={t('Status')} value={<StatusBadge status={data.status} />} />
+            <DetailRow label={t('Total Amount')} value={formatCurrency(data.totalAmount)} />
+            <DetailRow label={t('Items')} value={`${data.receivedCount}/${data.itemCount} ${t('received')}`} />
+            <DetailRow label={t('Created By')} value={data.createdBy} />
+            <DetailRow label={t('Approved By')} value={data.approvedBy ?? '—'} />
+            <DetailRow label={t('Ordered At')} value={data.orderedAt ? new Date(data.orderedAt).toLocaleString() : '—'} />
+            <DetailRow label={t('Expected Delivery')} value={data.expectedDeliveryAt ? new Date(data.expectedDeliveryAt).toLocaleDateString() : '—'} />
+            {data.receivedAt && <DetailRow label={t('Received At')} value={new Date(data.receivedAt).toLocaleString()} />}
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader><CardTitle className="text-base">Notes</CardTitle></CardHeader>
+          <CardHeader>          <CardTitle className="text-base">{t('Notes')}</CardTitle></CardHeader>
           <CardContent>
-            <p className="text-sm">{data.notes || 'No notes'}</p>
+            <p className="text-sm">{data.notes || t('No notes')}</p>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Line Items ({data.items.length})</CardTitle>
+          <CardTitle className="text-base">{t('Line Items ({count})', { count: data.items.length })}</CardTitle>
         </CardHeader>
         <CardContent>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-muted-foreground">
-                <th className="text-left py-2 font-medium">Product</th>
-                <th className="text-right py-2 font-medium">Quantity</th>
-                <th className="text-right py-2 font-medium">Unit Cost</th>
-                <th className="text-right py-2 font-medium">Total</th>
-                <th className="text-right py-2 font-medium">Received</th>
+                <th className="text-left py-2 font-medium">{t('Product')}</th>
+                <th className="text-right py-2 font-medium">{t('Quantity')}</th>
+                <th className="text-right py-2 font-medium">{t('Unit Cost')}</th>
+                <th className="text-right py-2 font-medium">{t('Total')}</th>
+                <th className="text-right py-2 font-medium">{t('Received')}</th>
               </tr>
             </thead>
             <tbody>
@@ -130,7 +130,7 @@ export function PurchaseOrderDetailView({ data, isLoading, isError, onSubmit, on
             </tbody>
             <tfoot>
               <tr className="font-medium border-t">
-                <td className="py-2" colSpan={3}>Total</td>
+                <td className="py-2" colSpan={3}>{t('Total')}</td>
                 <td className="text-right py-2">{formatCurrency(data.totalAmount)}</td>
                 <td />
               </tr>

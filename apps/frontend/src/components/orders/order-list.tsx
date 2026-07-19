@@ -31,7 +31,7 @@ export function OrderList({ orders, isLoading, isError, error, onRetry }: OrderL
     return (
       <ErrorState
         title={t("Failed to load orders")}
-        message={error?.message ?? 'An unexpected error occurred'}
+        message={error?.message ?? t('An unexpected error occurred')}
         onRetry={onRetry}
       />
     );
@@ -55,7 +55,7 @@ export function OrderList({ orders, isLoading, isError, error, onRetry }: OrderL
           className="cursor-pointer transition-shadow hover:shadow-md"
           onClick={() => router.push(`/orders/${order.id}`)}
           role="article"
-          aria-label={`Order ${order.id.slice(0, 8)}`}
+          aria-label={t('Order {id}', { id: order.id.slice(0, 8) })}
         >
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">

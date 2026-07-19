@@ -36,16 +36,16 @@ export default function AdminRestaurantsPage() {
       <div className="mt-8 rounded-lg border p-6">
         <h2 className="text-lg font-semibold mb-2">{t("Restaurant Settings")}</h2>
         <p className="text-sm text-muted-foreground mb-4">
-          Restaurant-specific settings are available within each restaurant&apos;s detail page.
-          Select a restaurant from the Restaurants section to configure:
+          {t("Restaurant-specific settings are available within each restaurant's detail page.")}
+          {t("Select a restaurant from the Restaurants section to configure:")}
         </p>
         <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-          <li>Business hours and holiday schedules</li>
-          <li>Tax rates and currency settings</li>
-          <li>Reservation policies</li>
-          <li>Kitchen configuration</li>
-          <li>Dining area and table settings</li>
-          <li>POS and payment settings</li>
+          <li>{t("Business hours and holiday schedules")}</li>
+          <li>{t("Tax rates and currency settings")}</li>
+          <li>{t("Reservation policies")}</li>
+          <li>{t("Kitchen configuration")}</li>
+          <li>{t("Dining area and table settings")}</li>
+          <li>{t("POS and payment settings")}</li>
         </ul>
       </div>
     </AdminPageLayout>

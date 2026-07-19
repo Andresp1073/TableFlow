@@ -35,7 +35,7 @@ export function KdsDashboard({
   error,
   onRetry,
   onStatusChange,
-  title = 'Kitchen Display',
+  title = t('Kitchen Display'),
 }: KdsDashboardProps) {
   const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
 
@@ -52,8 +52,8 @@ export function KdsDashboard({
         <KdsHeader title={title} />
         <div className="flex items-center justify-center min-h-[60vh]">
           <ErrorState
-            title={t("Failed to load orders")}
-            message={error?.message ?? 'Unable to connect to the kitchen server.'}
+            title={t('Failed to load orders')}
+            message={error?.message ?? t('Unable to connect to the kitchen server.')}
             onRetry={onRetry}
           />
         </div>
@@ -106,8 +106,8 @@ export function KdsDashboard({
               title={t("No active orders")}
               description={
                 selectedStationId
-                  ? 'This station has no orders. All caught up!'
-                  : 'The kitchen is clear. No orders to display.'
+                  ? t('This station has no orders. All caught up!')
+                  : t('The kitchen is clear. No orders to display.')
               }
             />
           </div>

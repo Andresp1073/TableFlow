@@ -22,7 +22,7 @@ function formatTime(iso: string): string {
     const now = new Date();
     const diffMs = now.getTime() - d.getTime();
     const diffMin = Math.floor(diffMs / 60000);
-    if (diffMin < 1) return t('Just now');
+    if (diffMin < 1) return t('just now');
     if (diffMin < 60) return t('{diffMin}m ago', { diffMin });
     const diffHrs = Math.floor(diffMin / 60);
     if (diffHrs < 24) return t('{diffHrs}h ago', { diffHrs });

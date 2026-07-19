@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { User, Settings, LogOut, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -12,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { t } from '@/lib/i18n';
+import { useAuth } from '@/providers/auth-provider';
 
 interface UserMenuProps {
   name: string;
@@ -21,6 +23,18 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ name, email, initials }: UserMenuProps) {
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await logout();
+    } catch {
+      // ignore errors, still redirect
+    }
+    router.push('/login');
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -42,20 +56,20 @@ export function UserMenu({ name, email, initials }: UserMenuProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => router.push('/settings')}>
           <User className="mr-2 h-4 w-4" />
           {t('Profile')}
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => router.push('/settings')}>
           <Settings className="mr-2 h-4 w-4" />
           {t('Account settings')}
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => router.push('/settings')}>
           <HelpCircle className="mr-2 h-4 w-4" />
           {t('Help & support')}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive">
+        <DropdownMenuItem className="text-destructive" onSelect={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           {t('Sign out')}
         </DropdownMenuItem>

@@ -54,9 +54,9 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <AlertTriangle className="h-8 w-8 text-destructive mb-4" />
-        <h3 className="text-sm font-semibold">Failed to load inventory data</h3>
+        <h3 className="text-sm font-semibold">{t("Failed to load inventory data")}</h3>
         <p className="text-sm text-muted-foreground mt-1">{error?.message}</p>
-        <button onClick={onRetry} className="mt-4 text-sm text-primary hover:underline">Retry</button>
+        <button onClick={onRetry} className="mt-4 text-sm text-primary hover:underline">{t("Retry")}</button>
       </div>
     );
   }
@@ -67,28 +67,28 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
     <div className="space-y-4">
       <DashboardGrid>
         <DashboardGridItem colSpan={1}>
-          <StatCard title={t("Total Products")} value={data.totalProducts} icon={<Package className="h-4 w-4" />} href="/inventory/products" />
+          <StatCard title={t('Total Products')} value={data.totalProducts} icon={<Package className="h-4 w-4" />} href="/inventory/products" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title={t("Inventory Value")} value={formatCurrency(data.totalStockValue)} icon={<DollarSign className="h-4 w-4" />} />
+          <StatCard title={t('Inventory Value')} value={formatCurrency(data.totalStockValue)} icon={<DollarSign className="h-4 w-4" />} />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title={t("Low Stock")} value={data.lowStockCount} icon={<AlertTriangle className="h-4 w-4 text-warning" />} description={t("Items below minimum threshold")} href="/inventory/alerts" />
+          <StatCard title={t('Low Stock')} value={data.lowStockCount} icon={<AlertTriangle className="h-4 w-4 text-warning" />} description={t('Items below minimum threshold')} href="/inventory/alerts" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title={t("Out of Stock")} value={data.outOfStockCount} icon={<TrendingDown className="h-4 w-4 text-destructive" />} href="/inventory/alerts" />
+          <StatCard title={t('Out of Stock')} value={data.outOfStockCount} icon={<TrendingDown className="h-4 w-4 text-destructive" />} href="/inventory/alerts" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title={t("Pending Orders")} value={data.pendingOrderCount} icon={<ClipboardList className="h-4 w-4" />} href="/inventory/purchase-orders" />
+          <StatCard title={t('Pending Orders')} value={data.pendingOrderCount} icon={<ClipboardList className="h-4 w-4" />} href="/inventory/purchase-orders" />
         </DashboardGridItem>
         <DashboardGridItem colSpan={1}>
-          <StatCard title={t("Categories")} value={data.totalCategories} icon={<Package className="h-4 w-4" />} href="/inventory/categories" />
+          <StatCard title={t('Categories')} value={data.totalCategories} icon={<Package className="h-4 w-4" />} href="/inventory/categories" />
         </DashboardGridItem>
       </DashboardGrid>
 
       <DashboardGrid>
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title={t("Low Stock Products")} isEmpty={data.lowStockProducts.length === 0} emptyMessage={t("All inventory levels are healthy")}>
+          <DashboardWidget title={t('Low Stock Products')} isEmpty={data.lowStockProducts.length === 0} emptyMessage={t('All inventory levels are healthy')}>
             <div className="space-y-2">
               {data.lowStockProducts.slice(0, 8).map((p) => (
                 <div key={p.id} className="flex items-center justify-between text-sm">
@@ -97,14 +97,14 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
                 </div>
               ))}
               {data.lowStockProducts.length > 8 && (
-                <Link href="/inventory/alerts" className="text-sm text-primary hover:underline block mt-2">View all {data.lowStockProducts.length} low stock items</Link>
+                <Link href="/inventory/alerts" className="text-sm text-primary hover:underline block mt-2">{t('View all {count} low stock items', { count: data.lowStockProducts.length })}</Link>
               )}
             </div>
           </DashboardWidget>
         </DashboardGridItem>
 
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title={t("Pending Purchase Orders")} isEmpty={data.pendingOrders.length === 0} emptyMessage={t("No pending orders")}>
+          <DashboardWidget title={t('Pending Purchase Orders')} isEmpty={data.pendingOrders.length === 0} emptyMessage={t('No pending orders')}>
             <div className="space-y-2">
               {data.pendingOrders.slice(0, 5).map((po) => (
                 <div key={po.id} className="flex items-center justify-between text-sm">
@@ -122,7 +122,7 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
 
       <DashboardGrid>
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title={t("Recent Movements")} isEmpty={data.recentMovements.length === 0} emptyMessage={t("No recent movements")}>
+          <DashboardWidget title={t('Recent Movements')} isEmpty={data.recentMovements.length === 0} emptyMessage={t('No recent movements')}>
             <div className="space-y-1">
               {data.recentMovements.slice(0, 10).map((m) => (
                 <div key={m.id} className="flex items-center justify-between text-sm py-1">
@@ -141,7 +141,7 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
         </DashboardGridItem>
 
         <DashboardGridItem colSpan={3}>
-          <DashboardWidget title={t("Top Consumed Products")} isEmpty={data.topConsumed.length === 0} emptyMessage={t("No consumption data")}>
+          <DashboardWidget title={t('Top Consumed Products')} isEmpty={data.topConsumed.length === 0} emptyMessage={t('No consumption data')}>
             <div className="space-y-2">
               {data.topConsumed.slice(0, 8).map((p, i) => (
                 <div key={p.name} className="flex items-center justify-between text-sm">
@@ -149,7 +149,7 @@ export function InventoryDashboardContent({ data, isLoading, isError, error, onR
                     <span className="text-muted-foreground w-5 shrink-0">#{i + 1}</span>
                     <span className="truncate">{p.name}</span>
                   </div>
-                  <span className="text-muted-foreground shrink-0">{Math.round(p.quantity)} units</span>
+                   <span className="text-muted-foreground shrink-0">{Math.round(p.quantity)} {t('units')}</span>
                 </div>
               ))}
             </div>

@@ -22,30 +22,30 @@ export default function CustomerListPage() {
 
   const handleArchive = (id: string) => {
     archiveCustomer.mutate({ restaurantId, customerId: id }, {
-      onSuccess: () => toast.success(t("Customer archived")),
-      onError: () => toast.error(t("Failed to archive customer")),
+      onSuccess: () => toast.success(t('Customer archived')),
+      onError: () => toast.error(t('Failed to archive customer')),
     });
   };
 
   const handleRestore = (id: string) => {
     restoreCustomer.mutate({ restaurantId, customerId: id }, {
-      onSuccess: () => toast.success(t("Customer restored")),
-      onError: () => toast.error(t("Failed to restore customer")),
+      onSuccess: () => toast.success(t('Customer restored')),
+      onError: () => toast.error(t('Failed to restore customer')),
     });
   };
 
   return (
     <ContentArea>
       <div className="space-y-4">
-        <PageHeader title={t("Customers")} description={t("View and manage customer profiles")} createHref="/customers/new" createLabel={t("New Customer")} />
+        <PageHeader title={t('Customers')} description={t('View and manage customer profiles')} createHref="/customers/new" createLabel={t('New Customer')} />
         <div className="relative max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder={t("Search customers...")}
+            placeholder={t('Search customers...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
-            aria-label={t("Search customers")}
+            aria-label={t('Search customers')}
           />
         </div>
         <CustomerList

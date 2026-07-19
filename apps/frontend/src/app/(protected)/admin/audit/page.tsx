@@ -90,14 +90,14 @@ export default function AdminAuditPage() {
             <SelectValue placeholder={t("All Modules")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Modules</SelectItem>
-            <SelectItem value="auth">Auth</SelectItem>
-            <SelectItem value="users">Users</SelectItem>
-            <SelectItem value="roles">Roles</SelectItem>
-            <SelectItem value="restaurants">Restaurants</SelectItem>
-            <SelectItem value="reservations">Reservations</SelectItem>
-            <SelectItem value="orders">Orders</SelectItem>
-            <SelectItem value="payments">Payments</SelectItem>
+            <SelectItem value="">{t("All Modules")}</SelectItem>
+            <SelectItem value="auth">{t("Auth")}</SelectItem>
+            <SelectItem value="users">{t("Users")}</SelectItem>
+            <SelectItem value="roles">{t("Roles")}</SelectItem>
+            <SelectItem value="restaurants">{t("Restaurants")}</SelectItem>
+            <SelectItem value="reservations">{t("Reservations")}</SelectItem>
+            <SelectItem value="orders">{t("Orders")}</SelectItem>
+            <SelectItem value="payments">{t("Payments")}</SelectItem>
           </SelectContent>
         </Select>
         <Select value={action} onValueChange={(value) => { setAction(value); setPage(1); }}>
@@ -105,12 +105,12 @@ export default function AdminAuditPage() {
             <SelectValue placeholder={t("All Actions")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Actions</SelectItem>
-            <SelectItem value="create">Create</SelectItem>
-            <SelectItem value="update">Update</SelectItem>
-            <SelectItem value="delete">Delete</SelectItem>
-            <SelectItem value="login">Login</SelectItem>
-            <SelectItem value="logout">Logout</SelectItem>
+            <SelectItem value="">{t("All Actions")}</SelectItem>
+            <SelectItem value="create">{t("Create")}</SelectItem>
+            <SelectItem value="update">{t("Update")}</SelectItem>
+            <SelectItem value="delete">{t("Delete")}</SelectItem>
+            <SelectItem value="login">{t("Login")}</SelectItem>
+            <SelectItem value="logout">{t("Logout")}</SelectItem>
           </SelectContent>
         </Select>
         <Button variant="outline" size="icon-sm" onClick={() => refetch()} aria-label={t("Refresh")}>
@@ -163,7 +163,7 @@ export default function AdminAuditPage() {
                   <td className="p-3 text-sm text-muted-foreground font-mono">
                     {entry.entityType}:{entry.entityId.slice(0, 8)}...
                   </td>
-                  <td className="p-3 text-sm text-muted-foreground">{entry.performedBy ?? 'System'}</td>
+                  <td className="p-3 text-sm text-muted-foreground">{entry.performedBy ?? t('System')}</td>
                   <td className="p-3 text-sm text-muted-foreground font-mono">{entry.ipAddress ?? '-'}</td>
                 </tr>
               ))}

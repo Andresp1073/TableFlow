@@ -47,53 +47,53 @@ export function SupplierForm({ onSubmit, onCancel, isSubmitting }: SupplierFormP
   return (
     <form onSubmit={handleSubmit}>
       <Card>
-        <CardHeader><CardTitle>Create Supplier</CardTitle></CardHeader>
+        <CardHeader>        <CardTitle>{t('Create Supplier')}</CardTitle></CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="name">Name *</Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder={t("Supplier name")} />
+              <Label htmlFor="name">{t('Name *')}</Label>
+              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder={t('Supplier name')} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="contact">Contact Person</Label>
-              <Input id="contact" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder={t("Contact name")} />
+              <Label htmlFor="contact">{t('Contact Person')}</Label>
+              <Input id="contact" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder={t('Contact name')} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("Email address")} />
+              <Label htmlFor="email">{t('Email')}</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('Email address')} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("Phone number")} />
+              <Label htmlFor="phone">{t('Phone')}</Label>
+              <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t('Phone number')} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="leadTime">Lead Time (days)</Label>
+              <Label htmlFor="leadTime">{t('Lead Time (days)')}</Label>
               <Input id="leadTime" type="number" min="0" value={leadTimeDays} onChange={(e) => setLeadTimeDays(Number(e.target.value))} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="minOrder">Min Order Amount ($)</Label>
+              <Label htmlFor="minOrder">{t('Min Order Amount ($)')}</Label>
               <Input id="minOrder" type="number" min="0" step="0.01" value={minimumOrderAmount} onChange={(e) => setMinimumOrderAmount(Number(e.target.value))} />
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="address">Address</Label>
-            <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder={t("Street address")} />
+              <Label htmlFor="address">{t('Address')}</Label>
+              <Input id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder={t('Street address')} />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="paymentTerms">Payment Terms</Label>
-            <Input id="paymentTerms" value={paymentTerms} onChange={(e) => setPaymentTerms(e.target.value)} placeholder={t("e.g. Net 30")} />
+            <Label htmlFor="paymentTerms">{t('Payment Terms')}</Label>
+            <Input id="paymentTerms" value={paymentTerms} onChange={(e) => setPaymentTerms(e.target.value)} placeholder={t('e.g. Net 30')} />
           </div>
           <div className="flex items-center gap-2">
             <Switch id="preferred" checked={preferred} onCheckedChange={setPreferred} />
-            <Label htmlFor="preferred">Preferred supplier</Label>
+            <Label htmlFor="preferred">{t('Preferred supplier')}</Label>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t("Optional notes")} />
+            <Label htmlFor="notes">{t('Notes')}</Label>
+            <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('Optional notes')} />
           </div>
           <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-            <Button type="submit" loading={isSubmitting}>Create Supplier</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>{t('Cancel')}</Button>
+            <Button type="submit" loading={isSubmitting}>{t('Create Supplier')}</Button>
           </div>
         </CardContent>
       </Card>

@@ -1,4 +1,5 @@
-'use client';
+﻿'use client';
+import { t } from '@/lib/i18n';
 
 import { useParams } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
@@ -78,8 +79,8 @@ export default function OrderDetailPage() {
 
       <Dialog open={showPayment} onOpenChange={setShowPayment}>
         <DialogContent className="sm:max-w-md">
-          <DialogTitle>Payment</DialogTitle>
-          <DialogDescription>Process payment for this order</DialogDescription>
+          <DialogTitle>{t('Payment')}</DialogTitle>
+          <DialogDescription>{t('Process payment for this order')}</DialogDescription>
           <PaymentForm
             total={order?.total ?? 0}
             isProcessing={processPayment.isPending}

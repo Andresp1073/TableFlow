@@ -14,7 +14,7 @@ export function SettingsRestaurant() {
     return (
       <Card>
         <CardContent className="py-8 text-center text-muted-foreground">
-          No restaurant selected.
+          {t('No restaurant selected.')}
         </CardContent>
       </Card>
     );
@@ -24,9 +24,9 @@ export function SettingsRestaurant() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Restaurant Information</CardTitle>
+          <CardTitle>{t('Restaurant Information')}</CardTitle>
           <CardDescription>
-            Basic information about your restaurant. Edit these details from the restaurant management page.
+            {t('Basic information about your restaurant. Edit these details from the restaurant management page.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

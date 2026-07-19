@@ -252,7 +252,7 @@ export default function DiningAreasPage() {
         {!isLoading && filteredAreas.length > 0 && (
           <p className="text-sm text-muted-foreground">
             {filteredAreas.length} {filteredAreas.length === 1 ? t('area') : t('areas')}
-            {search && t(' matching "{search}"', { search })}
+            {search && t('matching "{search}"', { search })}
           </p>
         )}
       </div>

@@ -66,7 +66,7 @@ export function OrderCard({ ticket, onStatusChange, className }: OrderCardProps)
                       PRIORITY_COLORS[ticket.priority],
                     )}
                   >
-                    {PRIORITY_LABELS[ticket.priority]}
+                    {t(PRIORITY_LABELS[ticket.priority])}
                   </span>
                 )}
               </div>
@@ -135,12 +135,12 @@ export function OrderCard({ ticket, onStatusChange, className }: OrderCardProps)
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground pt-1"
                 onClick={() => setExpanded(!expanded)}
                 aria-expanded={expanded}
-                aria-label={expanded ? 'Show fewer items' : `Show ${ticket.items.length - 3} more items`}
+                aria-label={expanded ? t('Show fewer items') : t('Show {count} more items', { count: ticket.items.length - 3 })}
               >
                 {expanded ? (
-                  <><ChevronUp className="h-3 w-3" /> Show less</>
+                  <><ChevronUp className="h-3 w-3" /> {t('Show less')}</>
                 ) : (
-                  <><ChevronDown className="h-3 w-3" /> {ticket.items.length - 3} more items</>
+                  <><ChevronDown className="h-3 w-3" /> {t('{count} more items', { count: ticket.items.length - 3 })}</>
                 )}
               </button>
             )}
@@ -158,7 +158,7 @@ export function OrderCard({ ticket, onStatusChange, className }: OrderCardProps)
 
         {/* Actions */}
         {nextTransitions.length > 0 && (
-          <div className="flex gap-1.5 px-3 pb-3" role="group" aria-label={t("Order actions")}>
+          <div className="flex gap-1.5 px-3 pb-3" role="group" aria-label={t('Order actions')}>
             {nextTransitions.map((nextStatus) => (
               <Button
                 key={nextStatus}
@@ -172,13 +172,13 @@ export function OrderCard({ ticket, onStatusChange, className }: OrderCardProps)
                 }
                 className="flex-1 text-xs font-bold h-8"
                 onClick={() => onStatusChange(ticket.id, nextStatus)}
-                aria-label={`${nextStatus === 'cancelled' ? 'Cancel' : `Move to ${nextStatus}`}`}
+                aria-label={nextStatus === 'cancelled' ? t('Cancel') : t('Move to {status}', { status: nextStatus })}
               >
-                {nextStatus === 'accepted' && 'Accept'}
-                {nextStatus === 'preparing' && 'Start Prep'}
-                {nextStatus === 'ready' && 'Mark Ready'}
-                {nextStatus === 'delivered' && 'Deliver'}
-                {nextStatus === 'cancelled' && 'Cancel'}
+                {nextStatus === 'accepted' && t('Accept')}
+                {nextStatus === 'preparing' && t('Start Prep')}
+                {nextStatus === 'ready' && t('Mark Ready')}
+                {nextStatus === 'delivered' && t('Deliver')}
+                {nextStatus === 'cancelled' && t('Cancel')}
               </Button>
             ))}
           </div>

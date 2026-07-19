@@ -77,8 +77,8 @@ export default function AdminRolesPage() {
                 <p className="text-sm text-muted-foreground line-clamp-2">{role.description}</p>
               )}
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span>{role._count?.userRoles ?? 0} users</span>
-                <span>{role._count?.rolePermissions ?? 0} permissions</span>
+                <span>{t('{count} users', { count: role._count?.userRoles ?? 0 })}</span>
+                <span>{t('{count} permissions', { count: role._count?.rolePermissions ?? 0 })}</span>
                 {role.color && (
                   <span className="flex items-center gap-1">
                     <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: role.color }} />
@@ -92,7 +92,7 @@ export default function AdminRolesPage() {
                   size="sm"
                   onClick={() => router.push(`/admin/roles/${role.id}`)}
                 >
-                  <Eye className="h-3.5 w-3.5 mr-1" /> View
+                  <Eye className="h-3.5 w-3.5 mr-1" /> {t('View')}
                 </Button>
                 {!role.isSystem && (
                   <Button
@@ -101,7 +101,7 @@ export default function AdminRolesPage() {
                     onClick={() => handleDelete(role)}
                     disabled={deleteMutation.isPending}
                   >
-                    <Trash2 className="h-3.5 w-3.5 mr-1 text-red-500" /> Delete
+                    <Trash2 className="h-3.5 w-3.5 mr-1 text-red-500" /> {t('Delete')}
                   </Button>
                 )}
               </div>

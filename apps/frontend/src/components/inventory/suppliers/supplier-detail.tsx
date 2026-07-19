@@ -39,8 +39,8 @@ export function SupplierDetailView({ data, isLoading, isError }: SupplierDetailV
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <AlertTriangle className="h-8 w-8 text-destructive mb-4" />
-        <p className="text-sm text-muted-foreground">Failed to load supplier</p>
-        <Button variant="outline" size="sm" className="mt-4" asChild><Link href="/inventory/suppliers">Go Back</Link></Button>
+        <p className="text-sm text-muted-foreground">{t('Failed to load supplier')}</p>
+        <Button variant="outline" size="sm" className="mt-4" asChild><Link href="/inventory/suppliers">{t('Go Back')}</Link></Button>
       </div>
     );
   }
@@ -53,16 +53,16 @@ export function SupplierDetailView({ data, isLoading, isError }: SupplierDetailV
           <h1 className="text-xl font-semibold">{data.name}</h1>
           <div className="flex items-center gap-2 mt-1">
             <Badge variant={data.status === 'Active' ? 'success' : data.status === 'Inactive' ? 'secondary' : 'danger'}>{data.status}</Badge>
-            {data.preferred && <Badge variant="warning">Preferred</Badge>}
+            {data.preferred && <Badge variant="warning">{t('Preferred')}</Badge>}
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
-          <CardHeader><CardTitle className="text-base">Contact Information</CardTitle></CardHeader>
+          <CardHeader>          <CardTitle className="text-base">{t('Contact Information')}</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label={t("Contact Name")} value={data.contactName ?? '—'} />
+            <DetailRow label={t('Contact Name')} value={data.contactName ?? '—'} />
             <DetailRow label={t("Email")} value={
               data.email ? <a href={`mailto:${data.email}`} className="hover:underline flex items-center gap-1"><Mail className="h-3 w-3" />{data.email}</a> : '—'
             } />
@@ -76,21 +76,21 @@ export function SupplierDetailView({ data, isLoading, isError }: SupplierDetailV
         </Card>
 
         <Card>
-          <CardHeader><CardTitle className="text-base">Business Details</CardTitle></CardHeader>
+          <CardHeader>          <CardTitle className="text-base">{t('Business Details')}</CardTitle></CardHeader>
           <CardContent>
-            <DetailRow label={t("Lead Time")} value={<span className="flex items-center gap-1"><Clock className="h-3 w-3" />{data.leadTimeDays} days</span>} />
-            <DetailRow label={t("Min Order")} value={<span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />{formatCurrency(data.minimumOrderAmount)}</span>} />
-            <DetailRow label={t("Payment Terms")} value={data.paymentTerms ?? '—'} />
-            <DetailRow label={t("Notes")} value={data.notes ?? '—'} />
+            <DetailRow label={t('Lead Time')} value={<span className="flex items-center gap-1"><Clock className="h-3 w-3" />{data.leadTimeDays} {t('days')}</span>} />
+            <DetailRow label={t('Min Order')} value={<span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />{formatCurrency(data.minimumOrderAmount)}</span>} />
+            <DetailRow label={t('Payment Terms')} value={data.paymentTerms ?? '—'} />
+            <DetailRow label={t('Notes')} value={data.notes ?? '—'} />
           </CardContent>
         </Card>
       </div>
 
       <Card>
-        <CardHeader><CardTitle className="text-base">Products ({data.products.length})</CardTitle></CardHeader>
+        <CardHeader>          <CardTitle className="text-base">{t('Products ({count})', { count: data.products.length })}</CardTitle></CardHeader>
         <CardContent>
           {data.products.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No products linked to this supplier</p>
+            <p className="text-sm text-muted-foreground">{t('No products linked to this supplier')}</p>
           ) : (
             <div className="space-y-1">
               {data.products.map((p) => (

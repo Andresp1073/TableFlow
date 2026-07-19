@@ -48,7 +48,7 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold">TableFlow</span>
+                <span className="text-sm font-bold">{t('TableFlow')}</span>
               </div>
             )}
           </div>
@@ -127,8 +127,8 @@ function SidebarItem({ item, collapsed }: { item: SidebarItem; collapsed: boolea
       <li>
         <Tooltip>
           <TooltipTrigger asChild>{content}</TooltipTrigger>
-          <TooltipContent side="right" className="ml-2">
-            {item.label}
+            <TooltipContent side="right" className="ml-2">
+              {t(item.label)}
             {item.badge !== undefined && (
               <span className="ml-2 rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
                 {item.badge}

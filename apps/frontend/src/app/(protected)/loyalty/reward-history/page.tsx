@@ -15,8 +15,8 @@ export default function RewardHistoryPage() {
     <ContentArea>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Reward History</h1>
-          <p className="text-sm text-muted-foreground">Available rewards and their details</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t('Reward History')}</h1>
+          <p className="text-sm text-muted-foreground">{t('Available rewards and their details')}</p>
         </div>
         <RewardHistoryView data={data} isLoading={isLoading} isError={isError} />
       </div>

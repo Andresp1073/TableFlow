@@ -36,10 +36,10 @@ import { ReservationNotFoundError } from "../../errors/ReservationNotFoundError.
 import { ReservationPolicyViolationError } from "../../errors/ReservationPolicyViolationError.js";
 
 type ReservationPermission =
-  | "restaurants.reservations.create"
-  | "restaurants.reservations.read"
-  | "restaurants.reservations.update"
-  | "restaurants.reservations.cancel";
+  | "reservations.create"
+  | "reservations.read"
+  | "reservations.update"
+  | "reservations.cancel";
 
 export interface ApplicationMetadata {
   ipAddress?: string;
@@ -70,7 +70,7 @@ export class ReservationApplicationService {
     auth: AuthorizationContext,
     metadata?: ApplicationMetadata,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.create");
+    await this.authorize(auth, "reservations.create");
 
     const reservationNumber = ReservationNumber.create(command.reservationNumber);
     const date = ReservationDate.create(new Date(command.date));
@@ -143,7 +143,7 @@ export class ReservationApplicationService {
     auth: AuthorizationContext,
     metadata?: ApplicationMetadata,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.update");
+    await this.authorize(auth, "reservations.update");
 
     const existing = await this.repository.findByIdAndRestaurant(command.id, command.restaurantId);
     if (!existing) {
@@ -190,7 +190,7 @@ export class ReservationApplicationService {
     auth: AuthorizationContext,
     metadata?: ApplicationMetadata,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.cancel");
+    await this.authorize(auth, "reservations.cancel");
 
     const existing = await this.repository.findByIdAndRestaurant(command.id, command.restaurantId);
     if (!existing) {
@@ -238,7 +238,7 @@ export class ReservationApplicationService {
     auth: AuthorizationContext,
     metadata?: ApplicationMetadata,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.update");
+    await this.authorize(auth, "reservations.update");
 
     const existing = await this.repository.findByIdAndRestaurant(command.id, command.restaurantId);
     if (!existing) {
@@ -280,7 +280,7 @@ export class ReservationApplicationService {
     auth: AuthorizationContext,
     metadata?: ApplicationMetadata,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.update");
+    await this.authorize(auth, "reservations.update");
 
     const existing = await this.repository.findByIdAndRestaurant(command.id, command.restaurantId);
     if (!existing) {
@@ -327,7 +327,7 @@ export class ReservationApplicationService {
     auth: AuthorizationContext,
     metadata?: ApplicationMetadata,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.update");
+    await this.authorize(auth, "reservations.update");
 
     const existing = await this.repository.findByIdAndRestaurant(command.id, command.restaurantId);
     if (!existing) {
@@ -428,7 +428,7 @@ export class ReservationApplicationService {
     query: GetReservationQuery,
     auth: AuthorizationContext,
   ): Promise<ReservationDTO> {
-    await this.authorize(auth, "restaurants.reservations.read");
+    await this.authorize(auth, "reservations.read");
 
     const reservation = await this.repository.findByIdAndRestaurant(query.id, query.restaurantId);
     if (!reservation) {
@@ -442,7 +442,7 @@ export class ReservationApplicationService {
     query: ListReservationsQuery,
     auth: AuthorizationContext,
   ): Promise<ReservationSummary[]> {
-    await this.authorize(auth, "restaurants.reservations.read");
+    await this.authorize(auth, "reservations.read");
 
     const filters: ReservationListFilters = {
       restaurantId: query.restaurantId,
@@ -460,7 +460,7 @@ export class ReservationApplicationService {
     query: SearchReservationsQuery,
     auth: AuthorizationContext,
   ): Promise<ReservationSummary[]> {
-    await this.authorize(auth, "restaurants.reservations.read");
+    await this.authorize(auth, "reservations.read");
 
     const filters: ReservationListFilters = {
       restaurantId: query.restaurantId,

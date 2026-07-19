@@ -6,6 +6,7 @@ import { ReportChart } from '@/components/analytics/report-chart';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useOccupancyReport } from '@/hooks/use-analytics';
 import type { DateRange } from '@/lib/analytics-types';
+import { t } from '@/lib/i18n';
 
 interface OccupancyReportContentProps {
   dateRange?: DateRange;
@@ -17,8 +18,8 @@ export function OccupancyReportContent({ dateRange }: OccupancyReportContentProp
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-destructive">
-        <p className="text-sm">Failed to load report</p>
-        <button onClick={() => refetch()} className="text-sm underline mt-2">Retry</button>
+        <p className="text-sm">{t('Failed to load report')}</p>
+        <button onClick={() => refetch()} className="text-sm underline mt-2">{t('Retry')}</button>
       </div>
     );
   }
@@ -26,22 +27,22 @@ export function OccupancyReportContent({ dateRange }: OccupancyReportContentProp
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
-        <StatCard title="Avg Occupancy" value={data?.summary.averageOccupancyRate ? `${data.summary.averageOccupancyRate.toFixed(1)}%` : '0%'} icon={<TrendingUp className="h-4 w-4" />} loading={isLoading} />
-        <StatCard title="Peak Occupancy" value={data?.summary.peakOccupancyRate ? `${data.summary.peakOccupancyRate.toFixed(1)}%` : '0%'} icon={<TrendingUp className="h-4 w-4" />} loading={isLoading} />
-        <StatCard title="Total Tables" value={data?.summary.totalTables ?? 0} icon={<Table2 className="h-4 w-4" />} loading={isLoading} />
-        <StatCard title="Total Capacity" value={data?.summary.totalCapacity ?? 0} icon={<Users className="h-4 w-4" />} loading={isLoading} />
-        <StatCard title="Avg Guests/Day" value={data?.summary.averageGuestsPerDay ?? 0} icon={<Building2 className="h-4 w-4" />} loading={isLoading} />
+        <StatCard title={t('Avg Occupancy')} value={data?.summary.averageOccupancyRate ? `${data.summary.averageOccupancyRate.toFixed(1)}%` : '0%'} icon={<TrendingUp className="h-4 w-4" />} loading={isLoading} />
+        <StatCard title={t('Peak Occupancy')} value={data?.summary.peakOccupancyRate ? `${data.summary.peakOccupancyRate.toFixed(1)}%` : '0%'} icon={<TrendingUp className="h-4 w-4" />} loading={isLoading} />
+        <StatCard title={t('Total Tables')} value={data?.summary.totalTables ?? 0} icon={<Table2 className="h-4 w-4" />} loading={isLoading} />
+        <StatCard title={t('Total Capacity')} value={data?.summary.totalCapacity ?? 0} icon={<Users className="h-4 w-4" />} loading={isLoading} />
+        <StatCard title={t('Avg Guests/Day')} value={data?.summary.averageGuestsPerDay ?? 0} icon={<Building2 className="h-4 w-4" />} loading={isLoading} />
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <ReportChart title="Occupancy by Day" type="area" data={data?.occupancyByDay ?? []} loading={isLoading} height={280} />
-        <ReportChart title="Occupancy by Hour" type="line" data={data?.occupancyByHour ?? []} loading={isLoading} height={280} />
-        <ReportChart title="Occupancy by Area" type="bar" data={data?.occupancyByArea?.map(a => ({ label: a.area, value: Math.round(a.rate) })) ?? []} loading={isLoading} height={280} />
+        <ReportChart title={t('Occupancy by Day')} type="area" data={data?.occupancyByDay ?? []} loading={isLoading} height={280} />
+        <ReportChart title={t('Occupancy by Hour')} type="line" data={data?.occupancyByHour ?? []} loading={isLoading} height={280} />
+        <ReportChart title={t('Occupancy by Area')} type="bar" data={data?.occupancyByArea?.map(a => ({ label: a.area, value: Math.round(a.rate) })) ?? []} loading={isLoading} height={280} />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Occupancy by Dining Area</CardTitle>
+          <CardTitle className="text-base">{t('Occupancy by Dining Area')}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -53,7 +54,7 @@ export function OccupancyReportContent({ dateRange }: OccupancyReportContentProp
                   <CardContent className="p-4">
                     <p className="text-sm font-medium">{area.area}</p>
                     <p className="text-2xl font-bold">{area.rate.toFixed(0)}%</p>
-                    <p className="text-xs text-muted-foreground">{area.occupiedTables} of {area.totalTables} tables occupied</p>
+                    <p className="text-xs text-muted-foreground">{area.occupiedTables} {t('of')} {area.totalTables} {t('tables occupied')}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -64,7 +65,7 @@ export function OccupancyReportContent({ dateRange }: OccupancyReportContentProp
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Peak Times</CardTitle>
+          <CardTitle className="text-base">{t('Peak Times')}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (

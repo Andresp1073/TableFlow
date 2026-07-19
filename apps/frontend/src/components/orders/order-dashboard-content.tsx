@@ -36,7 +36,7 @@ export function OrderDashboardContent({
     return (
       <ErrorState
         title={t("Failed to load order dashboard")}
-        message={error?.message ?? 'An unexpected error occurred'}
+        message={error?.message ?? t('An unexpected error occurred')}
         onRetry={onRetry}
       />
     );
@@ -58,7 +58,7 @@ export function OrderDashboardContent({
         title={t("Active Orders")}
         value={dashboard.active}
         icon={<ChefHat className="h-4 w-4" />}
-        description={`${dashboard.submitted} submitted, ${dashboard.inProgress} in progress`}
+        description={t('{submitted} submitted, {inProgress} in progress', { submitted: dashboard.submitted, inProgress: dashboard.inProgress })}
       />
       <StatCard
         title={t("Submitted")}
@@ -82,13 +82,13 @@ export function OrderDashboardContent({
         title={t("Completed Today")}
         value={dashboard.completed}
         icon={<CheckCircle2 className="h-4 w-4" />}
-        description={`${dashboard.cancelled} cancelled`}
+        description={t('{count} cancelled', { count: dashboard.cancelled })}
       />
       <StatCard
         title={t("Today's Revenue")}
         value={formatCurrency(dashboard.todayRevenue)}
         icon={<DollarSign className="h-4 w-4" />}
-        description={`${dashboard.total} total orders`}
+        description={t('{count} total orders', { count: dashboard.total })}
       />
     </div>
   );

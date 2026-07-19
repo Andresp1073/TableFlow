@@ -48,7 +48,7 @@ export function AdminSidebar() {
       <div className="p-4 border-b">
         <Link href="/admin" className="flex items-center gap-2 font-semibold text-sm">
           <Shield className="h-4 w-4" />
-          Admin Panel
+          {t('Admin Panel')}
         </Link>
       </div>
       <nav className="p-2 space-y-1" aria-label={t("Admin sections")}>

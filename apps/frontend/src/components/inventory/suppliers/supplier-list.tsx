@@ -56,7 +56,7 @@ export function SupplierList({ data, loading, error }: SupplierListProps) {
     {
       accessorKey: 'leadTimeDays',
       header: t('Lead Time'),
-      cell: ({ row }) => `${row.original.leadTimeDays} days`,
+      cell: ({ row }) => `${row.original.leadTimeDays} ${t('days')}`,
     },
     {
       accessorKey: 'productCount',
@@ -71,7 +71,7 @@ export function SupplierList({ data, loading, error }: SupplierListProps) {
       loading={loading}
       error={error}
       searchable
-      emptyMessage={t("No suppliers found.")}
+      emptyMessage={t('No suppliers found.')}
     />
   );
 }

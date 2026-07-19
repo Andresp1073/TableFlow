@@ -21,7 +21,7 @@ function StatBadge({ label, value, color }: { label: string; value: number; colo
   );
 }
 
-export function KdsHeader({ title = 'Kitchen Display', stats, children, className }: KdsHeaderProps) {
+export function KdsHeader({ title = t('Kitchen Display'), stats, children, className }: KdsHeaderProps) {
   return (
     <header
       className={cn(

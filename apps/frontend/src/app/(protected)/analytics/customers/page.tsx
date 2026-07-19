@@ -5,6 +5,7 @@ import { CustomerAnalyticsContent } from '@/components/analytics/customer-analyt
 import { ReportLayout } from '@/components/analytics/report-layout';
 import type { DateRange } from '@/lib/analytics-types';
 import { getDateRangeFromPreset } from '@/lib/analytics-types';
+import { t } from '@/lib/i18n';
 
 export default function CustomerAnalyticsPage() {
   const [dateRange, setDateRange] = useState<DateRange>(() => getDateRangeFromPreset('thisMonth'));
@@ -15,8 +16,8 @@ export default function CustomerAnalyticsPage() {
 
   return (
     <ReportLayout
-      title="Customer Analytics"
-      description="Customer behavior, segments, loyalty activity, and spending analysis."
+      title={t('Customer Analytics')}
+      description={t('Customer behavior, segments, loyalty activity, and spending analysis.')}
       onDateRangeChange={handleDateRangeChange}
     >
       <CustomerAnalyticsContent dateRange={dateRange} />

@@ -73,7 +73,7 @@ export function SettingsNotifications() {
         <div className="flex items-center gap-4 pt-2">
           <Button onClick={handleSave} disabled={!isDirty}>
             <Save className="h-4 w-4 mr-1.5" />
-            Save Preferences
+             {t('Save Preferences')}
           </Button>
         </div>
       </CardContent>

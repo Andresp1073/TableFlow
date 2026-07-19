@@ -125,7 +125,7 @@ export interface ListAvailableTablesResult {
 }
 
 export const TABLE_STATUS_OPTIONS: { value: TableStatus | ''; label: string }[] = [
-  { value: '', label: 'All Statuses' },
+  { value: '', label: 'All statuses' },
   { value: 'available', label: 'Available' },
   { value: 'occupied', label: 'Occupied' },
   { value: 'reserved', label: 'Reserved' },

@@ -1,6 +1,7 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
+import { t } from '@/lib/i18n';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useProduct, useArchiveProduct, useRestoreProduct } from '@/hooks/use-inventory';
 import { ContentArea } from '@/components/layout/content-area';
@@ -20,15 +21,15 @@ export default function ProductDetailPage() {
 
   const handleArchive = () => {
     archiveProduct.mutate({ restaurantId, productId }, {
-      onSuccess: () => { toast.success('Product archived'); router.refresh(); },
-      onError: () => toast.error('Failed to archive product'),
+      onSuccess: () => { toast.success(t('Product archived')); router.refresh(); },
+      onError: () => toast.error(t('Failed to archive product')),
     });
   };
 
   const handleRestore = () => {
     restoreProduct.mutate({ restaurantId, productId }, {
-      onSuccess: () => { toast.success('Product restored'); router.refresh(); },
-      onError: () => toast.error('Failed to restore product'),
+      onSuccess: () => { toast.success(t('Product restored')); router.refresh(); },
+      onError: () => toast.error(t('Failed to restore product')),
     });
   };
 

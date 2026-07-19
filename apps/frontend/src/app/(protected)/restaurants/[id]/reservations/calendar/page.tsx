@@ -11,6 +11,7 @@ import { ReservationTimeline } from '@/components/reservations/reservation-timel
 import type { CalendarViewType } from '@/lib/reservation-types';
 import { PageWrapper } from '@/components/layout/page-wrapper';
 import { Button } from '@/components/ui/button';
+import { t } from '@/lib/i18n';
 
 export default function ReservationCalendarPage() {
   const params = useParams();
@@ -56,12 +57,12 @@ export default function ReservationCalendarPage() {
 
   return (
     <PageWrapper
-      title="Reservation Calendar"
-      description={restaurant ? `Calendar view for ${restaurant.name}` : 'Calendar view'}
+      title={t('Reservation Calendar')}
+      description={restaurant ? t('Calendar view for {name}', { name: restaurant.name }) : t('Calendar view')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}/reservations`)}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Reservations
+          {t('Back to Reservations')}
         </Button>
       }
     >

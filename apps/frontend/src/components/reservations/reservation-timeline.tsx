@@ -119,7 +119,7 @@ export function ReservationTimeline({
                 minHeight: '24px',
               }}
               onClick={() => onReservationClick?.(reservation.id)}
-              aria-label={t('Reservation {number}: {status}, {partySize} guests, {start} - {end}', { number: reservation.reservationNumber, status: RESERVATION_STATUS_LABELS[reservation.status], partySize: reservation.partySize, start: reservation.formattedStart, end: reservation.formattedEnd })}
+              aria-label={t('Reservation {number}: {status}, {partySize} guests, {start} - {end}', { number: reservation.reservationNumber, status: t(RESERVATION_STATUS_LABELS[reservation.status]), partySize: reservation.partySize, start: reservation.formattedStart, end: reservation.formattedEnd })}
             >
               <div className="font-medium truncate">
                 {reservation.reservationNumber}

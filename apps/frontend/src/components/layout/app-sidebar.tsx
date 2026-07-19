@@ -37,7 +37,7 @@ const AppSidebar = forwardRef<HTMLElement, AppSidebarProps>(
               {collapsed ? (
                 <span className="text-sm font-bold">TF</span>
               ) : (
-                <span className="text-sm font-bold">TableFlow</span>
+                <span className="text-sm font-bold">{t('TableFlow')}</span>
               )}
             </Link>
           </div>

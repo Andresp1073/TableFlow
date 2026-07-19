@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { t } from '@/lib/i18n';
 import { useRestaurant, useUpdateRestaurant } from '@/hooks/use-restaurants';
 import { RestaurantForm } from '@/components/restaurants/restaurant-form';
 import { PageWrapper } from '@/components/layout/page-wrapper';
@@ -30,12 +31,12 @@ export default function EditRestaurantPage() {
 
   return (
     <PageWrapper
-      title={restaurant ? `Edit: ${restaurant.name}` : 'Edit Restaurant'}
-      description="Update restaurant information"
+      title={restaurant ? `Edit: ${restaurant.name}` : t('Edit Restaurant')}
+      description={t('Update restaurant information')}
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${id}`)}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Details
+          {t('Back to Details')}
         </Button>
       }
     >
@@ -49,7 +50,7 @@ export default function EditRestaurantPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load restaurant: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load restaurant')}: {(error as Error)?.message || t('An unexpected error occurred')}
           </AlertDescription>
         </Alert>
       ) : restaurant ? (

@@ -91,14 +91,14 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader>
-          <CardTitle>Create Purchase Order</CardTitle>
+          <CardTitle>{t('Create Purchase Order')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label>Supplier</Label>
+              <Label>{t('Supplier')}</Label>
               <Select value={supplierId} onValueChange={handleSupplierChange}>
-                <SelectTrigger><SelectValue placeholder={t("Select supplier")} /></SelectTrigger>
+                <SelectTrigger>               <SelectValue placeholder={t('Select supplier')} /></SelectTrigger>
                 <SelectContent>
                   {suppliers.map((s) => (
                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -107,27 +107,27 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Expected Delivery</Label>
+              <Label>{t('Expected Delivery')}</Label>
               <Input type="date" value={expectedDeliveryAt} onChange={(e) => setExpectedDeliveryAt(e.target.value)} />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label>Notes</Label>
-            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t("Optional notes")} />
+            <Label>{t('Notes')}</Label>
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('Optional notes')} />
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label>Line Items</Label>
-              <Button type="button" variant="outline" size="sm" onClick={addItem}><Plus className="h-4 w-4 mr-1" />Add Item</Button>
+              <Label>{t('Line Items')}</Label>
+              <Button type="button" variant="outline" size="sm" onClick={addItem}><Plus className="h-4 w-4 mr-1" />{t('Add Item')}</Button>
             </div>
             {items.map((item, i) => (
               <div key={i} className="flex gap-2 items-start border rounded-md p-3">
                 <div className="flex-1 space-y-1.5">
-                  <Label className="text-xs">Product</Label>
+                  <Label className="text-xs">{t('Product')}</Label>
                   <Select value={item.ingredientId} onValueChange={(v) => updateItem(i, 'ingredientId', v)}>
-                    <SelectTrigger><SelectValue placeholder={t("Select product")} /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder={t('Select product')} /></SelectTrigger>
                     <SelectContent>
                       {products.filter((p) => p.isActive).map((p) => (
                         <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
@@ -136,15 +136,15 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
                   </Select>
                 </div>
                 <div className="w-24 space-y-1.5">
-                  <Label className="text-xs">Qty</Label>
+                  <Label className="text-xs">{t('Qty')}</Label>
                   <Input type="number" min="0" step="0.1" value={item.quantity || ''} onChange={(e) => updateItem(i, 'quantity', Number(e.target.value))} />
                 </div>
                 <div className="w-24 space-y-1.5">
-                  <Label className="text-xs">Unit Cost</Label>
+                  <Label className="text-xs">{t('Unit Cost')}</Label>
                   <Input type="number" min="0" step="0.01" value={item.unitCost || ''} onChange={(e) => updateItem(i, 'unitCost', Number(e.target.value))} />
                 </div>
                 <div className="w-24 space-y-1.5">
-                  <Label className="text-xs">Total</Label>
+                  <Label className="text-xs">{t('Total')}</Label>
                   <div className="h-9 flex items-center text-sm">${(item.quantity * item.unitCost).toFixed(2)}</div>
                 </div>
                 {items.length > 1 && (
@@ -154,13 +154,13 @@ export function PurchaseOrderForm({ products, suppliers, onSubmit, onCancel, isS
                 )}
               </div>
             ))}
-            <div className="text-right text-sm font-medium pt-2">Total: ${totalAmount.toFixed(2)}</div>
+            <div className="text-right text-sm font-medium pt-2">{t('Total')}: ${totalAmount.toFixed(2)}</div>
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>{t('Cancel')}</Button>
             <Button type="submit" loading={isSubmitting} disabled={!supplierId || items.every((i) => !i.ingredientId)}>
-              Create Order
+              {t('Create Order')}
             </Button>
           </div>
         </CardContent>

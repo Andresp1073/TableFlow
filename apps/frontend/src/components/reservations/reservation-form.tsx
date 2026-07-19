@@ -98,7 +98,7 @@ export function ReservationForm({
 
         <FormField name="partySize" error={errors.partySize?.message}>
           <FormItem>
-            <FormLabel required>{t('Party Size')}</FormLabel>
+            <FormLabel required>{t('Party size')}</FormLabel>
             <FormControl>
               <Input
                 type="number"
@@ -156,7 +156,7 @@ export function ReservationForm({
               >
                 {RESERVATION_SOURCE_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label}
+                    {t(option.label)}
                   </option>
                 ))}
               </select>

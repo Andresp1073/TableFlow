@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn';
 import { Spinner } from '@/components/ui/spinner';
+import { t } from '@/lib/i18n';
 
 interface LoadingStateProps extends React.HTMLAttributes<HTMLDivElement> {
   message?: string;
@@ -11,7 +12,7 @@ function LoadingState({ message, size = 'md', className, ...props }: LoadingStat
     <div
       className={cn('flex flex-col items-center justify-center py-12 text-center', className)}
       role="status"
-      aria-label="Loading"
+      aria-label={t('Loading')}
       {...props}
     >
       <Spinner size={size} />

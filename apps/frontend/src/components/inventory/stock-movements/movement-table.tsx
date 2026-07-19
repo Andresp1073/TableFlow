@@ -55,7 +55,7 @@ export function MovementTable({ data, loading, error }: MovementTableProps) {
       loading={loading}
       error={error}
       searchable
-      emptyMessage={t("No stock movements recorded.")}
+      emptyMessage={t('No stock movements recorded.')}
     />
   );
 }

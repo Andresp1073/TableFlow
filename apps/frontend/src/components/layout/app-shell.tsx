@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/providers/theme-provider';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { t } from '@/lib/i18n';
 
 interface AppShellProps {
   sidebarSections: SidebarSection[];
@@ -94,7 +95,7 @@ function AppShell({
           }
           rightSlot={
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="icon-md" onClick={toggleTheme} aria-label="Toggle theme">
+              <Button variant="ghost" size="icon-md" onClick={toggleTheme} aria-label={t('Toggle theme')}>
                 {resolvedTheme === 'dark' ? (
                   <Sun className="h-4 w-4" />
                 ) : (
@@ -102,7 +103,7 @@ function AppShell({
                 )}
               </Button>
 
-              <Button variant="ghost" size="icon-md" aria-label="Notifications">
+              <Button variant="ghost" size="icon-md" aria-label={t('Notifications')}>
                 <Bell className="h-4 w-4" />
               </Button>
 
@@ -129,16 +130,16 @@ function AppShell({
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                       <User className="mr-2 h-4 w-4" />
-                      Profile
+                      {t('Profile')}
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Settings className="mr-2 h-4 w-4" />
-                      Settings
+                      {t('Settings')}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
-                      Sign out
+                      {t('Sign out')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

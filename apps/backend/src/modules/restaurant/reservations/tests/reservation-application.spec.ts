@@ -342,7 +342,7 @@ describe("ReservationApplicationService", () => {
 
       expect(result.id).toBe("res-1");
       expect(result.reservationNumber).toBe("RES-001");
-      expect(mockAuthService.authorize).toHaveBeenCalledWith(mockAuth, "restaurants.reservations.create");
+      expect(mockAuthService.authorize).toHaveBeenCalledWith(mockAuth, "reservations.create");
       expect(mockFactory.create).toHaveBeenCalledOnce();
       expect(mockRepository.save).toHaveBeenCalledOnce();
       expect(mockEventBus.emit).toHaveBeenCalledWith("ReservationCreated", expect.any(Object));

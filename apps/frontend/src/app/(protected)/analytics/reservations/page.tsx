@@ -5,6 +5,7 @@ import { ReservationReportContent } from '@/components/analytics/reservation-rep
 import { ReportLayout } from '@/components/analytics/report-layout';
 import type { DateRange } from '@/lib/analytics-types';
 import { getDateRangeFromPreset } from '@/lib/analytics-types';
+import { t } from '@/lib/i18n';
 
 export default function ReservationReportPage() {
   const [dateRange, setDateRange] = useState<DateRange>(() => getDateRangeFromPreset('thisMonth'));
@@ -15,8 +16,8 @@ export default function ReservationReportPage() {
 
   return (
     <ReportLayout
-      title="Reservation Report"
-      description="Reservation trends, cancellations, no-shows, and table utilization."
+      title={t('Reservation Report')}
+      description={t('Reservation trends, cancellations, no-shows, and table utilization.')}
       onDateRangeChange={handleDateRangeChange}
     >
       <ReservationReportContent dateRange={dateRange} />

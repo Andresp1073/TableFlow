@@ -25,14 +25,14 @@ export function PageHeader({ title, description, createHref, createLabel, onActi
           <Button asChild>
             <Link href={createHref}>
               <Plus className="h-4 w-4 mr-1" />
-              {createLabel ?? 'Create'}
+              {createLabel ?? t('Create')}
             </Link>
           </Button>
         )}
         {onAction && (
           <Button onClick={onAction}>
             <Plus className="h-4 w-4 mr-1" />
-            {createLabel ?? 'Create'}
+            {createLabel ?? t('Create')}
           </Button>
         )}
       </div>

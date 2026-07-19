@@ -53,7 +53,7 @@ export function RoleForm({ initialData, onSubmit, isSubmitting, mode }: RoleForm
     <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
       {mode === 'create' && (
         <div className="space-y-2">
-          <Label htmlFor="code">Code</Label>
+          <Label htmlFor="code">{t('Code')}</Label>
           <Input
             id="code"
             value={code}
@@ -76,7 +76,7 @@ export function RoleForm({ initialData, onSubmit, isSubmitting, mode }: RoleForm
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">{t('Description')}</Label>
         <Textarea
           id="description"
           value={description}
@@ -87,7 +87,7 @@ export function RoleForm({ initialData, onSubmit, isSubmitting, mode }: RoleForm
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="priority">Priority</Label>
+          <Label htmlFor="priority">{t('Priority')}</Label>
           <Input
             id="priority"
             type="number"
@@ -98,32 +98,32 @@ export function RoleForm({ initialData, onSubmit, isSubmitting, mode }: RoleForm
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="color">Color (optional)</Label>
+          <Label htmlFor="color">{t('Color (optional)')}</Label>
           <Input id="color" value={color} onChange={(e) => setColor(e.target.value)} placeholder={t("#000000")} />
         </div>
       </div>
 
       {mode === 'create' && (
         <div className="space-y-2">
-          <Label htmlFor="icon">Icon (optional)</Label>
+          <Label htmlFor="icon">{t('Icon (optional)')}</Label>
           <Input id="icon" value={icon} onChange={(e) => setIcon(e.target.value)} />
         </div>
       )}
 
       <div className="flex items-center gap-3">
         <Switch id="isDefault" checked={isDefault} onCheckedChange={setIsDefault} />
-        <Label htmlFor="isDefault">Default role (auto-assigned to new users)</Label>
+          <Label htmlFor="isDefault">{t('Default role (auto-assigned to new users)')}</Label>
       </div>
 
       {initialData?.isSystem && (
         <p className="text-sm text-amber-600 dark:text-amber-400">
-          This is a system role. Some properties cannot be modified.
+          {t('This is a system role. Some properties cannot be modified.')}
         </p>
       )}
 
       <div className="flex gap-3">
         <Button type="submit" disabled={isSubmitting || initialData?.isSystem}>
-          {isSubmitting ? 'Saving...' : mode === 'create' ? 'Create Role' : 'Update Role'}
+          {isSubmitting ? t('Saving...') : mode === 'create' ? t('Create Role') : t('Update Role')}
         </Button>
       </div>
     </form>

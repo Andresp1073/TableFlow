@@ -87,25 +87,25 @@ export function ReceivingForm({ products, initialOrderId, onSubmit, onCancel, is
         <CardContent className="space-y-4">
           {initialOrderId && (
             <div className="text-sm text-muted-foreground bg-muted rounded-md p-3">
-              Receiving for order: <span className="font-mono">{initialOrderId.slice(-8)}</span>
+              {t('Receiving for order:')} <span className="font-mono">{initialOrderId.slice(-8)}</span>
             </div>
           )}
 
           <div className="space-y-1.5">
-            <Label>Notes</Label>
-            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t("Receiving notes (optional)")} />
+            <Label>{t('Notes')}</Label>
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t('Receiving notes (optional)')} />
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label>Items to Receive</Label>
-              <Button type="button" variant="outline" size="sm" onClick={addItem}><Plus className="h-4 w-4 mr-1" />Add Item</Button>
+              <Label>{t('Items to Receive')}</Label>
+              <Button type="button" variant="outline" size="sm" onClick={addItem}><Plus className="h-4 w-4 mr-1" />{t('Add Item')}</Button>
             </div>
             {items.map((item, i) => (
               <div key={i} className="border rounded-md p-3 space-y-2">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                   <div className="space-y-1">
-                    <Label className="text-xs">Product</Label>
+                    <Label className="text-xs">{t('Product')}</Label>
                     <Select value={item.ingredientId} onValueChange={(v) => updateItem(i, 'ingredientId', v)}>
                       <SelectTrigger><SelectValue placeholder={t("Select")} /></SelectTrigger>
                       <SelectContent>
@@ -116,23 +116,23 @@ export function ReceivingForm({ products, initialOrderId, onSubmit, onCancel, is
                     </Select>
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-xs">Quantity *</Label>
+                    <Label className="text-xs">{t('Quantity *')}</Label>
                     <Input type="number" min="0" step="0.1" value={item.quantity || ''} onChange={(e) => updateItem(i, 'quantity', Number(e.target.value))} required />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-xs">Unit Cost</Label>
+                    <Label className="text-xs">{t('Unit Cost')}</Label>
                     <Input type="number" min="0" step="0.01" value={item.costAtReceipt || ''} onChange={(e) => updateItem(i, 'costAtReceipt', Number(e.target.value))} />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-xs">Batch Code</Label>
+                    <Label className="text-xs">{t('Batch Code')}</Label>
                     <Input value={item.batchCode} onChange={(e) => updateItem(i, 'batchCode', e.target.value)} placeholder={t("Optional")} />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-xs">Location</Label>
-                    <Input value={item.location} onChange={(e) => updateItem(i, 'location', e.target.value)} placeholder={t("e.g. Fridge A")} />
+                    <Label className="text-xs">{t('Location')}</Label>
+                    <Input value={item.location} onChange={(e) => updateItem(i, 'location', e.target.value)} placeholder={t('e.g. Fridge A')} />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-xs">Expiry Date</Label>
+                    <Label className="text-xs">{t('Expiry Date')}</Label>
                     <Input type="date" value={item.expiresAt} onChange={(e) => updateItem(i, 'expiresAt', e.target.value)} />
                   </div>
                   <div className="flex items-end">
@@ -148,9 +148,9 @@ export function ReceivingForm({ products, initialOrderId, onSubmit, onCancel, is
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={onCancel}>{t('Cancel')}</Button>
             <Button type="submit" loading={isSubmitting} disabled={items.every((i) => !i.ingredientId)}>
-              Receive Stock
+              {t('Receive Stock')}
             </Button>
           </div>
         </CardContent>

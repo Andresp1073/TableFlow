@@ -37,7 +37,7 @@ export function PermissionMatrix({ groups, selectedIds, onToggle, readOnly = fal
   }, [groups, search]);
 
   if (groups.length === 0) {
-    return <p className="text-sm text-muted-foreground py-4">No permissions found.</p>;
+    return <p className="text-sm text-muted-foreground py-4">{t("No permissions found.")}</p>;
   }
 
   return (
@@ -74,9 +74,9 @@ export function PermissionMatrix({ groups, selectedIds, onToggle, readOnly = fal
                       }
                     }}
                     className="text-xs text-muted-foreground hover:text-foreground underline"
-                  >
-                    {allSelected ? 'Deselect all' : someSelected ? 'Select all' : 'Select all'}
-                  </button>
+                    >
+                      {allSelected ? t('Deselect all') : t('Select all')}
+                    </button>
                 )}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">

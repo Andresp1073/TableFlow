@@ -44,7 +44,7 @@ export function OrderDetailView({
     return (
       <ErrorState
         title={t("Failed to load order")}
-        message={error?.message ?? 'An unexpected error occurred'}
+        message={error?.message ?? t('An unexpected error occurred')}
         onRetry={onRetry}
       />
     );
@@ -177,15 +177,15 @@ export function OrderDetailView({
           <div className="flex flex-col gap-2">
             {canSubmit && (
               <Button onClick={onSubmit} className="w-full">
-                <Send className="h-4 w-4 mr-2" />
-                Submit to Kitchen
-              </Button>
+                 <Send className="h-4 w-4 mr-2" />
+                 {t('Submit to Kitchen')}
+               </Button>
             )}
             {canPay && (
               <Button onClick={onPay} className="w-full" variant="primary">
-                <CreditCard className="h-4 w-4 mr-2" />
-                Process Payment
-              </Button>
+                 <CreditCard className="h-4 w-4 mr-2" />
+                 {t('Process Payment')}
+               </Button>
             )}
             {canCancel && (
               <Button
@@ -193,9 +193,9 @@ export function OrderDetailView({
                 variant="outline"
                 className="w-full text-destructive"
               >
-                <Trash2 className="h-4 w-4 mr-2" />
-                Cancel Order
-              </Button>
+                 <Trash2 className="h-4 w-4 mr-2" />
+                 {t('Cancel Order')}
+               </Button>
             )}
           </div>
         </div>

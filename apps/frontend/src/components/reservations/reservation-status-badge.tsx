@@ -18,8 +18,8 @@ export function ReservationStatusBadge({
   const variant = RESERVATION_STATUS_VARIANTS[status] ?? 'default';
   const label = RESERVATION_STATUS_LABELS[status] ?? status;
   return (
-    <Badge variant={variant} size={size} className={className} aria-label={t('Status: {status}', { status: label })}>
-      {label}
+    <Badge variant={variant} size={size} className={className} aria-label={t('Status: {status}', { status: t(label) })}>
+      {t(label)}
     </Badge>
   );
 }
@@ -44,13 +44,13 @@ export function ReservationStatusDot({ status, className }: ReservationStatusDot
   return (
     <span
       className={cn('inline-flex items-center gap-1.5 text-xs font-medium', className)}
-      aria-label={t('Status: {status}', { status: label })}
+      aria-label={t('Status: {status}', { status: t(label) })}
     >
       <span
         className={cn('h-1.5 w-1.5 rounded-full shrink-0', STATUS_DOT_COLORS[status])}
         aria-hidden="true"
       />
-      {label}
+      {t(label)}
     </span>
   );
 }

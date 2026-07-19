@@ -22,7 +22,7 @@ export function StationSelector({
   className,
 }: StationSelectorProps) {
   return (
-    <div className={cn('flex items-center gap-2 flex-wrap', className)} role="tablist" aria-label={t("Kitchen stations")}>
+    <div className={cn('flex items-center gap-2 flex-wrap', className)} role="tablist" aria-label={t('Kitchen stations')}>
       <Button
         key="all"
         variant={selectedStationId === null ? 'primary' : 'outline'}
@@ -31,7 +31,7 @@ export function StationSelector({
         role="tab"
         aria-selected={selectedStationId === null}
       >
-        All Stations
+        {t('All Stations')}
         {Object.values(ticketCounts).reduce((a, b) => a + b, 0) > 0 && (
           <span className="ml-1.5 text-xs opacity-70">
             ({Object.values(ticketCounts).reduce((a, b) => a + b, 0)})
@@ -52,7 +52,7 @@ export function StationSelector({
             onClick={() => onSelectStation(station.id)}
             role="tab"
             aria-selected={selectedStationId === station.id}
-            aria-label={`${station.name} station${count > 0 ? `, ${count} orders` : ''}`}
+            aria-label={t('{name} station{extra}', { name: station.name, extra: count > 0 ? `, ${count} orders` : '' })}
             className="relative"
           >
             <span>{station.name}</span>
@@ -60,7 +60,7 @@ export function StationSelector({
               <span className="ml-1.5 text-xs opacity-70">({count})</span>
             )}
             {workload > 80 && (
-              <span className="ml-1 h-2 w-2 rounded-full bg-destructive animate-pulse" aria-label={t("High workload")} />
+              <span className="ml-1 h-2 w-2 rounded-full bg-destructive animate-pulse" aria-label={t('High workload')} />
             )}
           </Button>
         );

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { t } from '@/lib/i18n';
 
 export default function ReservationDetailPage() {
   const params = useParams();
@@ -27,7 +28,7 @@ export default function ReservationDetailPage() {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}/reservations`)}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back to Reservations
+            {t('Back to Reservations')}
           </Button>
         </div>
       }
@@ -50,7 +51,7 @@ export default function ReservationDetailPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load reservation: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load reservation')}: {(error as Error)?.message || t('An unexpected error occurred')}
           </AlertDescription>
         </Alert>
       ) : reservation ? (

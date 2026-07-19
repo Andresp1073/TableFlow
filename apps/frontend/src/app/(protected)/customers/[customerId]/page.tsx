@@ -1,5 +1,7 @@
 'use client';
 
+import { t } from '@/lib/i18n';
+
 import { useParams, useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useCustomer, useArchiveCustomer, useRestoreCustomer } from '@/hooks/use-customers';
@@ -20,15 +22,15 @@ export default function CustomerDetailPage() {
 
   const handleArchive = () => {
     archiveCustomer.mutate({ restaurantId, customerId }, {
-      onSuccess: () => { toast.success('Customer archived'); router.push('/customers'); },
-      onError: () => toast.error('Failed to archive customer'),
+      onSuccess: () => { toast.success(t('Customer archived')); router.push('/customers'); },
+      onError: () => toast.error(t('Failed to archive customer')),
     });
   };
 
   const handleRestore = () => {
     restoreCustomer.mutate({ restaurantId, customerId }, {
-      onSuccess: () => { toast.success('Customer restored'); router.refresh(); },
-      onError: () => toast.error('Failed to restore customer'),
+      onSuccess: () => { toast.success(t('Customer restored')); router.refresh(); },
+      onError: () => toast.error(t('Failed to restore customer')),
     });
   };
 

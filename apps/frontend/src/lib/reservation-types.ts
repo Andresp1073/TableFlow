@@ -79,7 +79,7 @@ export interface ReservationListParams {
 }
 
 export const RESERVATION_STATUS_OPTIONS: { value: ReservationStatus | ''; label: string }[] = [
-  { value: '', label: 'All Statuses' },
+  { value: '', label: 'All statuses' },
   { value: 'pending', label: 'Pending' },
   { value: 'confirmed', label: 'Confirmed' },
   { value: 'checked_in', label: 'Checked In' },

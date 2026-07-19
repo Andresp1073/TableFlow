@@ -257,7 +257,7 @@ export default function TablesPage() {
         {!isLoading && filteredTables.length > 0 && (
           <p className="text-sm text-muted-foreground">
             {filteredTables.length} {filteredTables.length === 1 ? t('table') : t('tables')}
-            {search && t(' matching "{search}"', { search })}
+            {search && t('matching "{search}"', { search })}
           </p>
         )}
       </div>

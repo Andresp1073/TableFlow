@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 export function TableStatusBadge({ status }: { status: TableStatus }) {
   const variant = TABLE_STATUS_VARIANTS[status] ?? 'default';
   const label = TABLE_STATUS_LABELS[status] ?? status;
-  return <Badge variant={variant}>{label}</Badge>;
+  return <Badge variant={variant}>{t(label)}</Badge>;
 }
 
 export function TableStatusBadgeSmall({ status }: { status: TableStatus }) {
@@ -14,13 +14,13 @@ export function TableStatusBadgeSmall({ status }: { status: TableStatus }) {
   return (
     <span
       className="inline-flex items-center gap-1 text-xs font-medium"
-      aria-label={t('Status: {label}', { label })}
+      aria-label={t('Status: {label}', { label: t(label) })}
     >
       <span
         className="h-1.5 w-1.5 rounded-full shrink-0"
         style={{ backgroundColor: `var(--table-status-${status})` }}
       />
-      {label}
+      {t(label)}
     </span>
   );
 }

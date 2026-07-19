@@ -25,7 +25,7 @@ export default function CreateRestaurantPage() {
       actions={
         <Button variant="outline" size="sm" onClick={() => router.push('/restaurants')}>
           <ArrowLeft className="h-4 w-4 mr-1.5" />
-          Back to Restaurants
+          {t('Back to Restaurants')}
         </Button>
       }
     >

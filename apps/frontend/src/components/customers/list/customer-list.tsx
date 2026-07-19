@@ -63,22 +63,22 @@ export function CustomerList({ data, loading, error, onArchive, onRestore }: Cus
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon-sm" aria-label={t("Actions")}>
+              <Button variant="ghost" size="icon-sm" aria-label={t('Actions')}>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => router.push(`/customers/${row.original.id}`)}>
-                <Eye className="h-4 w-4 mr-2" /> View
+                <Eye className="h-4 w-4 mr-2" /> {t('View')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {isArchived ? (
                 <DropdownMenuItem onClick={() => onRestore(row.original.id)}>
-                  <RotateCcw className="h-4 w-4 mr-2" /> Restore
+                  <RotateCcw className="h-4 w-4 mr-2" /> {t('Restore')}
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem onClick={() => onArchive(row.original.id)}>
-                  <Archive className="h-4 w-4 mr-2" /> Archive
+                  <Archive className="h-4 w-4 mr-2" /> {t('Archive')}
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
@@ -95,7 +95,7 @@ export function CustomerList({ data, loading, error, onArchive, onRestore }: Cus
       loading={loading}
       error={error}
       searchable
-      emptyMessage={t("No customers found.")}
+      emptyMessage={t('No customers found')}
     />
   );
 }

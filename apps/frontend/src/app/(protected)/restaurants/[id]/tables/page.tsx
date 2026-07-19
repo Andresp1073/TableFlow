@@ -1,5 +1,7 @@
 'use client';
 
+import { t } from '@/lib/i18n';
+
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -52,7 +54,7 @@ export default function TablesPage() {
     () => [
       {
         accessorKey: 'tableNumber',
-        header: 'Table',
+        header: t('Table'),
         cell: ({ row }) => (
           <Link
             href={`/restaurants/${restaurantId}/tables/${row.original.id}`}
@@ -84,8 +86,8 @@ export default function TablesPage() {
       },
       {
         accessorKey: 'isReservable',
-        header: 'Reservable',
-        cell: ({ getValue }) => (getValue<boolean>() ? 'Yes' : 'No'),
+        header: t('Reservable'),
+        cell: ({ getValue }) => (getValue<boolean>() ? t('Yes') : t('No')),
       },
       {
         accessorKey: 'status',
@@ -114,24 +116,24 @@ export default function TablesPage() {
 
   return (
     <PageWrapper
-      title="Tables"
-      description={restaurant ? `Manage tables for ${restaurant.name}` : 'Manage tables'}
+      title={t('Tables')}
+      description={restaurant ? t('Manage tables for {name}', { name: restaurant.name }) : t('Manage tables')}
       actions={
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}`)}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back
+            {t('Back')}
           </Button>
           <Link href={`/restaurants/${restaurantId}/tables/floor-plan`}>
             <Button variant="outline" size="sm">
               <LayoutPanelTop className="h-4 w-4 mr-1.5" />
-              Floor Plan
+              {t('Floor Plan')}
             </Button>
           </Link>
           <Link href={`/restaurants/${restaurantId}/tables/create`}>
             <Button>
               <Plus className="h-4 w-4 mr-1.5" />
-              New Table
+              {t('New Table')}
             </Button>
           </Link>
         </div>
@@ -142,11 +144,11 @@ export default function TablesPage() {
           <div className="relative max-w-xs w-full">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search tables..."
+              placeholder={t('Search tables...')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-8"
-              aria-label="Search tables"
+              aria-label={t('Search tables')}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -154,10 +156,10 @@ export default function TablesPage() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="h-9 rounded-md border border-input bg-background px-3 text-sm"
-              aria-label="Filter by status"
+              aria-label={t('Filter by status')}
             >
               {TABLE_STATUS_OPTIONS.map((opt) => (
-                <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
               ))}
             </select>
           </div>
@@ -218,8 +220,8 @@ export default function TablesPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm font-medium text-destructive">Error loading tables</p>
-                      <p className="text-xs mt-1">{(error as Error)?.message || 'An unexpected error occurred'}</p>
+                       <p className="text-sm font-medium text-destructive">{t('Error loading tables')}</p>
+                      <p className="text-xs mt-1">{(error as Error)?.message || t('An unexpected error occurred')}</p>
                     </div>
                   </td>
                 </tr>
@@ -227,15 +229,15 @@ export default function TablesPage() {
                 <tr>
                   <td colSpan={columns.length} className="h-32 text-center">
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
-                      <p className="text-sm">No tables found</p>
+                       <p className="text-sm">{t('No tables found')}</p>
                       {search || statusFilter ? (
-                        <p className="text-xs mt-1">Try adjusting your search or filters</p>
+                        <p className="text-xs mt-1">{t('Try adjusting your search or filters')}</p>
                       ) : (
                         <Link
                           href={`/restaurants/${restaurantId}/tables/create`}
                           className="text-xs text-primary hover:underline mt-1"
                         >
-                          Create your first table
+                          {t('Create your first table')}
                         </Link>
                       )}
                     </div>
@@ -261,9 +263,9 @@ export default function TablesPage() {
         </div>
 
         {!isLoading && filteredTables.length > 0 && (
-          <p className="text-sm text-muted-foreground">
-            {filteredTables.length} table{filteredTables.length !== 1 ? 's' : ''}
-            {search && ` matching "${search}"`}
+           <p className="text-sm text-muted-foreground">
+            {t('{count} table(s)', { count: filteredTables.length })}
+            {search && ` ${t('matching "{search}"', { search })}`}
           </p>
         )}
       </div>

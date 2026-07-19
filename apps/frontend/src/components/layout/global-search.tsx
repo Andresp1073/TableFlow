@@ -51,7 +51,7 @@ export function GlobalSearch() {
           autoFocus
         />
         <div className="px-1 py-2 text-xs text-muted-foreground">
-          <p>{t('Press')} <kbd className="rounded border bg-muted px-1 font-mono">↑</kbd><kbd className="rounded border bg-muted px-1 font-mono">↓</kbd> {t('to navigate,')} <kbd className="rounded border bg-muted px-1 font-mono">Enter</kbd> {t('to select')}</p>
+           <p>{t('Press')} <kbd className="rounded border bg-muted px-1 font-mono">↑</kbd><kbd className="rounded border bg-muted px-1 font-mono">↓</kbd> {t('to navigate,')} <kbd className="rounded border bg-muted px-1 font-mono">{t('Enter')}</kbd> {t('to select')}</p>
         </div>
       </DialogContent>
     </Dialog>

@@ -21,7 +21,7 @@ export function SettingsAbout() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">{t('Application')}</p>
-              <p className="font-medium">TableFlow</p>
+              <p className="font-medium">{t('TableFlow')}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">{t('Version')}</p>

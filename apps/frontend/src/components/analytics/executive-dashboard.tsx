@@ -1,5 +1,6 @@
 'use client';
 
+import { t } from '@/lib/i18n';
 import { TrendingUp, CalendarCheck, Table2, DollarSign, Package, ShoppingCart } from 'lucide-react';
 import { StatCard } from '@/components/ui/stat-card';
 import { ReportChart } from '@/components/analytics/report-chart';
@@ -16,10 +17,10 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-destructive">
-        <p className="text-sm">Failed to load dashboard data</p>
-        <button onClick={() => refetch()} className="text-sm underline mt-2">Retry</button>
-      </div>
+        <div className="flex flex-col items-center justify-center py-12 text-destructive">
+          <p className="text-sm">{t("Failed to load dashboard data")}</p>
+          <button onClick={() => refetch()} className="text-sm underline mt-2">{t('Retry')}</button>
+        </div>
     );
   }
 
@@ -27,42 +28,42 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <StatCard
-          title={data?.revenue.label ?? 'Revenue'}
+          title={data?.revenue.label ?? t('Revenue')}
           value={data?.revenue.value ?? '$0'}
           icon={<TrendingUp className="h-4 w-4" />}
           trend={data?.revenue.trend}
           loading={isLoading}
         />
         <StatCard
-          title={data?.orders.label ?? 'Orders'}
+          title={data?.orders.label ?? t('Orders')}
           value={data?.orders.value ?? 0}
           icon={<ShoppingCart className="h-4 w-4" />}
           trend={data?.orders.trend}
           loading={isLoading}
         />
         <StatCard
-          title={data?.reservations.label ?? 'Reservations'}
+          title={data?.reservations.label ?? t('Reservations')}
           value={data?.reservations.value ?? 0}
           icon={<CalendarCheck className="h-4 w-4" />}
           trend={data?.reservations.trend}
           loading={isLoading}
         />
         <StatCard
-          title={data?.occupancy.label ?? 'Occupancy'}
+          title={data?.occupancy.label ?? t('Occupancy')}
           value={data?.occupancy.value ?? '0%'}
           icon={<Table2 className="h-4 w-4" />}
           trend={data?.occupancy.trend}
           loading={isLoading}
         />
         <StatCard
-          title={data?.averageTicket.label ?? 'Avg Ticket'}
+          title={data?.averageTicket.label ?? t('Avg Ticket')}
           value={data?.averageTicket.value ?? '$0'}
           icon={<DollarSign className="h-4 w-4" />}
           trend={data?.averageTicket.trend}
           loading={isLoading}
         />
         <StatCard
-          title={data?.inventoryValue.label ?? 'Inventory'}
+          title={data?.inventoryValue.label ?? t('Inventory')}
           value={data?.inventoryValue.value ?? '$0'}
           icon={<Package className="h-4 w-4" />}
           trend={data?.inventoryValue.trend}
@@ -72,21 +73,21 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <ReportChart
-          title="Revenue Trend"
+          title={t("Revenue Trend")}
           type="area"
           data={data?.revenueChart ?? []}
           loading={isLoading}
           height={280}
         />
         <ReportChart
-          title="Orders by Day"
+          title={t("Orders by Day")}
           type="bar"
           data={data?.ordersByDay ?? []}
           loading={isLoading}
           height={280}
         />
         <ReportChart
-          title="Reservation Status"
+          title={t("Reservation Status")}
           type="pie"
           data={data?.reservationStatus ?? []}
           loading={isLoading}
@@ -97,7 +98,7 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Top Products</CardTitle>
+            <CardTitle className="text-base">{t("Top Products")}</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -107,7 +108,7 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
                 ))}
               </div>
             ) : !data?.topProducts.length ? (
-              <p className="text-sm text-muted-foreground">No product data available.</p>
+              <p className="text-sm text-muted-foreground">{t("No product data available.")}</p>
             ) : (
               <div className="space-y-2">
                 {data.topProducts.map((product, i) => (
@@ -125,7 +126,7 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Top Customers</CardTitle>
+            <CardTitle className="text-base">{t("Top Customers")}</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -135,7 +136,7 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
                 ))}
               </div>
             ) : !data?.topCustomers.length ? (
-              <p className="text-sm text-muted-foreground">No customer data available.</p>
+              <p className="text-sm text-muted-foreground">{t("No customer data available.")}</p>
             ) : (
               <div className="space-y-2">
                 {data.topCustomers.map((customer, i) => (
@@ -154,7 +155,7 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Recent Activity</CardTitle>
+            <CardTitle className="text-base">{t("Recent Activity")}</CardTitle>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -164,7 +165,7 @@ export function ExecutiveDashboardContent({ dateRange }: ExecutiveDashboardProps
               ))}
             </div>
           ) : !data?.recentActivity.length ? (
-            <p className="text-sm text-muted-foreground">No recent activity.</p>
+              <p className="text-sm text-muted-foreground">{t("No recent activity.")}</p>
           ) : (
             <div className="space-y-3">
               {data.recentActivity.slice(0, 10).map((activity) => (

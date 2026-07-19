@@ -154,7 +154,7 @@ export default function ReservationsPage() {
               aria-label={t('Filter by status')}
             >
               {RESERVATION_STATUS_OPTIONS.map((opt) => (
-                <option key={String(opt.value)} value={String(opt.value)}>{opt.label}</option>
+                <option key={String(opt.value)} value={String(opt.value)}>{t(opt.label)}</option>
               ))}
             </select>
           </div>
@@ -269,7 +269,7 @@ export default function ReservationsPage() {
         {!isLoading && filteredReservations.length > 0 && (
           <p className="text-sm text-muted-foreground">
             {t('{count} reservations', { count: filteredReservations.length })}
-            {search && t(' matching "{query}"', { query: search })}
+            {search && t('matching "{query}"', { query: search })}
           </p>
         )}
       </div>

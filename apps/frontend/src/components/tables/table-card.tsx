@@ -150,7 +150,7 @@ export function TableCard({
       }}
       role="button"
       tabIndex={0}
-      aria-label={t('Table {tableNumber}, {status}, capacity {capacity}', { tableNumber: table.tableNumber, status: TABLE_STATUS_LABELS[table.status], capacity: capacityDisplay })}
+      aria-label={t('Table {tableNumber}, {status}, capacity {capacity}', { tableNumber: table.tableNumber, status: t(TABLE_STATUS_LABELS[table.status]), capacity: capacityDisplay })}
       data-selected={isSelected ? 'true' : 'false'}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {

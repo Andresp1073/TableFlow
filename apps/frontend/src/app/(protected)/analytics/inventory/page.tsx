@@ -5,6 +5,7 @@ import { InventoryReportContent } from '@/components/analytics/inventory-report-
 import { ReportLayout } from '@/components/analytics/report-layout';
 import type { DateRange } from '@/lib/analytics-types';
 import { getDateRangeFromPreset } from '@/lib/analytics-types';
+import { t } from '@/lib/i18n';
 
 export default function InventoryReportPage() {
   const [dateRange, setDateRange] = useState<DateRange>(() => getDateRangeFromPreset('thisMonth'));
@@ -15,8 +16,8 @@ export default function InventoryReportPage() {
 
   return (
     <ReportLayout
-      title="Inventory Report"
-      description="Stock levels, consumption trends, and valuation."
+      title={t('Inventory Report')}
+      description={t('Stock levels, consumption trends, and valuation.')}
       onDateRangeChange={handleDateRangeChange}
     >
       <InventoryReportContent dateRange={dateRange} />

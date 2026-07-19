@@ -34,7 +34,7 @@ export function OrderBoard({ tickets, onStatusChange, className, compact = false
   if (allEmpty) {
     return (
       <div className="flex items-center justify-center h-64 text-muted-foreground text-lg">
-        No active orders
+        {t('No active orders')}
       </div>
     );
   }
@@ -53,7 +53,7 @@ export function OrderBoard({ tickets, onStatusChange, className, compact = false
           <div key={column.status} className="space-y-2">
             <div className="flex items-center justify-between px-1">
               <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-                {column.label}
+                {t(column.label)}
               </h2>
               {column.count > 0 && (
                 <span

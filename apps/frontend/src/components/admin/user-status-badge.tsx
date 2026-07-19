@@ -1,3 +1,4 @@
+import { t } from '@/lib/i18n';
 import { cn } from '@/lib/cn';
 import { getUserStatus, USER_STATUS_CONFIG, type AdminUser } from '@/lib/admin-types';
 
@@ -18,7 +19,7 @@ export function UserStatusBadge({ user, className }: UserStatusBadgeProps) {
         className,
       )}
     >
-      {config.label}
+      {t(config.label)}
     </span>
   );
 }

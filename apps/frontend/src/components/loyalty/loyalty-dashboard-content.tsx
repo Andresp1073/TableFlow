@@ -1,5 +1,6 @@
 'use client';
 
+import { t } from '@/lib/i18n';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle, RefreshCw, Award, Gift, TrendingUp, Star, Users, Zap } from 'lucide-react';
@@ -57,9 +58,9 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <AlertCircle className="h-12 w-12 text-destructive mb-4" />
-        <p className="text-lg font-medium mb-2">Failed to load loyalty dashboard</p>
-        <p className="text-sm text-muted-foreground mb-4">{error?.message ?? 'An unexpected error occurred'}</p>
-        {onRetry && <Button onClick={onRetry}>Retry</Button>}
+        <p className="text-lg font-medium mb-2">{t('Failed to load loyalty dashboard')}</p>
+        <p className="text-sm text-muted-foreground mb-4">{error?.message ?? t('An unexpected error occurred')}</p>
+        {onRetry && <Button onClick={onRetry}>{t('Retry')}</Button>}
       </div>
     );
   }
@@ -68,32 +69,32 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Loyalty Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Customer loyalty program overview</p>
+          <h1 className="text-2xl font-semibold tracking-tight">{t('Loyalty Dashboard')}</h1>
+          <p className="text-sm text-muted-foreground">{t('Customer loyalty program overview')}</p>
         </div>
         {onRefresh && (
-          <Button variant="outline" size="icon-sm" onClick={onRefresh} aria-label="Refresh">
+          <Button variant="outline" size="icon-sm" onClick={onRefresh} aria-label={t('Refresh')}>
             <RefreshCw className="h-4 w-4" />
           </Button>
         )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={<Users className="h-5 w-5" />} label="Enrolled Members" value={data.totalEnrolled} />
-        <StatCard icon={<Award className="h-5 w-5" />} label="Active Members" value={data.activeMembers} />
-        <StatCard icon={<Star className="h-5 w-5" />} label="Total Points Issued" value={formatPoints(data.totalPointsIssued)} />
-        <StatCard icon={<Gift className="h-5 w-5" />} label="Points Redeemed" value={formatPoints(data.totalPointsRedeemed)} />
-        <StatCard icon={<Zap className="h-5 w-5" />} label="Current Balance" value={formatPoints(data.totalPointsBalance)} />
-        <StatCard icon={<Gift className="h-5 w-5" />} label="Rewards Available" value={data.totalRewardsAvailable} />
-        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Total Spent" value={`$${data.totalSpent.toLocaleString()}`} />
-        <StatCard icon={<TrendingUp className="h-5 w-5" />} label="Avg Spent/Member" value={`$${data.averageSpentPerMember.toLocaleString()}`} />
+        <StatCard icon={<Users className="h-5 w-5" />} label={t('Enrolled Members')} value={data.totalEnrolled} />
+        <StatCard icon={<Award className="h-5 w-5" />} label={t('Active Members')} value={data.activeMembers} />
+        <StatCard icon={<Star className="h-5 w-5" />} label={t('Total Points Issued')} value={formatPoints(data.totalPointsIssued)} />
+        <StatCard icon={<Gift className="h-5 w-5" />} label={t('Points Redeemed')} value={formatPoints(data.totalPointsRedeemed)} />
+        <StatCard icon={<Zap className="h-5 w-5" />} label={t('Current Balance')} value={formatPoints(data.totalPointsBalance)} />
+        <StatCard icon={<Gift className="h-5 w-5" />} label={t('Rewards Available')} value={data.totalRewardsAvailable} />
+        <StatCard icon={<TrendingUp className="h-5 w-5" />} label={t('Total Spent')} value={`$${data.totalSpent.toLocaleString()}`} />
+        <StatCard icon={<TrendingUp className="h-5 w-5" />} label={t('Avg Spent/Member')} value={`$${data.averageSpentPerMember.toLocaleString()}`} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DashboardWidget title="Tier Distribution">
+        <DashboardWidget title={t('Tier Distribution')}>
           <div className="space-y-3">
             {Object.entries(data.tierDistribution).length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No members enrolled yet</p>
+              <p className="text-sm text-muted-foreground py-4 text-center">{t('No members enrolled yet')}</p>
             ) : (
               Object.entries(data.tierDistribution).map(([tier, count]) => {
                 const total = data.totalEnrolled;
@@ -102,7 +103,7 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
                   <div key={tier} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Badge variant={getTierColor(tier as LoyaltyTier)}>{tier}</Badge>
-                      <span className="text-sm text-muted-foreground">{count} members</span>
+                      <span className="text-sm text-muted-foreground">{count} {t('members')}</span>
                     </div>
                     <span className="text-sm font-medium">{percentage}%</span>
                   </div>
@@ -112,10 +113,10 @@ export function LoyaltyDashboardContent({ data, isLoading, isError, error, onRet
           </div>
         </DashboardWidget>
 
-        <DashboardWidget title="Recent Redemptions">
+        <DashboardWidget title={t('Recent Redemptions')}>
           <div className="space-y-3">
             {data.recentRedemptions.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No recent redemptions</p>
+              <p className="text-sm text-muted-foreground py-4 text-center">{t('No recent redemptions')}</p>
             ) : (
               data.recentRedemptions.slice(0, 8).map((r) => (
                 <div key={r.id} className="flex items-center justify-between py-1.5">

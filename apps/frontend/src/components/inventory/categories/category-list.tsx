@@ -28,7 +28,7 @@ export function CategoryList({ data, isLoading, isError }: CategoryListProps) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <AlertTriangle className="h-8 w-8 text-destructive mb-4" />
-        <p className="text-sm text-muted-foreground">Failed to load categories</p>
+        <p className="text-sm text-muted-foreground">{t('Failed to load categories')}</p>
       </div>
     );
   }
@@ -37,7 +37,7 @@ export function CategoryList({ data, isLoading, isError }: CategoryListProps) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <Layers className="h-8 w-8 text-muted-foreground mb-4" />
-        <p className="text-sm text-muted-foreground">No categories found</p>
+        <p className="text-sm text-muted-foreground">{t('No categories found')}</p>
       </div>
     );
   }
@@ -51,8 +51,8 @@ export function CategoryList({ data, isLoading, isError }: CategoryListProps) {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary">{cat.productCount} products</Badge>
-              <Badge variant="success">{cat.activeCount} active</Badge>
+               <Badge variant="secondary">{cat.productCount} {t('products')}</Badge>
+               <Badge variant="success">{cat.activeCount} {t('active')}</Badge>
             </div>
           </CardContent>
         </Card>

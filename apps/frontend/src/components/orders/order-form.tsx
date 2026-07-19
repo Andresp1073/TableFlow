@@ -72,7 +72,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Order Details</CardTitle>
+          <CardTitle>{t('Order Details')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
@@ -90,15 +90,15 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="table">Table</Label>
+              <Label htmlFor="table">{t('Table')}</Label>
               <Input id="table" value={tableId} onChange={(e) => setTableId(e.target.value)} placeholder={t("e.g. T-12")} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="customer">Customer Name</Label>
+              <Label htmlFor="customer">{t('Customer Name')}</Label>
               <Input id="customer" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder={t("Walk-in")} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="guests">Guest Count</Label>
+              <Label htmlFor="guests">{t('Guest Count')}</Label>
               <Input id="guests" type="number" min={1} value={customerCount} onChange={(e) => setCustomerCount(e.target.value)} />
             </div>
           </div>
@@ -107,11 +107,11 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Items</CardTitle>
-          <Button type="button" variant="outline" size="sm" onClick={addItem}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Item
-          </Button>
+            <CardTitle>{t('Items')}</CardTitle>
+            <Button type="button" variant="outline" size="sm" onClick={addItem}>
+              <Plus className="h-4 w-4 mr-2" />
+              {t('Add Item')}
+            </Button>
         </CardHeader>
         <CardContent className="space-y-3">
           {items.map((item, index) => (
@@ -122,12 +122,12 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
                   id={`name-${index}`}
                   value={item.menuItemName}
                   onChange={(e) => updateItem(item._key, { menuItemName: e.target.value })}
-                  placeholder={t("Item name")}
+                  placeholder={t('Item name')}
                   required
                 />
               </div>
               <div className="w-20 space-y-2">
-                <Label htmlFor={`qty-${index}`}>Qty</Label>
+                <Label htmlFor={`qty-${index}`}>{t('Qty')}</Label>
                 <Input
                   id={`qty-${index}`}
                   type="number"
@@ -138,7 +138,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
                 />
               </div>
               <div className="w-24 space-y-2">
-                <Label htmlFor={`price-${index}`}>Price</Label>
+                <Label htmlFor={`price-${index}`}>{t('Price')}</Label>
                 <Input
                   id={`price-${index}`}
                   type="number"
@@ -158,7 +158,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
                 className="text-destructive"
                 onClick={() => removeItem(item._key)}
                 disabled={items.length <= 1}
-                aria-label={t("Remove item")}
+                aria-label={t('Remove item')}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -173,7 +173,7 @@ export function OrderForm({ onSubmit, isSubmitting }: OrderFormProps) {
         </div>
         <div className="flex gap-3">
           <Button type="submit" disabled={isSubmitting || items.every((i) => !i.menuItemName.trim())}>
-            {isSubmitting ? 'Creating...' : 'Create Order'}
+            {isSubmitting ? t('Creating...') : t('Create Order')}
           </Button>
         </div>
       </div>

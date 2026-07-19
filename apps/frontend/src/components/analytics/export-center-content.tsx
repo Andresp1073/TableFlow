@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { get } from '@/services/api';
+import { t } from '@/lib/i18n';
 import { ExportButton } from '@/components/analytics/export-button';
 import type { ExportConfig } from '@/lib/analytics-types';
 import { REPORT_META } from '@/lib/analytics-types';
@@ -43,13 +44,13 @@ const EXPORTABLE_REPORTS: ExportableReport[] = [
       }];
     },
     columns: [
-      { key: 'Total Revenue', label: 'Total Revenue' },
-      { key: 'This Week Revenue', label: 'This Week Revenue' },
-      { key: 'This Month Revenue', label: 'This Month Revenue' },
-      { key: 'Today Reservations', label: 'Today Reservations' },
-      { key: 'Occupancy Rate', label: 'Occupancy Rate' },
-      { key: 'Total Customers', label: 'Total Customers' },
-      { key: 'Avg Party Size', label: 'Avg Party Size' },
+      { key: 'Total Revenue', label: t('Total Revenue') },
+      { key: 'This Week Revenue', label: t('This Week Revenue') },
+      { key: 'This Month Revenue', label: t('This Month Revenue') },
+      { key: 'Today Reservations', label: t('Today Reservations') },
+      { key: 'Occupancy Rate', label: t('Occupancy Rate') },
+      { key: 'Total Customers', label: t('Total Customers') },
+      { key: 'Avg Party Size', label: t('Avg Party Size') },
     ],
   },
   {
@@ -67,11 +68,11 @@ const EXPORTABLE_REPORTS: ExportableReport[] = [
       }));
     },
     columns: [
-      { key: 'ID', label: 'Order ID' },
-      { key: 'Status', label: 'Status' },
-      { key: 'Total', label: 'Total' },
-      { key: 'Items', label: 'Items' },
-      { key: 'Created', label: 'Created' },
+      { key: 'ID', label: t('Order ID') },
+      { key: 'Status', label: t('Status') },
+      { key: 'Total', label: t('Total') },
+      { key: 'Items', label: t('Items') },
+      { key: 'Created', label: t('Created') },
     ],
   },
   {
@@ -89,11 +90,11 @@ const EXPORTABLE_REPORTS: ExportableReport[] = [
       }));
     },
     columns: [
-      { key: 'Customer', label: 'Customer' },
-      { key: 'Party Size', label: 'Party Size' },
-      { key: 'Status', label: 'Status' },
-      { key: 'Time', label: 'Time' },
-      { key: 'Table', label: 'Table' },
+      { key: 'Customer', label: t('Customer') },
+      { key: 'Party Size', label: t('Party Size') },
+      { key: 'Status', label: t('Status') },
+      { key: 'Time', label: t('Time') },
+      { key: 'Table', label: t('Table') },
     ],
   },
   {
@@ -111,11 +112,11 @@ const EXPORTABLE_REPORTS: ExportableReport[] = [
       }));
     },
     columns: [
-      { key: 'Name', label: 'Name' },
-      { key: 'Category', label: 'Category' },
-      { key: 'Stock Level', label: 'Stock Level' },
-      { key: 'Cost/Unit', label: 'Cost/Unit' },
-      { key: 'Unit', label: 'Unit' },
+      { key: 'Name', label: t('Name') },
+      { key: 'Category', label: t('Category') },
+      { key: 'Stock Level', label: t('Stock Level') },
+      { key: 'Cost/Unit', label: t('Cost/Unit') },
+      { key: 'Unit', label: t('Unit') },
     ],
   },
   {
@@ -134,12 +135,12 @@ const EXPORTABLE_REPORTS: ExportableReport[] = [
       }));
     },
     columns: [
-      { key: 'Name', label: 'Name' },
-      { key: 'Email', label: 'Email' },
-      { key: 'Phone', label: 'Phone' },
-      { key: 'Visits', label: 'Visits' },
-      { key: 'Total Spent', label: 'Total Spent' },
-      { key: 'VIP', label: 'VIP' },
+      { key: 'Name', label: t('Name') },
+      { key: 'Email', label: t('Email') },
+      { key: 'Phone', label: t('Phone') },
+      { key: 'Visits', label: t('Visits') },
+      { key: 'Total Spent', label: t('Total Spent') },
+      { key: 'VIP', label: t('VIP') },
     ],
   },
   {
@@ -157,11 +158,11 @@ const EXPORTABLE_REPORTS: ExportableReport[] = [
       }));
     },
     columns: [
-      { key: 'Action', label: 'Action' },
-      { key: 'Entity', label: 'Entity' },
-      { key: 'User', label: 'User' },
-      { key: 'Severity', label: 'Severity' },
-      { key: 'Time', label: 'Time' },
+      { key: 'Action', label: t('Action') },
+      { key: 'Entity', label: t('Entity') },
+      { key: 'User', label: t('User') },
+      { key: 'Severity', label: t('Severity') },
+      { key: 'Time', label: t('Time') },
     ],
   },
 ];
@@ -182,14 +183,14 @@ export function ExportCenterContent() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search reports..."
+            placeholder={t('Search reports...')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
-            aria-label="Search reports"
+            aria-label={t('Search reports')}
           />
         </div>
-        <span className="text-sm text-muted-foreground">{filtered.length} reports</span>
+        <span className="text-sm text-muted-foreground">{t('{count} reports', { count: filtered.length })}</span>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -199,9 +200,9 @@ export function ExportCenterContent() {
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-sm text-muted-foreground">
-          No reports match your search.
-        </div>
+          <div className="text-center py-12 text-sm text-muted-foreground">
+            {t('No reports match your search.')}
+          </div>
       )}
     </div>
   );
@@ -226,30 +227,30 @@ function ReportExportCard({ report, restaurantId }: { report: ExportableReport; 
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-base">{report.meta.title}</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">{report.meta.description}</p>
+            <CardTitle className="text-base">{t(report.meta.title)}</CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">{t(report.meta.description)}</p>
           </div>
-          <Badge variant="outline" className="text-xs">{report.columns.length} columns</Badge>
+          <Badge variant="outline" className="text-xs">{t('{count} columns', { count: report.columns.length })}</Badge>
         </div>
       </CardHeader>
       <CardContent>
         <p className="text-xs text-muted-foreground mb-3">
-          {isLoading ? 'Loading data...' : `${exportConfig.data.length} records available`}
+          {isLoading ? t('Loading data...') : t('{count} records available', { count: exportConfig.data.length })}
         </p>
         <div className="flex gap-2">
-          <ExportButton config={exportConfig} size="sm" label="CSV" />
-          <ExportButton config={{ ...exportConfig, format: 'json' }} size="sm" label="JSON" />
+          <ExportButton config={exportConfig} size="sm" label={t('CSV')} />
+          <ExportButton config={{ ...exportConfig, format: 'json' }} size="sm" label={t('JSON')} />
           <Button variant="outline" size="sm" onClick={() => {
             const w = window.open('', '_blank');
             if (w) {
-              w.document.write('<html><head><title>Loading...</title></head><body><p>Loading...</p></body></html>');
+              w.document.write(`<html><head><title>${t('Loading...')}</title></head><body><p>${t('Loading...')}</p></body></html>`);
               w.document.close();
               refetch().then((result) => {
                 const html = `
                   <html>
-                    <head><title>${report.meta.title}</title></head>
+                    <head><title>${t(report.meta.title)}</title></head>
                     <body>
-                      <h1>${report.meta.title}</h1>
+                      <h1>${t(report.meta.title)}</h1>
                       <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;font-family:system-ui;">
                         <thead>
                           <tr>${report.columns.map((c) => `<th style="background:#f5f5f5;text-align:left;">${c.label}</th>`).join('')}</tr>
@@ -270,7 +271,7 @@ function ReportExportCard({ report, restaurantId }: { report: ExportableReport; 
               });
             }
           }}>
-            Print
+            {t('Print')}
           </Button>
         </div>
       </CardContent>

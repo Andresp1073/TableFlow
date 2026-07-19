@@ -3,6 +3,7 @@
 import { cn } from '@/lib/cn';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { t } from '@/lib/i18n';
 
 interface NavItem {
   label: string;
@@ -23,7 +24,7 @@ function TopNavigation({ items, activeValue, onValueChange, className, ...props 
   const visibleItems = isMobile ? items.slice(0, 4) : items;
 
   return (
-    <nav className={cn('border-b', className)} aria-label="Top navigation" {...props}>
+    <nav className={cn('border-b', className)} aria-label={t('Top navigation')} {...props}>
       <div className="flex h-10 items-center px-4 lg:px-6">
         <Tabs value={activeValue} onValueChange={onValueChange} className="w-full">
           <TabsList className="bg-transparent p-0 h-10">

@@ -60,9 +60,9 @@ export function StockTable({ data, loading, error }: StockTableProps) {
       id: 'status',
       header: t('Status'),
       cell: ({ row }) => {
-        if (row.original.isLowStock) return <Badge variant="danger">Low Stock</Badge>;
-        if (row.original.isOverstock) return <Badge variant="warning">Overstock</Badge>;
-        return <Badge variant="success">OK</Badge>;
+        if (row.original.isLowStock) return <Badge variant="danger">{t('Low Stock')}</Badge>;
+        if (row.original.isOverstock) return <Badge variant="warning">{t('Overstock')}</Badge>;
+        return <Badge variant="success">{t('OK')}</Badge>;
       },
     },
     {
@@ -79,7 +79,7 @@ export function StockTable({ data, loading, error }: StockTableProps) {
       loading={loading}
       error={error}
       searchable
-      emptyMessage={t("No stock data available.")}
+      emptyMessage={t('No stock data available.')}
     />
   );
 }

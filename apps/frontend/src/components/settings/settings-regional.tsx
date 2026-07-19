@@ -89,9 +89,9 @@ export function SettingsRegional() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardHeader>
-          <CardTitle>Regional Settings</CardTitle>
+          <CardTitle>{t('Regional Settings')}</CardTitle>
           <CardDescription>
-            Configure timezone, currency, language, and date/time formats for your restaurant.
+            {t('Configure timezone, currency, language, and date/time formats for your restaurant.')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -106,7 +106,7 @@ export function SettingsRegional() {
               </SelectTrigger>
               <SelectContent>
                 {TIMEZONE_OPTIONS.map((tz) => (
-                  <SelectItem key={tz.value} value={tz.value}>{tz.label}</SelectItem>
+                  <SelectItem key={tz.value} value={tz.value}>{t(tz.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -124,7 +124,7 @@ export function SettingsRegional() {
               </SelectTrigger>
               <SelectContent>
                 {CURRENCY_OPTIONS.map((c) => (
-                  <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                  <SelectItem key={c.value} value={c.value}>{t(c.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -142,7 +142,7 @@ export function SettingsRegional() {
               </SelectTrigger>
               <SelectContent>
                 {LANGUAGE_OPTIONS.map((l) => (
-                  <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>
+                  <SelectItem key={l.value} value={l.value}>{t(l.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -155,12 +155,12 @@ export function SettingsRegional() {
               value={watchedValues.dateFormat ?? settings?.dateFormat ?? 'YYYY-MM-DD'}
               onValueChange={(v) => setValue('dateFormat', v, { shouldDirty: true })}
             >
-              <SelectTrigger id="dateFormat" aria-label="Select date format">
-                <SelectValue placeholder="Select date format" />
+              <SelectTrigger id="dateFormat" aria-label={t('Select date format')}>
+                <SelectValue placeholder={t('Select date format')} />
               </SelectTrigger>
               <SelectContent>
                 {DATE_FORMAT_OPTIONS.map((f) => (
-                  <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
+                  <SelectItem key={f.value} value={f.value}>{t(f.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -173,12 +173,12 @@ export function SettingsRegional() {
               value={watchedValues.timeFormat ?? settings?.timeFormat ?? 'HH:mm'}
               onValueChange={(v) => setValue('timeFormat', v, { shouldDirty: true })}
             >
-              <SelectTrigger id="timeFormat" aria-label="Select time format">
-                <SelectValue placeholder="Select time format" />
+              <SelectTrigger id="timeFormat" aria-label={t('Select time format')}>
+                <SelectValue placeholder={t('Select time format')} />
               </SelectTrigger>
               <SelectContent>
                 {TIME_FORMAT_OPTIONS.map((f) => (
-                  <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
+                  <SelectItem key={f.value} value={f.value}>{t(f.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -186,18 +186,18 @@ export function SettingsRegional() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="weekStartsOn">Week Starts On</Label>
+            <Label htmlFor="weekStartsOn">{t('Week Starts On')}</Label>
             <Select
               value={String(watchedValues.weekStartsOn ?? settings?.weekStartsOn ?? 0)}
               onValueChange={(v) => setValue('weekStartsOn', Number(v), { shouldDirty: true })}
             >
-              <SelectTrigger id="weekStartsOn" aria-label="Select first day of week">
-                <SelectValue placeholder="Select day" />
+              <SelectTrigger id="weekStartsOn" aria-label={t('Select first day of week')}>
+                <SelectValue placeholder={t('Select day')} />
               </SelectTrigger>
               <SelectContent>
                 {[0, 1, 2, 3, 4, 5, 6].map((d) => (
                   <SelectItem key={d} value={String(d)}>
-                    {DAY_NAMES[d === 0 ? 7 : d] ?? 'Sunday'}
+                    {t(DAY_NAMES[d === 0 ? 7 : d] ?? 'Sunday')}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -207,7 +207,7 @@ export function SettingsRegional() {
           <div className="flex items-center gap-4 pt-2">
             <Button type="submit" disabled={!isDirty || update.isPending}>
               <Save className="h-4 w-4 mr-1.5" />
-              {update.isPending ? 'Saving...' : 'Save Changes'}
+               {update.isPending ? t('Saving...') : t('Save Changes')}
             </Button>
           </div>
         </CardContent>

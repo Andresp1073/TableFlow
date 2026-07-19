@@ -40,7 +40,7 @@ function DetailRow({
 }
 
 function getSourceLabel(source: string): string {
-  return RESERVATION_SOURCE_OPTIONS.find((o) => o.value === source)?.label ?? source;
+  return t(RESERVATION_SOURCE_OPTIONS.find((o) => o.value === source)?.label ?? source);
 }
 
 export function ReservationDetailView({
@@ -108,7 +108,7 @@ export function ReservationDetailView({
           />
           <DetailRow
             icon={<Users className="h-4 w-4" />}
-            label={t('Party Size')}
+            label={t('Party size')}
             value={reservation.partySize === 1 ? t('{count} guest', { count: reservation.partySize }) : t('{count} guests', { count: reservation.partySize })}
           />
           <DetailRow

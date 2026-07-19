@@ -48,23 +48,23 @@ export function UserForm({ roles, initialData, onSubmit, isSubmitting, mode }: U
     <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
+          <Label htmlFor="firstName">{t('First Name')}</Label>
           <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
+          <Label htmlFor="lastName">{t('Last Name')}</Label>
           <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t('Email')}</Label>
         <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       </div>
 
       {mode === 'create' && (
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t('Password')}</Label>
           <Input
             id="password"
             type="password"
@@ -77,13 +77,13 @@ export function UserForm({ roles, initialData, onSubmit, isSubmitting, mode }: U
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="phone">Phone (optional)</Label>
+          <Label htmlFor="phone">{t('Phone (optional)')}</Label>
         <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
       </div>
 
       {mode === 'create' && (
         <div className="space-y-2">
-          <Label htmlFor="roles">Roles</Label>
+          <Label htmlFor="roles">{t('Roles')}</Label>
           <select
             id="roles"
             multiple
@@ -109,7 +109,7 @@ export function UserForm({ roles, initialData, onSubmit, isSubmitting, mode }: U
 
       <div className="flex gap-3">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : mode === 'create' ? 'Create User' : 'Update User'}
+          {isSubmitting ? t('Saving...') : mode === 'create' ? t('Create User') : t('Update User')}
         </Button>
       </div>
     </form>

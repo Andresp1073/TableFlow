@@ -5,6 +5,7 @@ import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useDebounce } from '@/hooks/use-debounce';
 import { Input, type InputProps } from '@/components/ui/input';
+import { t } from '@/lib/i18n';
 
 interface SearchBarProps extends Omit<InputProps, 'onChange' | 'value'> {
   value?: string;
@@ -14,7 +15,7 @@ interface SearchBarProps extends Omit<InputProps, 'onChange' | 'value'> {
 }
 
 const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
-  ({ className, value: externalValue, onChange, onClear, debounceMs = 300, placeholder = 'Search...', ...props }, ref) => {
+  ({ className, value: externalValue, onChange, onClear, debounceMs = 300, placeholder = t('Search...'), ...props }, ref) => {
     const [internalValue, setInternalValue] = useState(externalValue ?? '');
     const debouncedValue = useDebounce(internalValue, debounceMs);
 
@@ -47,7 +48,7 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
           <button
             onClick={handleClear}
             className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            aria-label="Clear search"
+            aria-label={t('Clear search')}
           >
             <X className="h-4 w-4" />
           </button>

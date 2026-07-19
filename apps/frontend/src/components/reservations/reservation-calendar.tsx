@@ -224,7 +224,7 @@ export function ReservationCalendar({
                 style={{ backgroundColor: STATUS_EVENT_COLORS[status] }}
                 aria-hidden="true"
               />
-              {label}
+              {t(label)}
             </span>
           ),
         )}

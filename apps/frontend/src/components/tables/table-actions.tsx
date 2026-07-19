@@ -186,7 +186,7 @@ export function TableActions({
           <DialogHeader>
             <DialogTitle>{t('Change Table Status')}</DialogTitle>
             <DialogDescription>
-              {t('Change the status of Table {tableNumber} from {currentStatus} to:', { tableNumber: table.tableNumber, currentStatus: TABLE_STATUS_LABELS[table.status] })}
+              {t('Change the status of Table {tableNumber} from {currentStatus} to:', { tableNumber: table.tableNumber, currentStatus: t(TABLE_STATUS_LABELS[table.status]) })}
             </DialogDescription>
           </DialogHeader>
 
@@ -198,7 +198,7 @@ export function TableActions({
               <SelectContent>
                 {availableStatusOptions.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
+                    {t(opt.label)}
                   </SelectItem>
                 ))}
               </SelectContent>

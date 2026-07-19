@@ -1,5 +1,6 @@
 import { ChevronRight, Slash } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface BreadcrumbItem {
   label: string;
@@ -15,7 +16,7 @@ function Breadcrumb({ items, separator = 'chevron', className, ...props }: Bread
   const SeparatorIcon = separator === 'slash' ? Slash : ChevronRight;
 
   return (
-    <nav aria-label="Breadcrumb" className={cn('mb-4', className)} {...props}>
+    <nav aria-label={t('Breadcrumb')} className={cn('mb-4', className)} {...props}>
       <ol className="flex items-center gap-1.5 text-sm text-muted-foreground">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;

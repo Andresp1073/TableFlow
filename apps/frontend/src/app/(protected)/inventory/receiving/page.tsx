@@ -28,7 +28,7 @@ export default function ReceivingPage() {
   const handleSubmit = (items: ReceiveStockItem[], notes?: string) => {
     receiveStock.mutate({ restaurantId, items, notes }, {
       onSuccess: (result) => {
-        toast.success(t("Received ${result.received} items"));
+        toast.success(t('Received {count} items', { count: result.received }));
         if (initialOrderId) {
           router.push(`/inventory/purchase-orders/${initialOrderId}`);
         } else {
@@ -41,7 +41,7 @@ export default function ReceivingPage() {
 
   return (
     <ContentArea>
-      <PageHeader title={initialOrderId ? 'Receive Purchase Order' : 'Receive Stock'} description={t("Record incoming stock items")} />
+      <PageHeader title={initialOrderId ? t('Receive Purchase Order') : t('Receive Stock')} description={t('Record incoming stock items')} />
       <ReceivingForm
         products={products ?? []}
         initialOrderId={initialOrderId}

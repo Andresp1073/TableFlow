@@ -19,7 +19,7 @@ export function SettingsDashboard() {
     return (
       <Alert variant="warning">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Select a restaurant to view settings.</AlertDescription>
+        <AlertDescription>{t('Select a restaurant to view settings.')}</AlertDescription>
       </Alert>
     );
   }
@@ -31,7 +31,7 @@ export function SettingsDashboard() {
       <Alert variant="error">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Failed to load settings: {(error as Error)?.message || 'Unexpected error'}
+           {t('Failed to load settings:')} {(error as Error)?.message || t('Unexpected error')}
         </AlertDescription>
       </Alert>
     );
@@ -73,46 +73,46 @@ export function SettingsDashboard() {
             <p className="font-medium">{settings?.timeFormat ?? 'HH:mm'}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Week Starts On</p>
+            <p className="text-sm text-muted-foreground">{t('Week Starts On')}</p>
             <p className="font-medium">
-              {settings?.weekStartsOn != null ? DAY_NAMES[settings.weekStartsOn === 0 ? 7 : settings.weekStartsOn] ?? 'Sunday' : 'Sunday'}
+              {settings?.weekStartsOn != null ? t(DAY_NAMES[settings.weekStartsOn === 0 ? 7 : settings.weekStartsOn] ?? '') || t('Sunday') : t('Sunday')}
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Tax Rate</p>
+            <p className="text-sm text-muted-foreground">{t('Tax Rate')}</p>
             <p className="font-medium">{settings?.taxPercentage ?? 0}%</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Service Charge</p>
+            <p className="text-sm text-muted-foreground">{t('Service Charge')}</p>
             <p className="font-medium">{settings?.serviceChargePercentage ?? 0}%</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Reservation Duration</p>
+            <p className="text-sm text-muted-foreground">{t('Reservation Duration')}</p>
             <p className="font-medium">{settings?.defaultReservationDuration ?? 60} min</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Buffer Time</p>
+            <p className="text-sm text-muted-foreground">{t('Buffer Time')}</p>
             <p className="font-medium">{settings?.reservationBufferMinutes ?? 15} min</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Walk-ins</p>
+            <p className="text-sm text-muted-foreground">{t('Walk-ins')}</p>
             <Badge variant={settings?.allowWalkIns ? 'success' : 'secondary'}>
-              {settings?.allowWalkIns ? 'Allowed' : 'Not Allowed'}
+              {settings?.allowWalkIns ? t('Allowed') : t('Not Allowed')}
             </Badge>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Auto-confirm</p>
+            <p className="text-sm text-muted-foreground">{t('Auto-confirm')}</p>
             <Badge variant={settings?.autoConfirmReservations ? 'success' : 'secondary'}>
-              {settings?.autoConfirmReservations ? 'Enabled' : 'Disabled'}
+              {settings?.autoConfirmReservations ? t('Enabled') : t('Disabled')}
             </Badge>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Max Reservations</p>
-            <p className="font-medium">{settings?.maxReservationsPerCustomer ?? 10} per customer</p>
+            <p className="text-sm text-muted-foreground">{t('Max Reservations')}</p>
+            <p className="font-medium">{settings?.maxReservationsPerCustomer ?? 10} {t('per customer')}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Cancellation Window</p>
-            <p className="font-medium">{settings?.reservationCancellationHours ?? 24} hours</p>
+            <p className="text-sm text-muted-foreground">{t('Cancellation Window')}</p>
+            <p className="font-medium">{settings?.reservationCancellationHours ?? 24} {t('hours')}</p>
           </div>
         </CardContent>
       </Card>

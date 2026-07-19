@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { t } from '@/lib/i18n';
 import { useRestaurant } from '@/hooks/use-restaurants';
 import { RestaurantDetailView } from '@/components/restaurants/restaurant-detail-view';
 import { RestaurantActions } from '@/components/restaurants/restaurant-actions';
@@ -25,7 +26,7 @@ export default function RestaurantDetailPage() {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push('/restaurants')}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back to Restaurants
+            {t('Back to Restaurants')}
           </Button>
         </div>
       }
@@ -48,7 +49,7 @@ export default function RestaurantDetailPage() {
         <Alert variant="error">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            Failed to load restaurant: {(error as Error)?.message || 'An unexpected error occurred'}
+            {t('Failed to load restaurant')}: {(error as Error)?.message || t('An unexpected error occurred')}
           </AlertDescription>
         </Alert>
       ) : restaurant ? (

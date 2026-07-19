@@ -9,6 +9,7 @@
     ],
     "jsx": "preserve",
     "outDir": ".next",
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [

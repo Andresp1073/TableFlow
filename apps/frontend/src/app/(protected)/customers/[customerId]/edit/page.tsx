@@ -1,5 +1,7 @@
 'use client';
 
+import { t } from '@/lib/i18n';
+
 import { useParams, useRouter } from 'next/navigation';
 import { useRestaurant } from '@/providers/restaurant-provider';
 import { useCustomer, useUpdateCustomer } from '@/hooks/use-customers';
@@ -22,10 +24,10 @@ export default function EditCustomerPage() {
   const handleSubmit = (formData: CreateCustomerInput) => {
     updateCustomer.mutate({ restaurantId, customerId, data: formData }, {
       onSuccess: () => {
-        toast.success('Customer updated');
+        toast.success(t('Customer updated'));
         router.push(`/customers/${customerId}`);
       },
-      onError: () => toast.error('Failed to update customer'),
+      onError: () => toast.error(t('Failed to update customer')),
     });
   };
 

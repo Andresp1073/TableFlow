@@ -4,6 +4,7 @@ import type { TicketStatus } from '@/lib/order-types';
 import { TICKET_STATUS_VARIANTS, TICKET_STATUS_LABELS } from '@/lib/order-types';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface OrderStatusBadgeProps {
   status: TicketStatus;
@@ -19,9 +20,9 @@ export function OrderStatusBadge({ status, size = 'md', className }: OrderStatus
       variant={variant}
       size={size}
       className={cn('uppercase tracking-wider font-bold', className)}
-      aria-label={`Order status: ${label}`}
+      aria-label={t('Order status: {status}', { status: t(label) })}
     >
-      {label}
+      {t(label)}
     </Badge>
   );
 }
@@ -47,7 +48,7 @@ export function OrderStatusDot({ status, className }: OrderStatusIndicatorProps)
       aria-hidden="true"
     >
       <span className={cn('h-2 w-2 rounded-full shrink-0', STATUS_DOT_COLORS[status])} />
-      {TICKET_STATUS_LABELS[status]}
+      {t(TICKET_STATUS_LABELS[status])}
     </span>
   );
 }

@@ -19,6 +19,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 import type { ChartDataPoint, PieChartData } from '@/lib/analytics-types';
 
 type ChartType = 'line' | 'bar' | 'area' | 'pie';
@@ -70,8 +71,8 @@ export function ReportChart({
   }
 
   const isPie = type === 'pie';
-  const chartData = data as ChartDataPoint[];
-  const pieData = data as PieChartData[];
+  const chartData = (data as ChartDataPoint[]).map((d) => ({ ...d, label: t(d.label) }));
+  const pieData = (data as PieChartData[]).map((d) => ({ ...d, name: t(d.name) }));
 
   return (
     <Card className={cn('', className)}>
@@ -82,7 +83,7 @@ export function ReportChart({
       <CardContent>
         {data.length === 0 ? (
           <div style={{ height }} className="flex items-center justify-center text-sm text-muted-foreground">
-            No data available for this period.
+            {t('No data available for this period.')}
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={height}>

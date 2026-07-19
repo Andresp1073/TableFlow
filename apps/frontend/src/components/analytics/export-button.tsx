@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import type { ExportConfig } from '@/lib/analytics-types';
+import { t } from '@/lib/i18n';
 
 interface ExportButtonProps {
   config: ExportConfig;
@@ -83,7 +84,7 @@ export function ExportButton({ config, variant = 'outline', size = 'sm', label =
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={variant} size={size} aria-label={`Export ${config.filename}`}>
+        <Button variant={variant} size={size} aria-label={t('Export {filename}', { filename: config.filename })}>
           <Download className="h-4 w-4 mr-1" />
           {label}
         </Button>
@@ -91,15 +92,15 @@ export function ExportButton({ config, variant = 'outline', size = 'sm', label =
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={handleExportCSV}>
           <FileSpreadsheet className="h-4 w-4 mr-2" />
-          Export as CSV
+          {t('Export as CSV')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleExportJSON}>
           <FileJson className="h-4 w-4 mr-2" />
-          Export as JSON
+          {t('Export as JSON')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handlePrint}>
           <Printer className="h-4 w-4 mr-2" />
-          Print / PDF
+          {t('Print / PDF')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

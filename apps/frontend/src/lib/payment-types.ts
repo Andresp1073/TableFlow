@@ -143,7 +143,7 @@ export const TRANSACTION_STATUS_COLORS: Record<PaymentTransactionStatus, string>
 };
 
 export const TRANSACTION_STATUS_OPTIONS: { value: PaymentTransactionStatus | ''; label: string }[] = [
-  { value: '', label: 'All Statuses' },
+  { value: '', label: 'All statuses' },
   { value: 'created', label: 'Created' },
   { value: 'pending', label: 'Pending' },
   { value: 'authorized', label: 'Authorized' },

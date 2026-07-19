@@ -144,9 +144,9 @@ export function SettingsBusinessHours() {
         data: { schedules: toApiSchedules(entries) },
       });
       setInitialEntries(JSON.stringify(entries));
-      toast.success('Business hours updated successfully');
+      toast.success(t('Business hours updated successfully'));
     } catch {
-      toast.error('Failed to update business hours');
+      toast.error(t('Failed to update business hours'));
     }
   };
 
@@ -154,7 +154,7 @@ export function SettingsBusinessHours() {
     return (
       <Alert variant="warning">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Select a restaurant to configure business hours.</AlertDescription>
+        <AlertDescription>{t('Select a restaurant to configure business hours.')}</AlertDescription>
       </Alert>
     );
   }
@@ -166,7 +166,7 @@ export function SettingsBusinessHours() {
       <Alert variant="error">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Failed to load business hours: {(error as Error)?.message || 'Unexpected error'}
+           {t('Failed to load business hours:')} {(error as Error)?.message || t('Unexpected error')}
         </AlertDescription>
       </Alert>
     );
@@ -175,9 +175,9 @@ export function SettingsBusinessHours() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Business Hours</CardTitle>
+        <CardTitle>{t('Business Hours')}</CardTitle>
         <CardDescription>
-          Set opening and closing hours for each day of the week.
+          {t('Set opening and closing hours for each day of the week.')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -191,10 +191,10 @@ export function SettingsBusinessHours() {
                 id={`day-${entry.dayOfWeek}`}
                 checked={!entry.isClosed}
                 onCheckedChange={(checked) => handleToggleDay(entry.dayOfWeek, !checked)}
-                aria-label={`${DAY_NAMES[entry.dayOfWeek]} ${entry.isClosed ? 'closed' : 'open'}`}
+                aria-label={`${t(DAY_NAMES[entry.dayOfWeek] ?? '')} ${entry.isClosed ? t('closed') : t('open')}`}
               />
               <Label htmlFor={`day-${entry.dayOfWeek}`} className="font-medium cursor-pointer">
-                {DAY_NAMES[entry.dayOfWeek]}
+                {t(DAY_NAMES[entry.dayOfWeek] ?? '')}
               </Label>
             </div>
 
@@ -204,7 +204,7 @@ export function SettingsBusinessHours() {
                   <div key={idx} className="flex items-center gap-2">
                     <div className="flex items-center gap-2">
                       <Label htmlFor={`open-${entry.dayOfWeek}-${idx}`} className="sr-only">
-                        Open time
+                        {t('Open time')}
                       </Label>
                       <Input
                         id={`open-${entry.dayOfWeek}-${idx}`}
@@ -212,11 +212,11 @@ export function SettingsBusinessHours() {
                         value={period.openTime}
                         onChange={(e) => handlePeriodChange(entry.dayOfWeek, idx, 'openTime', e.target.value)}
                         className="w-32"
-                        aria-label={`Open time for ${DAY_NAMES[entry.dayOfWeek]} period ${idx + 1}`}
+                        aria-label={`${t('Open time')} ${t('for')} ${t(DAY_NAMES[entry.dayOfWeek] ?? '')} ${t('period')} ${idx + 1}`}
                       />
-                      <span className="text-muted-foreground">to</span>
+                       <span className="text-muted-foreground">{t('to')}</span>
                       <Label htmlFor={`close-${entry.dayOfWeek}-${idx}`} className="sr-only">
-                        Close time
+                        {t('Close time')}
                       </Label>
                       <Input
                         id={`close-${entry.dayOfWeek}-${idx}`}
@@ -224,7 +224,7 @@ export function SettingsBusinessHours() {
                         value={period.closeTime}
                         onChange={(e) => handlePeriodChange(entry.dayOfWeek, idx, 'closeTime', e.target.value)}
                         className="w-32"
-                        aria-label={`Close time for ${DAY_NAMES[entry.dayOfWeek]} period ${idx + 1}`}
+                        aria-label={`${t('Close time')} ${t('for')} ${t(DAY_NAMES[entry.dayOfWeek] ?? '')} ${t('period')} ${idx + 1}`}
                       />
                     </div>
                     {entry.periods.length > 1 && (
@@ -233,7 +233,7 @@ export function SettingsBusinessHours() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleRemovePeriod(entry.dayOfWeek, idx)}
-                        aria-label={`Remove period ${idx + 1} for ${DAY_NAMES[entry.dayOfWeek]}`}
+                         aria-label={`${t('Remove')} ${t('period')} ${idx + 1} ${t('for')} ${t(DAY_NAMES[entry.dayOfWeek] ?? '')}`}
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
@@ -246,8 +246,8 @@ export function SettingsBusinessHours() {
                   size="sm"
                   onClick={() => handleAddPeriod(entry.dayOfWeek)}
                 >
-                  <Plus className="h-3.5 w-3.5 mr-1" />
-                  Add Period
+                   <Plus className="h-3.5 w-3.5 mr-1" />
+                  {t('Add Period')}
                 </Button>
               </div>
             )}

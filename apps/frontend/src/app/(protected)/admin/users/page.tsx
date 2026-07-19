@@ -72,10 +72,10 @@ export default function AdminUsersPage() {
           onValueChange={(value) => { setStatusFilter(value); setPage(1); }}
         >
           <SelectTrigger aria-label={t('Filter by status')} className="w-36">
-            <SelectValue placeholder={t('All Status')} />
+            <SelectValue placeholder={t('All statuses')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t('All Status')}</SelectItem>
+            <SelectItem value="all">{t('All statuses')}</SelectItem>
             <SelectItem value="active">{t('Active')}</SelectItem>
             <SelectItem value="inactive">{t('Inactive')}</SelectItem>
             <SelectItem value="locked">{t('Locked')}</SelectItem>
@@ -98,8 +98,8 @@ export default function AdminUsersPage() {
         />
       ) : (
         <div className="rounded-lg border">
-          <table className="w-full" aria-label="Users list">
-            <caption className="sr-only">Users list</caption>
+          <table className="w-full" aria-label={t("Users list")}>
+            <caption className="sr-only">{t("Users list")}</caption>
             <thead>
               <tr className="border-b bg-muted/50">
                 <th className="text-left p-3 text-sm font-medium">{t('Name')}</th>

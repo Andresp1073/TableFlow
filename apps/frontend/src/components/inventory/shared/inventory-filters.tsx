@@ -41,20 +41,20 @@ export function InventoryFilters({
         <Select value={category ?? 'all'} onValueChange={(v) => onCategoryChange(v === 'all' ? '' : v)}>
           <SelectTrigger className="w-40"><SelectValue placeholder={t("All Categories")} /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="all">{t('All Categories')}</SelectItem>
             {CATEGORY_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       )}
       {showStatus && onStatusChange && (
         <Select value={status ?? 'all'} onValueChange={(v) => onStatusChange(v === 'all' ? '' : v)}>
-          <SelectTrigger className="w-40"><SelectValue placeholder={t("All Statuses")} /></SelectTrigger>
+          <SelectTrigger className="w-40"><SelectValue placeholder={t("All statuses")} /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">{t('All statuses')}</SelectItem>
             {PO_STATUS_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -63,9 +63,9 @@ export function InventoryFilters({
         <Select value={movementType ?? 'all'} onValueChange={(v) => onMovementTypeChange(v === 'all' ? '' : v)}>
           <SelectTrigger className="w-40"><SelectValue placeholder={t("All Types")} /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
+            <SelectItem value="all">{t('All Types')}</SelectItem>
             {MOVEMENT_TYPE_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+              <SelectItem key={opt.value} value={opt.value}>{t(opt.label)}</SelectItem>
             ))}
           </SelectContent>
         </Select>

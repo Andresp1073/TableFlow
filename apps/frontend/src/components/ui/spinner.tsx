@@ -1,4 +1,5 @@
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -16,7 +17,7 @@ function Spinner({ className, size = 'md', ...props }: SpinnerProps) {
     <div
       className={cn('animate-spin text-muted-foreground', sizeMap[size], className)}
       role="status"
-      aria-label="Loading"
+      aria-label={t('Loading')}
       {...props}
     >
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

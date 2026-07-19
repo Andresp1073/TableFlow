@@ -99,12 +99,12 @@ export default function UserDetailPage() {
             </div>
             {user.lockReason && (
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Lock Reason</span>
+                <span className="text-muted-foreground">{t("Lock Reason")}</span>
                 <span className="text-red-500">{user.lockReason}</span>
               </div>
             )}
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Created</span>
+                <span className="text-muted-foreground">{t("Created")}</span>
               <span>{new Date(user.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function UserDetailPage() {
                 onClick={() => deactivateMutation.mutateAsync(userId)}
                 disabled={deactivateMutation.isPending}
               >
-                <Ban className="h-4 w-4 mr-1" /> Deactivate
+                  <Ban className="h-4 w-4 mr-1" /> {t('Deactivate')}
               </Button>
             ) : (
               <Button
@@ -126,22 +126,22 @@ export default function UserDetailPage() {
                 onClick={() => activateMutation.mutateAsync(userId)}
                 disabled={activateMutation.isPending}
               >
-                <CheckCircle className="h-4 w-4 mr-1" /> Activate
+                  <CheckCircle className="h-4 w-4 mr-1" /> {t('Activate')}
               </Button>
             )}
             <Dialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm"><Key className="h-4 w-4 mr-1" /> Reset Password</Button>
+                <Button variant="outline" size="sm">                  <Key className="h-4 w-4 mr-1" /> {t('Reset Password')}</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Reset Password</DialogTitle>
-                  <DialogDescription>
-                    Set a new password for {user.firstName} {user.lastName}.
-                  </DialogDescription>
+                <DialogTitle>{t("Reset Password")}</DialogTitle>
+                <DialogDescription>
+                  {t("Set a new password for {firstName} {lastName}.", { firstName: user.firstName, lastName: user.lastName })}
+                </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword">New Password</Label>
+                  <Label htmlFor="newPassword">{t("New Password")}</Label>
                   <Input
                     id="newPassword"
                     type="password"
@@ -155,7 +155,7 @@ export default function UserDetailPage() {
                     onClick={handleResetPassword}
                     disabled={resetPasswordMutation.isPending || newPassword.length < 8}
                   >
-                    {resetPasswordMutation.isPending ? 'Resetting...' : 'Reset Password'}
+                    {resetPasswordMutation.isPending ? t('Resetting...') : t('Reset Password')}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -165,13 +165,13 @@ export default function UserDetailPage() {
 
         <Card className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Roles</h2>
+            <h2 className="text-lg font-semibold">{t("Roles")}</h2>
             <Button variant="outline" size="sm" onClick={handleOpenRoles}>
-              <Shield className="h-4 w-4 mr-1" /> Manage
+                  <Shield className="h-4 w-4 mr-1" /> {t('Manage')}
             </Button>
           </div>
           {user.userRoles.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No roles assigned.</p>
+              <p className="text-sm text-muted-foreground">{t("No roles assigned.")}</p>
           ) : (
             <div className="space-y-2">
               {user.userRoles.map((ur) => (
@@ -180,9 +180,9 @@ export default function UserDetailPage() {
                     <p className="text-sm font-medium">{ur.role.name}</p>
                     <p className="text-xs text-muted-foreground">{ur.role.code}</p>
                   </div>
-                  <Badge variant={ur.role.isSystem ? 'default' : 'secondary'}>
-                    {ur.role.isSystem ? 'System' : 'Custom'}
-                  </Badge>
+                <Badge variant={ur.role.isSystem ? 'default' : 'secondary'}>
+                  {ur.role.isSystem ? t('System') : t('Custom')}
+                </Badge>
                 </div>
               ))}
             </div>
@@ -193,10 +193,10 @@ export default function UserDetailPage() {
       <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Manage Roles</DialogTitle>
-            <DialogDescription>
-              Select the roles for {user.firstName} {user.lastName}.
-            </DialogDescription>
+                <DialogTitle>{t("Manage Roles")}</DialogTitle>
+                <DialogDescription>
+                  {t("Select the roles for {firstName} {lastName}.", { firstName: user.firstName, lastName: user.lastName })}
+                </DialogDescription>
           </DialogHeader>
           <div className="space-y-2 max-h-80 overflow-y-auto">
             {roles?.map((role) => (
@@ -228,7 +228,7 @@ export default function UserDetailPage() {
               onClick={handleSaveRoles}
               disabled={replaceRolesMutation.isPending}
             >
-              {replaceRolesMutation.isPending ? 'Saving...' : 'Save Roles'}
+                  {replaceRolesMutation.isPending ? t('Saving...') : t('Save Roles')}
             </Button>
           </DialogFooter>
         </DialogContent>

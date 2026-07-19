@@ -16,6 +16,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { t } from '@/lib/i18n';
 
 export default function FloorPlanPage() {
   const params = useParams();
@@ -56,17 +57,17 @@ export default function FloorPlanPage() {
 
   return (
     <PageWrapper
-      title="Floor Plan"
-      description={restaurant ? `Interactive floor plan for ${restaurant.name}` : 'Interactive floor plan'}
+      title={t('Floor Plan')}
+      description={restaurant ? t('Interactive floor plan for {name}', { name: restaurant.name }) : t('Interactive floor plan')}
       actions={
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}/tables`)}>
             <ArrowLeft className="h-4 w-4 mr-1.5" />
-            Back to Tables
+            {t('Back to Tables')}
           </Button>
           <Button variant="outline" size="sm" onClick={() => router.push(`/restaurants/${restaurantId}/tables/create`)}>
             <Table2 className="h-4 w-4 mr-1.5" />
-            New Table
+            {t('New Table')}
           </Button>
         </div>
       }
@@ -74,14 +75,14 @@ export default function FloorPlanPage() {
       <div className="flex flex-col h-[calc(100vh-12rem)] rounded-lg border overflow-hidden">
         <div className="flex items-center gap-3 px-4 py-2 border-b bg-background">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Area:</span>
+            <span className="text-sm text-muted-foreground">{t('Area:')}</span>
             <Select value={selectedDiningArea} onValueChange={setSelectedDiningArea}>
-              <SelectTrigger className="w-[180px] h-8" aria-label="Filter by dining area">
+              <SelectTrigger className="w-[180px] h-8" aria-label={t('Filter by dining area')}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Areas</SelectItem>
-                <SelectItem value="unassigned">Unassigned</SelectItem>
+                <SelectItem value="all">{t('All Areas')}</SelectItem>
+                <SelectItem value="unassigned">{t('Unassigned')}</SelectItem>
                 {diningAreas?.map((area) => (
                   <SelectItem key={area.id} value={area.id}>{area.name}</SelectItem>
                 ))}

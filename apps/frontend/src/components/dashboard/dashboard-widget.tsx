@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, AlertCircle, Inbox } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { t } from '@/lib/i18n';
 
 interface DashboardWidgetProps {
   title: string;
@@ -36,7 +37,7 @@ function DashboardWidget({
   isError = false,
   isEmpty = false,
   error = null,
-  emptyMessage = 'No data available',
+  emptyMessage = t('No data available'),
   onRefresh,
   onRetry,
   action,
@@ -56,7 +57,7 @@ function DashboardWidget({
               className="h-7 w-7"
               onClick={onRefresh}
               disabled={isLoading}
-              aria-label={`Refresh ${title}`}
+              aria-label={t('Refresh {title}', { title })}
             >
               <RefreshCw className={cn('h-3.5 w-3.5', isLoading && 'animate-spin')} />
             </Button>
@@ -70,11 +71,11 @@ function DashboardWidget({
           <div className="flex flex-col items-center justify-center py-4 text-center">
             <AlertCircle className="h-8 w-8 text-destructive mb-2" />
             <p className="text-xs text-muted-foreground mb-2">
-              {error?.message ?? 'Failed to load data'}
+              {error?.message ?? t('Failed to load data')}
             </p>
             {onRetry && (
               <Button variant="outline" size="sm" onClick={onRetry}>
-                Retry
+                {t('Retry')}
               </Button>
             )}
           </div>
